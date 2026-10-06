@@ -1,0 +1,1192 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Surface Defect Detection of Metal Parts: Use of Multimodal Illuminations and Hyperspectral Imaging Algorithms</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="katex/katex.min.css">
+<style>
+  :root {
+    --bg: #faf8f4; --panel: #fffdf9; --card: #fffdf9; --ink: #2b2622;
+    --muted: #7d6b58; --line: #e2d6c3; --accent: #b4532a; --gold: #b7791f;
+    --sans: "Noto Sans TC", "Microsoft JhengHei", "PingFang TC", system-ui, sans-serif;
+    --serif: "Noto Serif TC", "Source Han Serif TC", "Songti TC", "PMingLiU", serif;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 17px/1.85 var(--sans); }
+  a { color: var(--accent); text-underline-offset: .2em; overflow-wrap: anywhere; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+  .layout { display: grid; grid-template-columns: 240px minmax(0, 1fr); align-items: start; }
+  #toc { position: sticky; top: 0; height: 100vh; height: 100dvh; overflow-y: auto;
+    padding: 24px 14px 40px; border-right: 1px solid var(--line); background: #f3ede3;
+    font-size: 13.5px; scrollbar-width: thin; }
+  #toc a { display: flex; gap: 8px; padding: 6px 9px; border-radius: 4px;
+    color: var(--muted); text-decoration: none; line-height: 1.5; }
+  #toc a:hover { color: var(--ink); background: #efe6d8; }
+  #toc a.on { background: #e9dccb; color: var(--ink); }
+  #toc .toc-tag { flex: 0 0 3.2em; white-space: nowrap; color: #7d6b58;
+    font-family: ui-monospace, Consolas, monospace; font-size: 12px; }
+  #toc .toc-item { padding-left: 12px; }
+  main { width: 100%; max-width: 1240px; min-width: 0; margin-inline: auto; padding: 44px clamp(24px, 3.2vw, 52px) 100px; }
+  main > header { padding-bottom: 24px; border-bottom: 1px solid var(--line); margin-bottom: 28px; }
+  h1, h2, h3 { overflow-wrap: anywhere; }
+  h1 { font: 600 clamp(26px, 2.5vw, 32px)/1.3 Georgia, "Cambria", var(--serif);
+    margin: 0; letter-spacing: -.015em; }
+  h2 { font: 700 26px/1.45 var(--sans); margin: 72px 0 24px; padding-bottom: 12px;
+    border-bottom: 1px solid #cdbca3; letter-spacing: .01em; }
+  h2 .mark { color: var(--accent); margin-right: 10px; font-size: .7em; vertical-align: .15em; }
+  h3 { font: 700 21px/1.5 var(--sans); margin: 36px 0 14px; display: flex;
+    align-items: baseline; gap: 12px; letter-spacing: .01em; }
+  p { margin: 0 0 20px; }
+  .chip { display: inline-block; flex-shrink: 0; border: 1px solid var(--accent); color: var(--accent);
+    border-radius: 4px; padding: 1px 7px; font: 13px/1.7 ui-monospace, Consolas, monospace; }
+  .sub, .meta, .src { color: var(--muted); font-size: 14px; line-height: 1.75; }
+  main > header .meta { margin: 18px 0 0; max-width: 54rem; }
+  #story { margin-bottom: 40px; }
+  #story p { max-width: 44rem; }
+  #story .lede { font-size: 19px; line-height: 1.85; margin: 0 0 20px; }
+  section[id] { scroll-margin-top: 24px; }
+  table { border-collapse: collapse; width: 100%; margin: 16px 0; font-size: 14.5px; line-height: 1.75; }
+  th, td { border-bottom: 1px solid var(--line); padding: 11px 12px; text-align: left; vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; }
+  main > section > table { display: block; max-width: 100%; overflow-x: auto; }
+  .eq { min-width: 0; background: var(--panel); border: 1px solid var(--line); border-radius: 8px;
+    padding: 22px 24px; margin: 20px 0; }
+  .eq .tex-block { overflow-x: auto; overflow-y: hidden; max-width: 100%; font-size: 1.12em; padding: 6px 0; }
+  .eq .where { text-align: right; color: var(--muted); font: 13px/1.6 ui-monospace, Consolas, monospace; margin-top: 8px; }
+  .eq dl { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 10px 20px;
+    margin: 18px 0 8px; font-size: 15px; }
+  .eq dt { color: var(--ink); } .eq dd { margin: 0; color: #4a4038; }
+  .eq .links { font-size: 14px; color: var(--muted); margin-top: 14px; }
+  .fmap-caption { color: #4a4038; font-size: 15px; max-width: 44rem; margin-top: 16px; }
+  .kp { min-width: 0; background: var(--card); border: 1px solid var(--line); border-radius: 8px;
+    padding: 28px; margin: 28px 0; scroll-margin-top: 20px; }
+  .kp h3 { margin: 0 0 16px; }
+  .kp .src { margin-bottom: 16px; }
+  .kp dl { display: grid; grid-template-columns: 6em minmax(0, 1fr); gap: 12px 20px;
+    margin: 20px 0 24px; font-size: 16px; line-height: 1.85; max-width: 48rem; }
+  .kp dt { font-weight: 600; color: var(--muted); }
+  .kp dd { margin: 0; min-width: 0; color: #3d342c; }
+  .demo { min-width: 0; border: 1px solid #e2d6c3; border-radius: 8px; padding: 16px; margin-top: 24px; background: #fffdf9; }
+  .controls { display: flex; flex-wrap: wrap; gap: 12px 20px; margin-bottom: 12px; font-size: 14px; }
+  .controls label { display: flex; align-items: center; gap: 8px; }
+  .controls select { background: #f1e8da; color: var(--ink); border: 1px solid #d6c7b0; border-radius: 4px; }
+  .val { min-width: 4em; color: var(--muted); }
+  .legend { display: flex; flex-wrap: wrap; gap: 8px 16px; font-size: 13px; margin: 6px 0 14px; }
+  .note { color: var(--muted); font-size: 14px; line-height: 1.8; }
+  .error { color: #c0392b; }
+  .figure { min-width: 0; margin: 24px 0; max-width: 820px; }
+  .figure img { display: block; width: 100%; height: auto; background: #fff;
+    border-radius: 6px; border: 1px solid var(--line); padding: 8px; }
+  .figure figcaption { color: var(--muted); font-size: 14px; line-height: 1.7; margin-top: 12px; }
+  .fig-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 20px; max-width: none; }
+  .fig-row.two { grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); }
+  .fig-row .figure { margin: 0; max-width: none; }
+  .summary p { margin: 0 0 16px; }
+  main > section > p, main > section > ul, main > section > ol, .sub { max-width: 44rem; }
+  main li { margin: 8px 0; }
+  .chip.trad { border-color: var(--gold); color: var(--gold); }
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 170px), 1fr));
+    gap: 16px; margin: 24px 0; max-width: 48rem; }
+  .stat { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 16px 18px; }
+  .stat b { display: block; font: 700 24px/1.3 ui-monospace, Consolas, monospace; color: var(--accent); margin-bottom: 8px; }
+  .stat b.gold { color: var(--gold); } .stat b.low { color: #c0392b; }
+  .stat > span { color: var(--muted); font-size: 14px; line-height: 1.6; display: block; }
+  .badge { display: inline-block; white-space: nowrap; border-radius: 999px; padding: 0 9px;
+    font-size: 12px; line-height: 1.9; border: 1px solid; }
+  .badge.ok { color: #2f855a; border-color: #9cc8a8; background: #e7f3ea; }
+  .badge.mid { color: #b4532a; border-color: #b4532a; background: #f8ece2; }
+  .badge.low { color: #b7791f; border-color: #e2c08a; background: #fbf0dc; }
+  .badge.bad { color: #c0392b; border-color: #e3a59b; background: #fbe9e6; }
+  .table-wrap { min-width: 0; max-width: 100%; overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; }
+  .table-wrap table { margin: 0; min-width: 900px; }
+  .table-wrap th:first-child, .table-wrap td:first-child { position: sticky; left: 0; background: #fffdf9; z-index: 1; }
+  .table-wrap th { position: sticky; top: 0; background: #fffdf9; }
+  .fig-row.small .figure img { padding: 4px; }
+  @media (max-width: 860px) {
+    .layout { grid-template-columns: minmax(0, 1fr); }
+    #toc { position: static; height: auto; max-height: 210px; padding: 12px 16px;
+      border-right: 0; border-bottom: 1px solid var(--line); }
+    main { padding: 28px 20px 80px; }
+    h1 { font-size: 26px; line-height: 1.35; }
+    h2 { font-size: 24px; margin-top: 56px; }
+    .kp dl, .eq dl { grid-template-columns: minmax(0, 1fr); gap: 6px; }
+    .kp dt:not(:first-child), .eq dt:not(:first-child) { margin-top: 12px; }
+    .kp { padding: 22px; }
+  }
+  @media (max-width: 520px) {
+    body { font-size: 16px; line-height: 1.85; }
+    main { padding: 26px 16px 72px; }
+    h1 { font-size: 24px; }
+    h2 { font-size: 22px; }
+    h3 { font-size: 20px; gap: 10px; }
+    main > header { padding-bottom: 20px; margin-bottom: 24px; }
+    #story .lede { font-size: 17px; }
+    .kp { padding: 18px 16px; margin: 24px 0; }
+    .kp dl { font-size: 16px; }
+    .demo { padding: 10px; margin-top: 20px; }
+    .eq { padding: 18px 16px; }
+    .figure img { padding: 4px; }
+    th, td { padding: 10px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { scroll-behavior: auto !important; animation: none !important; transition: none !important; }
+  }
+  /* animated knowledge points (lessons.js) */
+  .lz-cv { display: block; width: 100%; background: #f6f1e8; border-radius: 6px; margin: 8px 0 4px; }
+  .lesson .controls { align-items: center; }
+  .lz-seg { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+  .lz-lab { color: var(--muted); font-size: 13px; margin-right: 2px; }
+  .lz-seg button, .lz-tog { background: #f1e8da; color: var(--ink); border: 1px solid #d6c7b0; border-radius: 999px;
+    padding: 3px 12px; font: 13px/1.6 var(--sans); cursor: pointer; }
+  .lz-seg button:hover, .lz-tog:hover { border-color: #7d6b58; }
+  .lz-seg button[aria-pressed="true"], .lz-tog[aria-pressed="true"] { background: #b4532a; border-color: var(--accent); color: #fff; }
+  .lz-lamp { padding: 6px 12px; border-radius: 6px; color: #faf8f4; font-weight: 600; font-size: 14px; margin: 4px 0 12px; transition: background .4s; }
+  .lz-shots { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 12px; }
+  .lz-shot, .lz-thumb { margin: 0; animation: lzIn .45s both; }
+  .lz-shot img, .lz-thumb img { display: block; width: 100%; height: auto; border-radius: 4px; border: 1px solid var(--line); }
+  .lz-shot figcaption, .lz-thumb figcaption { color: var(--muted); font-size: 12.5px; margin-top: 4px; }
+  @keyframes lzIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+  .lz-mode { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 14px; margin: 6px 0 10px; color: var(--muted); font-size: 14px; }
+  .lz-mode b { font: 700 28px/1.2 ui-monospace, Consolas, monospace; color: var(--gold); }
+  .lz-stack { max-height: 560px; overflow: auto; padding-right: 4px; }
+  .lz-grp { margin: 8px 0 14px; }
+  .lz-grp-t { color: var(--accent); font-size: 13px; margin-bottom: 6px; }
+  .lz-thumbs { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 8px; }
+  .lz-cubes { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 6px; }
+  .lz-cube { display: flex; gap: 8px; align-items: baseline; border: 1px solid var(--line); border-radius: 6px; padding: 5px 10px; font-size: 13px; }
+  .lz-cube.on { border-color: var(--gold); background: #fbf0dc; }
+  .lz-cube i { font-style: normal; color: var(--muted); }
+  .lz-wrap { position: relative; }
+  .lz-play { position: absolute; top: 16px; right: 8px; z-index: 2; background: rgba(180,83,42,.92); color: #fff; border: 1px solid var(--accent);
+    border-radius: 999px; padding: 3px 14px; font: 13px/1.6 var(--sans); cursor: pointer; }
+  .lz-play[aria-pressed="false"] { background: var(--gold); border-color: var(--gold); color: #faf8f4; font-weight: 600; }
+  .lz-cube3d { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; margin-top: 8px; }
+  .lz-layer { margin: 0; }
+  .lz-layer canvas { display: block; width: 100%; height: auto; border-radius: 3px; border: 1px solid var(--line); cursor: crosshair; }
+  .lz-layer figcaption { color: var(--muted); font: 11.5px/1.6 ui-monospace, Consolas, monospace; }
+  .lz-cube3d.stacked { display: block; position: relative; }
+  .lz-cube3d.stacked .lz-layer { position: absolute; width: var(--lw); left: calc(var(--i) * 12px); top: calc((14 - var(--i)) * 8px);
+    animation: lzIn .45s both; animation-delay: calc(var(--i) * .07s); box-shadow: 0 6px 14px rgba(0,0,0,.55); }
+  .lz-cube3d.stacked .lz-layer figcaption { display: none; }
+  .lz-cube3d.stacked .lz-layer:last-child figcaption { display: block; }
+
+  /* The diagram and its controls have separate space. */
+  .lesson .lz-playbar { display:flex; gap:10px; align-items:center; margin:8px 0 16px; }
+  .lesson .lz-play { position:static; padding:6px 16px; }
+  .lesson .lz-seg button, .lesson .lz-tog { min-height:34px; }
+  .lz-cube-workspace { display:grid; grid-template-columns:minmax(0, .9fr) minmax(0, 1.2fr); gap:24px; margin:20px 0; align-items:start; }
+  .lz-cube-workspace h4 { font-size:15px; margin:0 0 14px; color:var(--muted); }
+  .lz-cube-workspace .lz-cube3d { grid-template-columns:repeat(3,minmax(0,1fr)); }
+  .lz-cube-workspace .lz-cube3d.stacked .lz-layer { left:calc(var(--i) * 5px); top:calc((14 - var(--i)) * 7px); animation:none; }
+  .lz-cube-workspace .lz-layer.is-active canvas { border:2px solid var(--accent); }
+  .lz-cube-workspace .lz-cube3d.stacked .lz-layer.is-active { z-index:20; }
+  .lz-cube-workspace .lz-cube3d.stacked .lz-layer figcaption { display:none; }
+  .lz-cube-workspace .lz-cube3d.stacked .lz-layer.is-active figcaption { display:block; color:var(--accent); }
+  .lz-pixel-preview { display:block; width:100%; height:auto; border:1px solid var(--line); border-radius:5px; cursor:crosshair; }
+  .lz-pixel-values { display:flex; gap:16px; flex-wrap:wrap; font-size:14px; margin:10px 0; }
+  .lz-pixel-values .yellow { color:var(--gold); } .lz-pixel-values .blue { color:#2f6fb3; }
+  .lesson select { max-width:100%; font:inherit; padding:6px 10px; }
+  @media (prefers-reduced-motion:reduce) { .lz-shot,.lz-thumb,.lz-layer { animation:none; } }
+
+  #demo-B3 .lz-focus-copy { min-height:105px; margin:16px 0 12px; padding:14px 18px; border-left:3px solid var(--accent); background:#f6efe3; }
+  #demo-B3 .lz-focus-title { margin:0 0 6px; font-size:19px; color:var(--accent); }
+  #demo-B3 .lz-focus-cue { margin:0; max-width:48rem; font-size:16px; line-height:1.75; }
+  #demo-B3 .lz-light-result { margin:16px 0; padding:14px 18px; background:#f6f1e8; border-radius:6px; }
+  #demo-B3 .lz-light-result[hidden] { display:none; }
+  #demo-B3 .lz-light-result > div { display:grid; grid-template-columns:9em 1fr 4em; align-items:center; gap:14px; margin:8px 0; font-size:14px; }
+  #demo-B3 .lz-light-track { height:14px; background:#e2d6c3; border-radius:4px; overflow:hidden; }
+  #demo-B3 .lz-light-track span { display:block; height:100%; background:var(--gold); }
+  #demo-B3 .lz-tog:disabled { opacity:.35; cursor:default; }
+  #demo-B3 .lz-original { border-top:1px solid var(--line); padding-top:12px; margin-top:20px; }
+  #demo-B3 .lz-original summary { color:var(--muted); cursor:pointer; }
+
+.lz-observe{margin:10px 0 14px;padding:10px 14px;border-left:3px solid var(--accent);background:#f6efe3;color:#3d342c;font-size:15px;line-height:1.8}
+.lz-status{font-size:16px;color:var(--gold);margin:10px 0 12px;font-variant-numeric:tabular-nums}
+.lesson details .note{margin:14px 0 0}
+
+#map > table{display:table;width:100%}
+#map th:first-child{width:5em}
+#map th:last-child{width:30%}
+
+  .ag-guide{margin:24px 0;padding:22px;border:1px solid var(--line);border-radius:10px;background:#fffdf9}
+  .ag-guide h4{margin:0 0 12px;font-size:20px}
+  .ag-controls{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin:10px 0}
+  .ag-guide button{font:inherit;padding:6px 12px;border:1px solid #d6c7b0;border-radius:18px;background:#f1e8da;color:#2b2622;cursor:pointer}
+  .ag-guide button[aria-pressed="true"]{background:#b4532a;border-color:#b4532a}
+  .ag-guide button:focus-visible,.ag-guide input:focus-visible{outline:2px solid #b4532a;outline-offset:3px}
+  .ag-family{font-size:13px;color:#7d6b58;margin-left:8px}
+  .ag-panels{display:grid;grid-template-columns:1.15fr 1fr .9fr;gap:14px;margin:18px 0 12px}
+  .ag-panel{min-width:0;padding:16px;border:1px solid #e2d6c3;border-radius:7px;background:#fffdf9;transition:border-color .25s,background .25s}
+  .ag-panel.ag-focus{border-color:#b4532a;background:#f8ece2;box-shadow:inset 0 3px #b4532a}
+  .ag-panel h5{margin:0 0 12px;font-size:17px}
+  .ag-panel p{font-size:14px;line-height:1.75;margin:10px 0}
+  .ag-legend{font-size:12px;display:flex;gap:14px;margin:8px 0 20px}
+  .ag-legend span:first-child{color:#2f6fb3}.ag-legend span:last-child{color:#b7791f}
+  .ag-bands{display:flex;gap:20px;height:130px;padding:4px 8px 0}
+  .ag-band{display:flex;align-items:flex-end;gap:5px;position:relative;flex:1;border-bottom:1px solid #d6c7b0}
+  .ag-bar{width:50%;position:relative;min-height:2px;transition:height .45s}
+  .ag-blue{background:#2f6fb3}.ag-yellow{background:#b7791f}
+  .ag-bar span{position:absolute;top:-21px;width:100%;text-align:center;font-size:12px}
+  .ag-band>small{position:absolute;top:100%;margin-top:5px;width:100%;text-align:center;color:#7d6b58}
+  .ag-panel .ag-values{margin-top:30px;color:#4a4038;font-size:13px}
+  .ag-score{color:#b7791f;font-size:19px!important;font-weight:600}
+  .ag-threshold{display:block;width:100%;accent-color:#b4532a;margin:12px 0}
+  .ag-decision{font-size:18px;font-weight:600;color:#b4532a}.ag-decision.ag-alert{color:#b7791f}
+  .ag-caption{font-size:13px;color:#7d6b58;margin:10px 0 0}
+  .ag-focus-note{border-left:3px solid #b4532a;padding-left:12px;margin:14px 0;font-size:14px}
+  @media(prefers-reduced-motion:reduce){.ag-bar,.ag-panel{transition:none}}
+
+
+  .ag-guide select{font:inherit;color:#2b2622;background:#f1e8da;border:1px solid #d6c7b0;border-radius:6px;padding:6px}
+  .ai-toolbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:20px 0 12px}
+  .ai-play{background:#b7791f!important;color:#fffdf9!important;border-color:#b7791f!important;font-weight:700!important}
+  .ai-images{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  .ai-images figure{margin:0;background:#f6f1e8;padding:12px;border-radius:6px}
+  .ai-images figcaption{font-weight:700;margin-bottom:10px;font-size:16px}
+  .ai-images figcaption span{font-weight:400;color:#7d6b58;font-size:13px}
+  .ai-images canvas{width:100%;aspect-ratio:420/170;display:block;cursor:crosshair}
+  .ai-images canvas:focus-visible{outline:2px solid #b4532a}
+  .ai-legend{display:flex;gap:18px;margin:10px 0;font-size:13px;flex-wrap:wrap}
+  .ai-legend span:last-child{color:#7d6b58}
+  .ai-threshold{display:flex;flex-wrap:wrap;align-items:center;gap:8px 24px;margin:18px 0 10px;font-size:14px}
+  .ai-threshold label{display:flex;align-items:center;gap:12px}.ai-eta{width:min(240px,45vw);accent-color:#b4532a}
+  .ai-outcome{font-size:17px!important;padding:12px 16px;background:#f8ece2;border-left:3px solid #b4532a;margin:8px 0 20px!important}
+  .ai-inspect{display:grid;grid-template-columns:1fr 1.3fr;gap:24px;border-top:1px solid #e2d6c3;padding-top:14px}
+  .ai-inspect h5{font-size:16px;margin:0 0 10px}.ai-inspect p{font-size:14px;margin:8px 0}
+  .ai-spectrum{display:block;width:100%;height:150px}.ai-chart-label{font-size:13px!important;color:#7d6b58}
+  .ai-point{color:#b7791f}.ai-progress{font-size:14px;color:#b4532a}
+
+
+  .al-lesson{padding:20px;background:#fffdf9;border:1px solid #e2d6c3;border-radius:8px;margin:20px 0}
+  .al-goal{border-left:3px solid #b4532a;padding-left:14px;color:#4a4038}
+  .al-controls{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+  .al-controls button,.al-controls select{font:inherit;background:#f1e8da;color:#2b2622;border:1px solid #d6c7b0;border-radius:6px;padding:6px 12px;cursor:pointer}
+  .al-controls button[aria-pressed=true]{border-color:#b4532a;background:#b4532a}
+  .al-controls input{width:160px;accent-color:#b4532a}.al-controls output{color:#b7791f;font-variant-numeric:tabular-nums}
+  .al-grid{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:22px;align-items:start}
+  .al-grid figure{margin:0;min-width:0}.al-grid figcaption{font-size:14px;color:#7d6b58;margin:0 0 10px}
+  .al-image{width:100%;aspect-ratio:420/170;display:block;cursor:crosshair}.al-plot{width:100%;height:240px;display:block;background:#f6f1e8}
+  .al-location,.al-status{font-size:14px!important;color:#4a4038;margin:10px 0!important}
+  .al-result{border-left:3px solid #b7791f;padding:12px 16px;background:#f6efe3;margin:16px 0 0!important;font-size:16px!important}
+  .al-foot,.al-route{font-size:14px!important;color:#7d6b58}
+  .al-controls :focus-visible,.al-image:focus-visible{outline:2px solid #b4532a;outline-offset:3px}
+  .al-metrics{display:flex;gap:24px;font-size:16px;margin:14px 0}.al-metrics strong{color:#b7791f}
+
+
+.formula-story{margin-top:20px}.formula-path{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:20px 0 24px;color:#b4532a;font-weight:600}
+.formula-path span{padding:8px 12px;background:#f8ece2;border:1px solid #d6c7b0;border-radius:6px}
+.formula-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.formula-card{background:#fffdf9;border:1px solid #e2d6c3;border-radius:10px;padding:20px;min-width:0}.formula-card h4{margin:0 0 12px;font-size:19px;color:#2b2622}.formula-card p{margin:8px 0;font-size:16px;line-height:1.8}.formula-card .example{padding:12px;background:#f8ece2;color:#2b2622;border-left:3px solid #b4532a}.formula-evaluation{display:grid;grid-template-columns:1fr 1.4fr;gap:16px;margin-top:16px}.formula-methods{margin:24px 0}.formula-methods th,.formula-methods td{font-size:16px}.formula-foot{padding:16px 20px;background:#f8ece2;border-left:3px solid #b7791f;font-size:16px;line-height:1.8}
+
+  .report-route {padding:16px 20px;border:1px solid var(--line);border-left:3px solid var(--accent);margin-bottom:32px;line-height:2;}
+  .report-route a {margin-inline:8px;white-space:nowrap;}
+  .report-route span {display:block;color:var(--muted);font-size:14px;}
+  .formula-pair {display:grid;grid-template-columns:minmax(0,1.4fr) minmax(390px,1fr);gap:20px;align-items:start;}
+  .formula-pair #fmap {position:sticky;top:20px;padding:12px;}
+  #formula-reference .tex-block {overflow-x:auto;}
+  #formula-reference {border:1px solid var(--line);border-radius:8px;background:#fffdf9;padding:16px;min-width:0;}
+  #formula-reference h4 {margin:0;}
+  #formula-reference .sub {font-size:13px;margin:4px 0 12px;}
+  .formula-reference-row {padding:12px 0;border-top:1px solid var(--line);}
+  .formula-reference-row a {font-size:14px;font-weight:600;}
+  .formula-reference-row .tex-block {font-size:13px;margin:8px 0 0;overflow:visible;}
+  .formula-reference-row .katex-display {margin:0;text-align:left;}
+  .formula-reference-row .katex-display>.katex {text-align:left;}
+
+
+  #fmap .nbox {font-size:24px;}
+  #fmap .nbox .ntag {font-size:20px;}
+  #fmap .elabel {font-size:18px;} #fmap .lane {font-size:20px;}
+  .formula-pair #fmap {align-self:start;}
+  @media (max-width:860px){.formula-pair{grid-template-columns:minmax(0,1fr)}.formula-pair #fmap{position:static;overflow-x:auto}#cluster table,#symbol-table{display:block;overflow-x:auto;max-width:100%}}
+  .formula-reference-row .tex-block {padding:4px 0;}
+
+  .opening-header h1 {font:700 26px/1.35 var(--sans);margin:22px 0 8px;}
+  .opening-header .meta {margin:0 0 22px;}
+  #story {margin:0 0 26px;}
+  .opening-question {font-size:22px;font-weight:700;line-height:1.6;margin:0 0 8px;}
+  .opening-flow {display:grid;grid-template-columns:1fr 32px 1fr 32px 1fr;align-items:center;margin:22px 0 10px;border-block:1px solid var(--line);padding:18px 0;}
+  .opening-flow figure {margin:0;min-width:0;}
+  .opening-flow svg {display:block;width:100%;height:80px;}
+  .opening-flow figcaption {text-align:center;font-size:16px;line-height:1.65;color:var(--ink);margin:8px 0 0;}
+  .opening-flow figcaption span {display:block;font-size:14px;color:var(--muted);}
+  .opening-arrow {color:var(--accent);font-size:26px;text-align:center;}
+  .opening-source {font-size:13px;color:var(--muted);line-height:1.65;}
+  #core-demo {margin-top:12px;}
+  #core-demo .ag-guide {margin-top:0;}
+  #report-result {border-left:3px solid var(--gold);padding:8px 22px;margin:30px 0 46px;}
+  #report-result h2 {font-size:23px;margin:0 0 10px;padding:0;border:0;}
+  #reading-background>header h1 {font-size:24px;}
+
+
+  .paper-overview {display:grid;grid-template-columns:1fr 1fr;gap:0 28px;margin:12px 0 28px;}
+  .paper-overview article {min-width:0;padding:18px 0;border-top:1px solid var(--line);}
+  .overview-label {font:600 14px/1.5 var(--sans);color:var(--accent);}
+  .paper-overview h2 {font:700 23px/1.4 var(--sans);margin:4px 0 12px;padding:0;border:0;}
+  .paper-overview p {font-size:16px;line-height:1.6;margin:10px 0 3px;}
+  .overview-source {font-size:13px;color:var(--muted);}
+  .overview-photos {display:grid;grid-template-columns:1fr 1fr;gap:8px 12px;}
+  .overview-photos figure {min-width:0;margin:0;}
+  .overview-photos img {display:block;width:100%;aspect-ratio:230/130;object-fit:cover;background:#f1e8da;}
+  .overview-photos figcaption {font:13px/1.6 var(--sans);margin:2px 0;text-align:center;}
+  .overview-process {display:flex;align-items:center;justify-content:flex-start;gap:18px;height:91px;}
+  .overview-method {display:flex;align-items:center;gap:8px;}
+  .overview-method figure {flex:1;min-width:0;margin:0;}
+  .overview-method i {font-style:normal;font-size:22px;color:var(--accent);}
+  .overview-method figcaption {font:13px/1.6 var(--sans);text-align:center;margin-top:4px;color:var(--muted);}
+  .overview-method canvas {display:block;width:100%;aspect-ratio:230/130;background:#fffdf9;}
+  .ov-stack {position:relative;aspect-ratio:230/130;margin:0 8px 8px 0;}
+  .ov-stack img {position:absolute;width:100%;height:100%;object-fit:cover;border:1px solid var(--line);}
+  .ov-stack img:nth-child(1){left:8px;top:8px;} .ov-stack img:nth-child(2){left:4px;top:4px;} .ov-stack img:nth-child(3){left:0;top:0;}
+  .ov-k1 {color:var(--gold);} .ov-k2 {color:var(--accent);} .ov-gray {color:#7d6b58;}
+  .overview-method figure.ov-wide {flex:1.5;}
+  .paper-overview article {container-type:inline-size;}
+  @container (max-width:400px){.overview-method{flex-direction:column;align-items:stretch;}.overview-method figure,.overview-method figure.ov-wide{width:80%;margin:0 auto;flex:none;}.overview-method i{text-align:center;transform:rotate(90deg);}}
+  .paper-overview p.ov-legend {font-size:13px;line-height:1.6;color:var(--muted);margin:6px 0 0;}
+  @media (max-width:640px){.paper-overview{grid-template-columns:1fr;}}
+  .overview-process span {font:600 17px/1.5 var(--sans);}
+  .overview-process i {font-style:normal;font-size:24px;color:var(--accent);}
+  .overview-finding {min-height:91px;display:flex;flex-direction:column;justify-content:center;gap:2px;}
+  .overview-finding b {font:700 26px/1.4 var(--sans);color:var(--gold);}
+  .overview-finding > span {font-size:13px;line-height:1.5;color:var(--muted);}
+
+
+  .report-route {padding:8px 16px;margin-bottom:16px;}
+  main > .opening-header {padding-bottom:0;margin-bottom:12px;border:0;}
+  .opening-header h1 {margin:12px 0 6px;}
+  .opening-header .meta {margin:0;}
+  .paper-overview {margin:0 0 20px;}
+  .paper-overview article {padding:12px 0;}
+  .overview-process {height:76px;} .overview-finding {min-height:76px;}
+
+ .extra-demo {padding:20px;background:#fffdf9;border:1px solid var(--line);border-radius:12px;}
+ .extra-demo svg {display:block;width:100%;max-width:780px;height:auto;margin:16px auto;}
+ .extra-result {font-size:16px;border-left:3px solid var(--accent);padding:10px 14px;margin:0;background:#f8ece2;}
+ .extra-demo output {color:var(--accent);margin-inline:8px;}
+</style>
+<style id="warm-theme">
+  :root { --sans: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif; --serif: "Lora", Georgia, serif;
+    --navy: #1a2744; --espresso: #2a211c; }
+  body { background: #faf8f4; color: #2b2622; }
+  h1, .opening-header h1 { font-family: var(--serif); color: var(--navy); font-weight: 600; }
+  h2 { font-family: var(--serif); color: var(--navy); border-bottom-color: #d8ccb8; }
+  h3 { color: var(--navy); }
+  #toc { background: #f3ede3; border-right-color: #e2d6c3; }
+  #toc a.on { background: #e8dcc9; color: #2b2622; }
+  /* every animation, chart and photo canvas is a warm dark "screen" so its light labels stay readable */
+  main canvas { background: var(--espresso) !important; border-radius: 6px; }
+  .fmap { background: var(--espresso) !important; }
+  .fmap foreignObject, .fmap foreignObject * { color: #f1e8dc; }
+  /* formula-map node colours (set as SVG attributes by widgets.js) */
+  .fmap [fill="#0f172a"] { fill: #3a2e26; } .fmap [stroke="#cbd5e1"] { stroke: #dfd2c1; }
+  .fmap [fill="#083344"] { fill: #5a2f1e; } .fmap [stroke="#22d3ee"] { stroke: #e8956a; }
+  .fmap [fill="#1e293b"] { fill: #3b3029; } .fmap [stroke="#475569"] { stroke: #6e5d4c; }
+  .fmap [fill="#111827"] { fill: #231c17; } .fmap [stroke="#64748b"] { stroke: #8f7d69; }
+  .fmap [stroke="#94a3b8"] { stroke: #bba98f; } .fmap [fill="#94a3b8"] { fill: #bba98f; }
+  .talk-step > h2 { display: flex; align-items: center; gap: 14px; margin-top: 88px; }
+  .step-no { flex: 0 0 auto; display: inline-grid; place-items: center; width: 40px; height: 40px; border-radius: 50%;
+    background: var(--navy); color: #faf8f4; font: 700 19px/1 var(--sans); }
+  .talk-step > section > h2 { font-size: 22px; margin-top: 40px; }
+  .backup-divider { margin: 120px 0 0; padding: 22px 26px; border: 2px dashed #cdbca3; border-radius: 10px; background: #f6efe3; }
+  .backup-divider span { font: 700 22px/1.3 var(--serif); color: var(--navy); }
+  .backup-divider p { margin: 6px 0 0; color: #7d6b58; }
+  .ov-list { margin: 6px 0 4px; padding-left: 1.2em; font-size: 15.5px; line-height: 1.6; }
+  .ov-list li { margin: 2px 0; }
+  .crit { padding-left: 1.4em; } .crit li { margin: 0 0 12px; line-height: 1.7; }
+  .crit-src { color: #8a7866; font-size: 14px; }
+  .live { margin-top: 14px; padding-top: 12px; border-top: 1px dashed #5a4a3e; }
+  .live-row { display: flex; flex-wrap: wrap; gap: 8px 18px; align-items: center; }
+  .live-ctl { display: inline-flex; align-items: center; gap: 8px; color: #dfd2c1; font-size: 14px; }
+  .live-ctl input { width: 130px; accent-color: #e8956a; }
+  .live-ctl output { min-width: 2.6em; color: #fbbf24; font-variant-numeric: tabular-nums; }
+  .live-note { color: #bba98f; font-size: 14px; }
+  .live-seg { display: flex; flex-wrap: wrap; gap: 6px; }
+  .live-seg button { background: #3b3029; color: #f1e8dc; border: 1px solid #6e5d4c; border-radius: 999px; padding: 3px 12px; font: 13px var(--sans); cursor: pointer; }
+  .live-seg button[aria-pressed="true"] { background: #b4532a; border-color: #e8956a; color: #fff; }
+  .live-out { margin-top: 8px; overflow-x: auto; color: #f1e8dc; }
+  .nx-svg { display: block; width: 100%; max-width: 680px; background: var(--espresso); border-radius: 6px; margin: 10px 0 6px; }
+  .nx-img { display: block; width: 100%; max-width: 560px; image-rendering: pixelated; margin: 10px 0 6px; }
+  .nx-result { font-size: 15.5px; margin: 6px 0; } .nx-note { font-size: 14px; color: #7d6b58; }
+  .nx-ctl .live-ctl { color: #4a4038; } .nx-ctl .live-ctl output { color: #b4532a; }
+  .nx-ctl .live-seg button { background: #f1e8da; color: #2b2622; border-color: #d6c7b0; }
+  .nx-ctl .live-seg button[aria-pressed="true"] { background: #b4532a; color: #fff; border-color: #b4532a; }
+  .crit-fig { margin: 10px 0 4px; } .crit-fig img { display: block; width: 100%; max-width: 560px; border: 1px solid #e2d6c3; border-radius: 4px; background: #fff; }
+  .crit-fig figcaption { font-size: 13px; color: #8a7866; margin-top: 4px; }
+  .crit-refs { font-size: 13.5px; color: #7d6b58; line-height: 1.7; }
+  .chapter-lead { font: 500 19px/1.6 var(--serif); color: #5a4636; border-left: 4px solid #b4532a; padding: 6px 0 6px 16px; margin: 0 0 28px; }
+  /* key formula cards: a dark "screen" so the coloured formula terms stay readable */
+  .keyeq { background: var(--espresso) !important; border-color: #4a3d33 !important; border-left: 4px solid #e8956a !important; }
+  .keyeq-head { color: #bba98f !important; } .keyeq-head b { color: #f0b27a !important; }
+  .keyeq .plain, .keyeq .tex-block, .keyeq .katex { color: #f1e8dc !important; }
+  .keyeq .keyeq-note { color: #dfd2c1; font-size: 14px; margin: 6px 0 0; }
+  .keyeq .w-a { color: #67e8f9 !important; } .keyeq .w-b { color: #fbbf24 !important; }
+  .keyeq .w-c { color: #c4b5fd !important; } .keyeq .w-d { color: #86efac !important; }
+</style>
+<style id="pr-widget-css">.anim{min-width:0;border:1px solid #e2d6c3;border-radius:8px;padding:14px;margin:14px 0;background:#fffdf9}
+.anim-title{font-weight:700;line-height:1.6;margin-bottom:10px;color:#2b2622}
+.anim-bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:13px;line-height:1.5}
+.anim-bar button{min-height:36px;font:inherit;padding:6px 10px;border:1px solid #d6c7b0;border-radius:8px;background:#f1e8da;color:#2b2622;cursor:pointer}
+.anim-bar button:hover{border-color:#b4532a}
+.anim-pos{color:#7d6b58;margin-left:2px;white-space:nowrap}
+.anim-frames{min-width:0;margin:14px 0 4px;padding-left:1.45em}
+.anim-frames li{min-width:0;max-width:100%;padding:8px;border-radius:8px;color:#7d6b58;line-height:1.65;overflow-wrap:anywhere}
+.anim-frames li+li{margin-top:4px}
+.anim-frames li.cur{background:#f3dccb;color:#2b2622}
+.anim-label{display:block;margin:0 0 4px;font-size:14px}
+.anim-expr{display:inline-block;max-width:100%;overflow-x:auto;vertical-align:middle;font-family:"Cambria Math","Times New Roman",serif;font-size:16px;margin-right:6px;white-space:nowrap}
+.anim-tex{display:inline-block;max-width:100%;overflow-x:auto;overflow-y:hidden;vertical-align:middle;margin-right:8px;padding:2px 0}
+.anim-val{display:inline-block;font-weight:700;color:#b7791f;white-space:nowrap}
+.anim-plot{min-width:0;max-width:100%}
+#toc .toc-head{display:flex;align-items:center;margin-top:10px}
+#toc .toc-caret{background:none;border:0;color:#8a7866;cursor:pointer;width:18px;padding:0;font-size:12px;transition:transform .15s}
+#toc .toc-grp.open .toc-caret{transform:rotate(90deg)}
+#toc .toc-head a{flex:1;color:#2b2622;font-weight:700}
+#toc .toc-sub{display:none;margin:2px 0 4px 10px;border-left:1px solid #f1e8da}
+#toc .toc-grp.open .toc-sub{display:block}
+#pr-progress{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,#b4532a,#b7791f);z-index:50}
+#pr-top{position:fixed;right:22px;bottom:22px;width:40px;height:40px;border-radius:50%;border:1px solid #e2d6c3;background:#fffdf9;color:#b4532a;font-size:18px;cursor:pointer;opacity:0;pointer-events:none;transition:opacity .2s;z-index:50}
+#pr-top.show{opacity:1;pointer-events:auto}
+#pr-top:hover{border-color:#b4532a}
+#toc .toc-lab{margin:0 0 12px;padding:8px 10px;border:1px solid #b4532a;border-radius:8px;background:#f8ece2;color:#b4532a;font-weight:700}
+#toc .toc-lab:hover{border-color:#b4532a}
+#pr-lightbox{position:fixed;inset:0;z-index:100;background:rgba(3,7,12,.92);display:flex;flex-direction:column}
+#pr-lightbox .lb-stage{flex:1;display:flex;align-items:center;justify-content:center;padding:56px 70px 8px;min-height:0}
+#pr-lightbox .lb-stage img{box-sizing:border-box;background:#fff;border-radius:8px;padding:12px;box-shadow:0 10px 40px rgba(0,0,0,.6)}
+#pr-lightbox .lb-foot{display:flex;flex-wrap:wrap;gap:6px 18px;align-items:baseline;justify-content:center;padding:10px 24px 18px;color:#4a4038;font-size:14px}
+#pr-lightbox .lb-pos{color:#7d6b58;font-family:ui-monospace,Consolas,monospace}
+#pr-lightbox .lb-cap{max-width:70em}
+#pr-lightbox .lb-open{color:#b4532a}
+#pr-lightbox button{position:absolute;background:rgba(43,36,30,.8);color:#2b2622;border:1px solid #e2d6c3;border-radius:50%;width:44px;height:44px;font-size:24px;line-height:1;cursor:pointer}
+#pr-lightbox button:hover{border-color:#b4532a;color:#b4532a}
+#pr-lightbox .lb-close{top:14px;right:18px}
+#pr-lightbox .lb-prev{left:14px;top:50%;transform:translateY(-50%)}
+#pr-lightbox .lb-next{right:14px;top:50%;transform:translateY(-50%)}
+main .figure img{cursor:zoom-in}
+.pr-flash{animation:prflash 2.2s ease-out}
+@keyframes prflash{0%,35%{box-shadow:0 0 0 2px #b4532a,0 0 26px rgba(180,83,42,.45)}100%{box-shadow:0 0 0 0 transparent}}
+.kp-nav{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 16px;margin:8px 0 16px;font-size:13px;line-height:1.6;color:#7d6b58}
+.kp-nav a{text-decoration:none}
+.kp-eqs a.kp-eq{display:inline-block;margin:0 3px;padding:2px 8px;border:1px solid #b4532a;border-radius:8px;font:12px/1.8 ui-monospace,Consolas,monospace}
+.kp-step a{margin-left:14px;color:#4a4038}
+.kp-step a:hover,.kp-eqs a:hover{color:#b4532a}
+.demo.split{display:grid;grid-template-columns:minmax(0,1fr);gap:20px;align-items:start}
+.demo.split.no-steps{grid-template-columns:minmax(0,1fr)}
+.demo-left,.demo-right,.demo .out,.plots>.plot{min-width:0;max-width:100%}
+.demo-left{position:static;max-height:none}
+.demo-left .controls{display:flex;flex-direction:column;align-items:stretch;gap:12px;padding:16px;border:1px solid #e2d6c3;border-radius:8px;background:#fffdf9}
+.demo-left .controls label{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr) auto;align-items:center;gap:8px;min-width:0;font-size:14px;line-height:1.6;overflow-wrap:anywhere}
+.demo-left .controls input[type=range]{width:100%;min-width:0;margin:0;grid-column:2}
+.demo-left .controls select{width:100%;min-width:0;grid-column:2 / -1;justify-self:stretch}
+.demo-left .controls label:has(input[type=checkbox]){grid-template-columns:minmax(0,1fr) 22px}
+.demo-left .controls label:has(input[type=checkbox]) input{grid-column:2}
+.demo.split.no-steps .demo-left{position:static;max-height:none}
+.demo.split.no-steps .demo-left .controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px 22px}
+@media (min-width:1200px){.demo.split{grid-template-columns:335px minmax(0,1fr)}.demo-left{position:sticky;top:20px;max-height:calc(100vh - 40px);overflow:auto;scrollbar-width:thin}}
+.plots{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;margin:0 0 16px}
+.plots.two{grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr))}
+.plot canvas{display:block;max-width:100%;border-radius:8px;border:1px solid #e2d6c3;box-sizing:border-box}
+.controls input[type=range]{accent-color:#b4532a;width:150px;max-width:100%;min-height:36px}
+.controls select{min-height:36px;max-width:100%;background:#f1e8da;color:#2b2622;border:1px solid #d6c7b0;border-radius:8px;padding:6px 8px;font:inherit}
+.controls input[type=checkbox]{accent-color:#b4532a;width:18px;height:18px;margin:0}
+.controls .val{display:inline-block;min-width:3.2em;padding:2px 6px;border-radius:8px;background:#f1e8da;color:#b4532a;font:12px/1.8 ui-monospace,Consolas,monospace;text-align:center;white-space:nowrap}
+.controls .val:empty{display:none}
+.demo .out table{display:block;max-width:100%;overflow-x:auto;margin:12px 0 16px;scrollbar-width:thin}
+.demo .out .note{font-size:15px;line-height:1.8;margin:14px 0 0;color:#7d6b58;overflow-wrap:anywhere}
+.fmap{position:relative;overflow-x:auto;border:1px solid #e2d6c3;border-radius:8px;background:#fffdf9;padding:12px}
+.fmap svg{display:block}
+.fmap .node{cursor:pointer}
+.fmap .node:hover rect{stroke:#b4532a}
+.fmap .nbox{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;text-align:center;font-size:15px;line-height:1.35;color:#2b2622;padding:4px}
+.fmap .nbox .ntag{font-size:13px;color:#7d6b58;font-family:ui-monospace,Consolas,monospace}
+.fmap .nbox b{font-weight:700}
+.fmap .elabel{font-size:13px;line-height:1.3;color:#4a4038;text-align:center;height:100%;display:flex;align-items:flex-end;justify-content:center}
+.fmap .lane{font-size:13px;fill:#7d6b58;font-family:ui-monospace,Consolas,monospace}
+.keyeq{min-width:0;border:1px solid #e2d6c3;border-left:3px solid #b4532a;border-radius:8px;background:#fffdf9;padding:20px 22px;margin:24px 0 18px}
+.keyeq-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px;font-size:13px;line-height:1.6;color:#7d6b58}
+.keyeq-head b{color:#b4532a;font-weight:600;font-size:14px}
+.keyeq .plain{font-size:17px;line-height:1.85;margin:12px 0 10px;max-width:48em;color:#2b2622}
+.keyeq .tex-block{max-width:100%;overflow-x:auto;overflow-y:hidden;font-size:1.08em;padding:12px 0 10px;margin:0;scrollbar-width:thin}
+.keyeq details{margin-top:12px;font-size:14px;line-height:1.8;color:#4a4038}
+.keyeq summary{cursor:pointer;color:#7d6b58;width:fit-content;max-width:100%;overflow-wrap:anywhere}
+.keyeq summary:hover{color:#b4532a}
+.keyeq dl{display:grid;grid-template-columns:minmax(0,auto) minmax(0,1fr);gap:8px 20px;margin:12px 0 0}
+.keyeq dt,.keyeq dd{min-width:0;overflow-wrap:anywhere}
+.keyeq dd{margin:0}
+dfn[data-term]{font-style:normal;font-weight:600;color:#2b2622;border-bottom:2px solid #b4532a;cursor:help;position:relative}
+.term-ref{border-bottom:1px dotted #8a7866;cursor:help;position:relative}
+[data-tip]:hover::after,[data-tip]:focus::after{content:attr(data-tip);position:absolute;left:0;top:calc(100% + 4px);z-index:60;width:max-content;max-width:min(340px,80vw);background:#fffdf9;color:#2b2622;border:1px solid #e2d6c3;border-radius:8px;padding:8px 12px;font:400 13px/1.6 "Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif;box-shadow:0 6px 20px rgba(0,0,0,.45);white-space:normal}
+.lede{font-size:18px;line-height:1.9;color:#2b2622;max-width:44em;margin:22px 0 12px}
+.w-a{color:#b4532a}.w-b{color:#b7791f}.w-c{color:#7c5cbf}.w-d{color:#2f855a}
+.w-a,.w-b,.w-c,.w-d{font-weight:600;border-bottom:1px dashed currentColor;cursor:help;border-radius:2px}
+.pr-hl{background:rgba(125,107,88,.22);box-shadow:0 0 0 2px rgba(125,107,88,.22);border-radius:3px}
+.katex .pr-hl{background:none;box-shadow:none;text-shadow:0 0 10px currentColor}
+.keyeq.pr-focus .tex-block .katex{color:#8a7866}
+.keyeq.pr-focus .katex [style*="color"]:not(.pr-hl){opacity:.35}
+.keyeq .tex-block .katex *{transition:opacity .15s}
+.toc-grp:not(.toc-appx)+.toc-appx{margin-top:10px;padding-top:10px;border-top:1px solid #e2d6c3}
+#toc .toc-appx a.toc-group{color:#8a7866}
+.anim-bar button:focus-visible,.controls select:focus-visible,.controls input:focus-visible,.keyeq summary:focus-visible,.term-ref:focus-visible,#pr-top:focus-visible{outline:2px solid #b4532a;outline-offset:3px}
+@media (max-width:600px){
+.demo.split{gap:16px}
+.demo-left .controls{padding:14px;gap:16px}
+.demo-left .controls label,.demo-left .controls label:has(input[type=checkbox]){grid-template-columns:minmax(0,1fr) auto;gap:5px 10px;font-size:14px}
+.demo-left .controls label input,.demo-left .controls label select,.demo-left .controls label:has(input[type=checkbox]) input{grid-row:2;grid-column:1}
+.demo-left .controls label select{grid-column:1 / -1}
+.demo-left .controls label .val{grid-row:2;grid-column:2}
+.anim{padding:12px;margin:16px 0 0}
+.anim-bar{gap:8px 6px}
+.anim-bar button{flex:1 0 auto;padding:6px 8px}
+.anim-pos{flex-basis:100%;margin:0}
+.anim-frames{padding-left:1.3em}
+.anim-frames li{padding:8px 6px}
+.keyeq{padding:16px;margin:20px 0 16px}
+.keyeq .plain{font-size:16px;line-height:1.85}
+.keyeq dl{grid-template-columns:minmax(0,1fr);gap:4px}
+.keyeq dt{font-weight:600;margin-top:10px}
+.keyeq dt:first-child{margin-top:0}
+.keyeq dd{padding-left:0;color:#7d6b58}
+.kp-nav{display:grid;grid-template-columns:minmax(0,1fr);gap:8px}
+.kp-step a{margin-left:0;margin-right:14px}
+.lede{font-size:17px}
+}
+@media (prefers-reduced-motion:reduce){.pr-flash{animation:none}#pr-top,#toc .toc-caret,.keyeq .tex-block .katex *{transition:none}}
+/* Desktop: settings above the computation and result columns. */
+.anim-expr,.anim-tex{max-width:none;overflow:visible;padding:3px 4px 3px 0}
+.anim-frames li{overflow-x:auto;overflow-y:hidden}
+@media (min-width:1200px){
+  .demo.split{grid-template-columns:minmax(340px,2fr) minmax(0,3fr);gap:20px 24px}
+  .demo-left{display:contents}
+  .demo-left .controls{grid-column:1/-1;grid-row:1;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px 24px;margin:0;padding:16px 18px}
+  .demo-left .controls label{grid-template-columns:minmax(0,1fr) auto;gap:8px 12px}
+  .demo-left .controls label select,.demo-left .controls label input[type=range]{grid-row:2;grid-column:1}
+  .demo-left .controls label select{grid-column:1/-1}
+  .demo-left .controls label .val{grid-row:2;grid-column:2}
+  .demo-left .controls label:has(input[type=checkbox]){display:flex;justify-content:space-between;align-self:center;gap:16px}
+  .demo-left .out-steps{grid-column:1;grid-row:2;min-width:0}
+  .demo-left .out-steps .anim{margin:0}
+  .demo-right{grid-column:2;grid-row:2}
+  .demo.split.no-steps{grid-template-columns:minmax(0,1fr)}
+  .demo.split.no-steps .out-steps{display:none}
+  .demo.split.no-steps .demo-right{grid-column:1/-1}
+  .kp>dl{max-width:none;grid-template-columns:6.5em minmax(0,1fr);gap:8px 20px}
+  .kp>dl dd{max-width:54em}
+}</style>
+</head>
+<body>
+<div class="layout">
+<nav id="toc" aria-label="Contents"></nav>
+<main>
+<header class="opening-header"><h1>Surface Defect Detection of Metal Parts:<br>Use of Multimodal Illuminations and Hyperspectral Imaging Algorithms</h1><p class="meta">Benmoussat et al., 2012 · <a href="index.html">Full page</a> · <a href="annotated.html">Annotated paper, paragraph by paragraph</a></p></header>
+<section id="story" data-toc="group" data-toc-open data-tag="0" data-toc-name="What this paper does">
+  <div class="paper-overview">
+    <article><span class="overview-label">Problem</span><h2>How can a computer find dents and scratches automatically?</h2>
+      <div class="overview-photos"><figure><img src="figs/benmoussat12-tab2-d3-WL-G-real.png" alt="The scratch is clearly visible under white light"><figcaption>White light: clear</figcaption></figure><figure><img src="figs/benmoussat12-tab2-d3-505-G-real.png" alt="The scratch is clearly visible under 505 nm lighting"><figcaption>505 nm: clear</figcaption></figure><figure><img src="figs/benmoussat12-tab2-d3-470-B-real.png" alt="Under 470 nm lighting the scratch shrinks to a few broken dots"><figcaption>470 nm: broken up</figcaption></figure><figure><img src="figs/benmoussat12-tab2-d3-850-R-real.png" alt="Under 850 nm lighting the scratch is almost invisible"><figcaption>850 nm: almost gone</figcaption></figure></div>
+      <p>How can a camera automatically find dents and scratches on shiny metal?</p><a class="overview-source" href="#s1">In the paper: Table II</a></article>
+    <article><span class="overview-label">Before</span><h2>Pick one light first, then take a photo and look for defects</h2>
+      <div class="overview-process"><span>Pick one light</span><i>→</i><span>Take a photo</span><i>→</i><span>Find defects</span></div>
+      <p>When designing an inspection system, you first choose the light's direction, color, and polarization so that the defect stands out. If the light is wrong, the defect does not show up in the photo. For example, the scratch in the Problem card almost disappears at 850 nm.</p><a class="overview-source" href="annotated.html#s1">In the paper: Section I</a>; <a class="overview-source" href="https://doi.org/10.1016/j.eswa.2010.11.030">Zhang et al., 2011</a></article>
+    <article><span class="overview-label">This paper</span><h2>Combine the brightness under many kinds of lighting</h2>
+      <div class="overview-method"><figure><div class="ov-stack"><img src="figs/benmoussat12-tab2-d3-850-R-real.png" alt=""><img src="figs/benmoussat12-tab2-d3-505-G-real.png" alt=""><img src="figs/benmoussat12-tab2-d3-WL-G-real.png" alt="Photos of the same scratch under different lighting, stacked together"></div><figcaption>One photo for each light</figcaption></figure><i>→</i><figure class="ov-wide"><canvas class="ov-bars" width="420" height="237" aria-label="Brightness at a point on the scratch divided by brightness at a background point, across the 12 monochromatic-light components"></canvas><figcaption>Scratch brightness ÷ background brightness</figcaption></figure><i>→</i><figure><canvas class="ov-mask" aria-label="The scratch outlined by SAM using the 12 monochromatic-light components"></canvas><figcaption>SAM outlines the scratch</figcaption></figure></div>
+      <p class="ov-legend">Middle: if the dark spot were only a shadow, it would be equally dark under every light and the line would be flat. The scratch is much darker in visible light and only slightly darker in near-infrared. <span class="ov-gray">Gray dots</span> mean the photo is overexposed (brightness 255), so no comparison is possible. Right: the <span class="ov-k1">gold diagonal band</span> is the scratch that was found. The scattered small dots are background pixels wrongly flagged (<span class="ov-far"></span>).</p>
+      <p>At each position, line up the brightness under all the lights as a string of numbers (a brightness record) and compare it with the background. Places whose pattern differs are outlined.</p><a class="overview-source" href="#kp-D1">In the paper: Section II–III</a></article>
+    <article><span class="overview-label">Result</span><h2>SAM has the lowest average false alarm rate</h2>
+      <div class="overview-finding"><span>SAM comparison in Fig. 3</span><b>Monochromatic light gives fewer false alarms than white light</b><span>Ranking by average false alarm rate: 6 methods compared (Table III)</span></div>
+      <p>The test used 3 artificial defects: a dent 2 mm in diameter, small dents about 0.5 mm in diameter, and a scratch 6 mm long. Each method was first tuned to find at least 90% of the defect pixels. Then the share of background wrongly flagged was compared.</p><a class="overview-source" href="#s5">In the paper: Table III, Fig. 3</a></article>
+  <article class="ov-extra"><span class="overview-label">Weak spots</span><h2>Good results, but the test is small and one cause is mixed in</h2><ul class="ov-list"><li>More lights also means more numbers per pixel; the two effects are not separated.</li><li>Only 3 lab-made defects on flat parts.</li><li>Some claims (0% false alarms, fast) go beyond what is shown.</li></ul><a class="overview-source" href="#ch-critique">Chapter 5</a></article><article class="ov-extra"><span class="overview-label">Next steps</span><h2>Separate the causes, test real parts, add a vision-language model</h2><ul class="ov-list"><li>Compare cubes with equal numbers of components.</li><li>Real, curved parts with many samples.</li><li>SAM finds the defect; a vision-language model explains it.</li></ul><a class="overview-source" href="#ch-critique">Chapter 5</a></article></div>
+</section><section id="ch-light" class="talk-step" data-toc="group" data-tag="1a" data-toc-name="Basics: light and spectrum"><h2><span class="step-no">1a</span>Basics: light and spectrum</h2>
+<p class="chapter-lead">Light is a wave; its wavelength sets the color. A spectrum shows how much light there is at each wavelength. White light covers a wide range, a single-color LED a narrow one.</p>
+<section class="kp" id="kp-A1" data-kp="A1" data-toc="item" data-tag="A1" data-toc-name="Wavelength and color">
+    <h3><span class="chip">A1</span>Wavelength and color of light</h3>
+    <p class="src">In the paper: <a class="ann" href="annotated.html#s2c">Section II-C</a></p>
+    <dl><dt>Everyday example</dt><dd>A rainbow spreads from violet to red, and each color has a different wavelength. A TV remote sends out infrared light that your eyes cannot see, but a phone camera pointed at it often can.</dd>
+      <dt>What it is</dt><dd>Light is a wave. The distance between two neighboring wave peaks is called the <dfn data-term="wavelength">wavelength</dfn>, measured in nm (nanometers). The human eye sees roughly 380 to 750 nm. Shorter than this range is ultraviolet light. Just beyond visible red is <dfn data-term="near-infrared">near-infrared</dfn> light. Human eyes cannot see it, and whether a camera can sense it depends on the sensor and the filter.</dd>
+      <dt>How the paper uses it</dt><dd>Machine vision cameras commonly use light from 380 to 1100 nm (Section II-C). The paper's camera can sense up to 1000 nm, so near-infrared LED lighting from 780 to 940 nm can be used (Section IV).</dd></dl>
+    <div class="demo" id="demo-A1"></div>
+  </section><section class="kp" id="kp-A2" data-kp="A2" data-toc="item" data-tag="A2" data-toc-name="Spectrum vs. multi/hyperspectral">
+    <h3><span class="chip">A2</span>Spectrum, multispectral, and hyperspectral</h3>
+    <p class="src">In the paper: <a class="ann" href="annotated.html#s1">Section I</a>, <a class="ann" href="annotated.html#s2d">II-D</a></p>
+    <dl><dt>What it is</dt><dd>A <dfn data-term="spectrum">spectrum</dfn> shows how the intensity of light changes with wavelength. The demo below uses one reflectance curve for both cases. <dfn data-term="multispectral">Multispectral</dfn> imaging usually measures a few wide bands. <dfn data-term="hyperspectral imaging">Hyperspectral</dfn> imaging measures many narrow, adjacent bands and keeps finer spectral detail. An ordinary color camera uses 3 wide bands (red, green, blue) that overlap each other. There is no universal cut-off in the number of bands between the two.</dd>
+      <dt>How the paper uses it</dt><dd>The paper switches LEDs on one after another and photographs with a color camera. Each grayscale image records one combination of lighting, polarization angle, and color channel. Each pixel in the cube therefore has 3 to 60 brightness values. These numbers come from different shooting conditions and are not measurements of continuous bands, so they are called a "pseudo-spectrum" (Section II-D, Table I).</dd></dl>
+    <div class="demo" id="demo-A2"></div>
+  </section><section class="kp" id="kp-A3" data-kp="A3" data-toc="item" data-tag="A3" data-toc-name="LED light sources">
+    <h3><span class="chip">A3</span>LED light sources</h3>
+    <p class="src">In the paper: <a class="ann" href="annotated.html#s2a">Section II-A</a>, <a class="ann" href="annotated.html#s4">IV</a></p>
+    <dl><dt>What it is</dt><dd>An <dfn data-term="LED">LED</dfn> (light-emitting diode) is a light source made from semiconductor material. It glows when current passes through it. A monochromatic LED concentrates its light near one wavelength. A white LED covers a wider range of visible light. The paper points out that LEDs have advantages such as long life and high efficiency, which make them a common light source for machine vision (Section II-A).</dd>
+      <dt>How the paper uses it</dt><dd>The paper uses 1 white LED (400 to 750 nm) and 9 <dfn data-term="monochromatic light">monochromatic</dfn> LED arrays: 470, 505, 590, 630, 780, 810, 850, 880, and 940 nm (Section IV).</dd></dl>
+    <div class="demo" id="demo-A3"></div>
+  </section>
+</section>
+<section id="ch-polar" class="talk-step" data-toc="group" data-tag="1b" data-toc-name="Basics: polarization"><h2><span class="step-no">1b</span>Basics: polarization</h2>
+<p class="chapter-lead">Light also has a vibration direction. A polarizer lets one direction through; a second one (the analyzer) in front of the camera dims the light depending on its angle.</p>
+<section class="kp" id="kp-B1" data-kp="B1" data-toc="item" data-tag="B1" data-toc-name="Polarization: two fences">
+    <h3><span class="chip">B1</span>What polarization is: two fences</h3>
+    <p class="src">In the paper: <a class="ann" href="annotated.html#s2b">Section II-B</a></p>
+    <dl><dt>What it is</dt><dd>First, think of the "electric field direction" as the direction in which light vibrates. In the figure, the light travels to the right, and the short lines show the vibration direction. In ordinary lamp light the directions are scattered, which is called unpolarized light. After passing through a <dfn data-term="polarizer">polarizer</dfn>, the directions all match, and the light becomes linearly <dfn data-term="polarization">polarized</dfn> light. A polarizer works like a "fence" that keeps only one vibration direction. More precisely, it lets through the part of the electric field along its transmission direction. The electric field vibrates perpendicular to the direction the light travels.</dd>
+      <dt>How the paper uses it</dt><dd>A polarizer is placed in front of the lamp to set the polarization direction of the incoming light. Another polarizer, called the <dfn data-term="analyzer">analyzer</dfn>, is placed in front of the camera. Rotating it shows how the brightness of the reflected light changes. The polarization of light reflected from metal depends on the material, the surface direction, and the geometry. The paper uses this to add observation information about the defect, and it does not directly rebuild the defect's 3D shape (Section II-B).</dd></dl>
+    <div class="demo" id="demo-B1"></div>
+  </section><section class="kp" id="kp-B2" data-kp="B2" data-toc="item" data-tag="B2" data-toc-name="Analyzer angle and brightness">
+    <h3><span class="chip">B2</span>Analyzer angle and brightness</h3>
+    <p class="src">In the paper: <a class="ann" href="annotated.html#s2b">Section II-B</a>, <a class="ann" href="annotated.html#s4">IV</a></p>
+    <dl><dt>Everyday example</dt><dd>Look at a phone screen through polarized sunglasses and turn your head. The screen gets darker and can even go completely black.</dd>
+      <dt>What it is</dt><dd>For ideal linearly polarized light and an analyzer, the fraction of brightness that passes = cos²(analyzer angle − polarization direction of the incoming light). This is called <dfn data-term="Malus's law">Malus's law</dfn>. When the two are parallel, the most light passes. When they are perpendicular, none passes (0). Real filters and partially polarized light may not match this ideal exactly.</dd>
+      <dt>How the paper uses it</dt><dd>The paper rotates the analyzer to 30°, 60°, and 90° and takes an image at each. At the same position, with the same lighting and channel, this gives 3 brightness values (Section IV). The paper does not say what the reference direction for these angles is.</dd></dl>
+    <div class="demo" id="demo-B2"></div>
+  </section><div class="keyeq" data-live="malus"><div class="keyeq-head"><b>Key formula</b><span>Malus's law, analyzer angle</span></div><p class="plain">Light already polarized at angle <span class="w-b">φ</span> passes an analyzer at angle <span class="w-a">θ</span> with brightness falling as cos². The paper uses analyzer angles 30°, 60° and 90°.</p><div class="tex-block">I = \cc{I_0}\,\cos^{2}(\ca{\theta} - \cb{\varphi})</div><div class="tex-block">\ca{\theta}-\cb{\varphi} = 0^\circ,\ 30^\circ,\ 60^\circ,\ 90^\circ \;\Rightarrow\; I/\cc{I_0} = 100\%,\ 75\%,\ 25\%,\ 0\%</div></div>
+<section class="kp nx-kp" id="kp-B5" data-kp="B5" data-toc="item" data-tag="B5" data-toc-name="Polarization removes glare">
+<h3><span class="chip">B5</span>Polarization separates the glare from the rest</h3><p class="src">From the paper cluster: Nayar et al. 1997, <i>Separation of Reflection Components Using Color and Polarization</i>; Atkinson and Hancock 2006</p><p>With a polarizer in front of the lamp, the mirror-like reflection keeps that polarization, while the diffuse part loses it. Turning the analyzer in front of the camera dims only the glare, following cos²; at 90° the glare is blocked. This is the light path of the paper's Fig. 1(a).</p>
+<div class="nx" data-nx="B5"></div>
+<p class="al-foot">Nayar et al. also note that for metals the two Fresnel coefficients are nearly equal, so polarization signals from bare metal are weak. Atkinson and Hancock show that the degree of polarization depends on how much the surface is tilted, which is why the paper hopes polarization reveals a dent's 3D shape; their study covers non-metals only.</p></section>
+
+</section>
+<section id="ch-metal" class="talk-step" data-toc="group" data-tag="1c" data-toc-name="Basics: metal reflection and the color camera"><h2><span class="step-no">1c</span>Basics: metal reflection and the color camera</h2>
+<p class="chapter-lead">Shiny metal reflects like a mirror, so where the bright spots fall depends on the lamp. A color camera records each photo as red, green and blue channels.</p>
+<section class="kp" id="kp-C1" data-kp="C1" data-toc="item" data-tag="C1" data-toc-name="Light angle and reflection">
+    <h3><span class="chip">C1</span>Light angle and metal reflection</h3>
+    <p class="src">In the paper: <a class="ann" href="annotated.html#s1">Section I</a>, <a class="ann" href="annotated.html#s2b">II-B</a>, <a class="ann" href="annotated.html#s5">V</a></p>
+    <dl><dt>Everyday example</dt><dd>When a car mechanic checks a car door, they shine a tube light at a slant. Where the reflection of the tube bends, they know there is a dent.</dd>
+      <dt>What it is</dt><dd>Shiny metal surfaces often show strong <dfn data-term="specular reflection">specular reflection</dfn>. Like a mirror, they send the light into one particular direction. The surface orientation, the light position, and the camera position together decide which areas are brighter. When the light moves, the bright and dark areas also change.</dd>
+      <dt>How the paper uses it</dt><dd>Whether a defect looks bright or dark in a photo depends on the lighting. So the paper does not take photos under just one lighting. It takes photos under many and analyzes them together (Section I). The different slopes of the same dent also reflect light differently (Section V).</dd></dl>
+    <div class="demo" id="demo-C1"></div>
+  </section><section class="kp nx-kp" id="kp-C5" data-kp="C5" data-toc="item" data-tag="C5" data-toc-name="Two kinds of reflection">
+<h3><span class="chip">C5</span>Two kinds of reflection: why the wavelength changes the contrast</h3><p class="src">From the paper cluster: Shafer 1985, <i>Using Color to Separate Reflection Components</i></p><p>Reflected light has two parts. The mirror-like part bounces off the surface and keeps the lamp's color. The body (diffuse) part enters the material, scatters and comes back with the material's color, so it changes with the wavelength. A defect changes the mix, so its contrast depends on which LED is on.</p>
+<div class="nx" data-nx="C5"></div>
+<p class="al-foot">Illustrative numbers. Shafer's model is written for non-metals; bare metal reflects almost only the mirror-like part, so the model fits a defect only where it has oxide, roughness or oil. Linking it to this paper is our reading, not the paper's claim.</p></section>
+<section class="kp" id="kp-C2" data-kp="C2" data-toc="item" data-tag="C2" data-toc-name="How a color camera sees color">
+    <h3><span class="chip">C2</span>How a color camera records color</h3>
+    <p class="src">In the paper: <a class="ann" href="annotated.html#s2c">Section II-C</a>, <a class="ann" href="annotated.html#s4">IV</a>, <a class="ann" href="annotated.html#fig2">Fig. 2</a></p>
+    <dl><dt>What it is</dt><dd>A color camera's sensor is covered with a <dfn data-term="Bayer pattern">Bayer</dfn> filter. Each pixel measures only one of red, green, or blue, and the other two are filled in from neighboring pixels. Filters of different colors have different sensitivities to each wavelength.</dd>
+      <dt>How the paper uses it</dt><dd>At 470 nm the red, green, and blue responses are about 3%, 30%, and 82%. Red has almost no signal, so it is not used. For near-infrared, only the red channel is used (Section IV, Table II).</dd></dl>
+    <div class="demo" id="demo-C2"></div>
+    <figure class="figure"><a href="figs/benmoussat12-fig2-real.png"><img src="figs/benmoussat12-fig2-real.png" alt="Bayer demosaicing"></a><figcaption>Fig. 2 of the paper (p.4): (a) the 2×2 unit of the Bayer pattern; (b) filling in the full color of each pixel from two neighboring rows.</figcaption></figure>
+  </section>
+</section>
+<section id="ch-problem" class="talk-step" data-toc="group" data-tag="2" data-toc-name="Problem: one light can hide the defect"><h2><span class="step-no">2</span>Problem: one light can hide the defect</h2>
+<p class="chapter-lead">The usual fix is to tune one light (direction, color, polarization: the three basics above). But the same dent or scratch can be clear under one light and almost invisible under another.</p>
+<section class="kp" id="kp-A4" data-kp="A4" data-toc="item" data-tag="A4" data-toc-name="White vs. monochromatic photos">
+    <h3><span class="chip">A4</span>How white light and monochromatic light differ in photos</h3>
+    <p class="src">In the paper: <a class="ann" href="annotated.html#s2a">Section II-A</a>, <a class="ann" href="annotated.html#tab2">Table II</a></p>
+    <dl><dt>What it is</dt><dd><dfn data-term="white light">White light</dfn> (WL) covers a wide range of visible light. One color photo can be split into 3 grayscale channel images: red, green, and blue. Monochromatic light (ML) is concentrated in a narrow range of wavelengths. How strong a signal each channel receives depends on how sensitive that channel is to this light.</dd>
+      <dt>How the paper uses it</dt><dd>Under unpolarized lighting, the paper keeps the 3 channels of white light and the 12 stronger-signal channels from the 9 monochromatic lights (Table II). The demo below lets you compare how bright or dark the same defect looks, and its contrast, under different lighting.</dd></dl>
+    <div class="demo" id="demo-A4"></div>
+  </section><section class="kp" id="kp-C3" data-kp="C3" data-toc="item" data-tag="C3" data-toc-name="Defect vs. background contrast">
+<h3><span class="chip">C3</span>Contrast between defect and background</h3><p class="src">In the paper: <a href="annotated.html#s1">Section I</a>, <a href="annotated.html#tab2">Table II</a></p><p>A brighter photo does not mean a clearer defect. First brighten the whole image, then change the brightness difference between defect and background.</p>
+<div class="extra-demo" data-kind="contrast"><div class="ag-controls"><label>Overall brightness increase <input name="overall" type="range" min="0" max="60" value="0"><output data-output="overall">0</output></label><label>Brightness difference between background and defect <input name="contrast" type="range" min="0" max="80" value="45"><output data-output="contrast">45</output></label></div><svg viewBox="0 0 620 260" role="img" aria-label="Interactive diagram of contrast between defect and background"></svg><p class="extra-result" aria-live="polite"></p></div>
+<p class="al-foot">This demo explains contrast using a brightness difference. No noise is added, and the numbers are not measurements from the paper.</p></section><section class="kp nx-kp" id="kp-P1" data-kp="P1" data-toc="item" data-tag="P1" data-toc-name="Traditional pipeline">
+<h3><span class="chip">P1</span>The traditional way: one light, one gray threshold, then a classifier</h3><p class="src">From the paper cluster: Neogi et al. 2014, <i>Review of vision-based steel surface inspection systems</i>; the paper's ref. [1], Zhang et al. 2011 (multi-class SVM)</p><p>Most inspection systems take one photo under one lighting, mark pixels by a gray-level threshold, then describe each marked region with features and classify it with a neural network or an SVM. Try it on the real scratch photos: pick a light, then move the threshold.</p>
+<div class="nx" data-nx="P1"></div>
+<p class="al-foot">Gray threshold on a single real photo of Defect III, scored against this page's scratch label. Neogi et al. report classifier accuracies of 87–94% for six cold-rolled steel defect classes (Choi et al.), and note that no single lighting shows every defect.</p></section>
+
+</section>
+<section id="ch-lights" class="talk-step" data-toc="group" data-tag="3a" data-toc-name="This paper: photograph under every light"><h2><span class="step-no">3a</span>This paper: photograph under every light</h2>
+<p class="chapter-lead">Instead of choosing, take one photo per light: a white LED and 9 single-color LEDs, with and without a polarizer.</p>
+<section class="kp" id="kp-B3" data-kp="B3" data-toc="item" data-tag="B3" data-toc-name="The imaging system">
+    <h3><span class="chip">B3</span>The imaging system</h3>
+    <p class="src">In the paper: <a class="ann" href="annotated.html#fig1">Fig. 1</a>, <a class="ann" href="annotated.html#s2b">Section II-B</a></p>
+    <dl><dt>What it is</dt><dd>The light source shines down on the metal part from above, and the reflected light passes through the analyzer into the camera. In Fig. 1(a), a polarizer is added in front of the light source to make polarized lighting. In (b), the polarizer in front of the light source is removed to make unpolarized lighting. In both cases the analyzer stays in front of the camera.</dd>
+      <dt>How the paper uses it</dt><dd>The same imaging system is used throughout. You switch between white and monochromatic light, add or remove the polarizer in front of the light source, and then adjust the analyzer angle to take images under different conditions (Section II-B, II-D).</dd></dl>
+    <div class="demo" id="demo-B3"></div>
+  </section><section class="kp" id="kp-B4" data-kp="B4" data-toc="item" data-tag="B4" data-toc-name="Four lighting modes">
+    <h3><span class="chip">B4</span>Four kinds of lighting: UWL, PWL, UML, PML</h3>
+    <p class="src">In the paper: <a class="ann" href="annotated.html#s2d">Section II-D</a>, <a class="ann" href="annotated.html#tab1">Table I</a></p>
+    <dl><dt>What it is</dt><dd>White light (WL) and monochromatic light (ML) can each be combined with unpolarized (U) or polarized (P) lighting. This gives 4 combinations: <dfn data-term="UWL">UWL</dfn>, <dfn data-term="PWL">PWL</dfn>, <dfn data-term="UML">UML</dfn>, and <dfn data-term="PML">PML</dfn>.</dd>
+      <dt>How the paper uses it</dt><dd>The paper stacks the grayscale channel images of each combination into 4 cubes, with 3, 9, 12, and 36 components in turn. It then merges them into a fifth cube with 60 components in total (Table I).</dd></dl>
+    <div class="demo" id="demo-B4"></div>
+  </section>
+</section>
+<section id="ch-record" class="talk-step" data-toc="group" data-tag="3b" data-toc-name="This paper: each spot gets a brightness record"><h2><span class="step-no">3b</span>This paper: each spot gets a brightness record</h2>
+<p class="chapter-lead">Stack the photos. Every pixel becomes a list of brightness values, like a coarse spectrum.</p>
+<section class="kp" id="kp-D1" data-kp="D1" data-toc="item" data-tag="D1" data-toc-name="Stacking photos into a cube">
+    <h3><span class="chip">D1</span>Stacking photos into a cube</h3>
+    <p class="src">In the paper: <a class="ann" href="annotated.html#s2d">Section II-D</a>, <a class="ann" href="annotated.html#tab2">Table II</a></p>
+    <dl><dt>Everyday example</dt><dd>In a flip-book, every page draws the same scene. If you watch one fixed spot, you can see how it changes from page to page.</dd>
+      <dt>What it is</dt><dd>Stack the photos taken of the same position under different lighting. Read the brightness of the same pixel in each image and line the values up in order. This gives a "pseudo-spectrum". It records the response under different shooting conditions.</dd>
+      <dt>How the paper uses it</dt><dd>The stacked data is called a <dfn data-term="pseudo-spectral cube">pseudo-spectral cube</dfn> (PSC). It lets the paper borrow detection methods from hyperspectral imaging (Section II-D, III). The demo below uses the paper's 15 unpolarized photos.</dd></dl>
+    <div class="demo" id="demo-D1"></div>
+  </section><div class="keyeq" data-live="vector"><div class="keyeq-head"><b>Key formula</b><span>one pixel = one list of brightness values</span></div><p class="plain"><span class="w-a">Each pixel</span> becomes a list of <span class="w-b">L brightness values</span>, one per lighting (L = 12 here, up to 60 in the paper).</p><div class="tex-block">\ca{x} = [\,\cb{x_1},\ \cb{x_2},\ \dots,\ \cb{x_L}\,]^{T}</div></div>
+<div class="keyeq" data-live="cube"><div class="keyeq-head"><b>Key formula</b><span>pseudo-spectral cube, Table I</span></div><p class="plain">All photos of one part form a cube of <span class="w-a">N × M</span> pixels and <span class="w-b">L</span> components; L is 3, 9, 12, 36 or 60 for the five cubes.</p><div class="tex-block">\mathbf{X} \in \mathbb{R}^{\ca{N\times M}\times \cb{L}}, \qquad \cb{L} = 3,\ 9,\ 12,\ 36,\ 60</div></div>
+<section class="kp" id="kp-C4" data-kp="C4" data-toc="item" data-tag="C4" data-toc-name="Image alignment">
+<h3><span class="chip">C4</span>Image alignment: the same cell is not always the same position</h3><p class="src">Needed background: relates to the image stacking in <a href="annotated.html#s2d">Section II-D</a> of the paper</p><p>A brightness record must be taken from the same position on the part. Shift the second image and see whether the yellow box still reads the defect.</p>
+<div class="extra-demo" data-kind="alignment"><div class="ag-controls"><label>Horizontal shift of image 2 <input type="range" min="0" max="2" value="0"><output>0</output> cells</label></div><svg viewBox="0 0 620 260" role="img" aria-label="Interactive diagram of image alignment: the same cell is not always the same position"></svg><p class="extra-result" aria-live="polite"></p></div>
+<p class="al-foot">The grid only shows the effect of positions being offset. The paper does not propose or test an image alignment algorithm, so this demo must not be taken as the authors' method.</p></section>
+</section>
+<section id="ch-compare" class="talk-step" data-toc="group" data-tag="3c" data-toc-name="This paper: compare the record with the background"><h2><span class="step-no">3c</span>This paper: compare the record with the background</h2>
+<p class="chapter-lead">A defect is a pixel whose record has a different shape from the background's. SAM compares the shape; the paper also tests five other methods.</p>
+<section class="kp" id="kp-D8" data-kp="D8" data-toc="item" data-tag="D8" data-toc-name="Choosing the reference">
+<h3><span class="chip">D8</span>Reference record: look for what resembles a defect, or what does not resemble the background?</h3><p class="src">In the paper: <a href="annotated.html#s4">Section IV</a> (t1–t4)</p><p>The SAM score tells how similar a record is to the reference. If you switch the reference between background and defect, the meaning of a high score also changes.</p>
+<div class="extra-demo" data-kind="reference"><div class="ag-controls"><label>Reference record <select><option value="background">Normal background [100, 50]</option><option value="defect">Defect template [50, 100]</option></select></label></div><svg viewBox="0 0 620 260" role="img" aria-label="Interactive diagram of the reference record: look for what resembles a defect, or what does not resemble the background?"></svg><p class="extra-result" aria-live="polite"></p></div>
+<p class="al-foot">Two brightness values are used to demonstrate SAM. The paper tested 4 kinds of reference: defect center, defect edge, a background pixel, and the average of the cube.</p></section><section class="kp nx-kp" id="kp-D9" data-kp="D9" data-toc="item" data-tag="D9" data-toc-name="SAM vs. distance">
+<h3><span class="chip">D9</span>Why compare the direction, not the distance</h3><p class="src">From the paper cluster: Kruse et al. 1993 (origin of SAM); Keshava 2004</p><p>A normal spot farther from the lamp is darker under every light by the same factor. An ordinary distance to the background then grows, and the spot is wrongly marked. SAM looks only at the direction: the darker spot still points the same way. Kruse et al. call SAM “insensitive to gain factors” for this reason.</p>
+<div class="nx" data-nx="D9"></div>
+<p class="al-foot">Two-light toy example; the limits (distance 25, angle 10°) are chosen for illustration. The direction stays the same only if every light is dimmed by the same factor.</p></section>
+<section class="kp" id="kp-D2" data-kp="D2" data-toc="item" data-tag="D2" data-toc-name="SAM: brightness pattern">
+    <h3><span class="chip">D2</span>SAM: telling overall brightening from a difference from the background</h3>
+    <p class="src">In the paper: <a class="ann" href="annotated.html#s3c">Section III-C</a>, <a class="ann" href="annotated.html#eq4">Eq. (4)</a></p>
+    <p><dfn data-term="SAM">SAM</dfn> compares the brightness ratios under different lighting. <b>If everything just gets brighter, the record can still look like the background. Only when the ratios change does a difference show up.</b> Switch between the 3 examples below and compare the arrow directions with the brightness bars.</p>
+    <div class="demo" id="demo-D2"></div>
+    <p><b>How the paper uses it:</b> The background is used as the reference. Pixels that differ more from it are found, and then a threshold decides which are suspected defects. A similarity score is not the probability of a defect. Among the 3 artificial defects tested in the paper, SAM has the lowest average false alarm rate (Section V, Table III).</p>
+  </section><section class="kp nx-kp" id="kp-D10" data-kp="D10" data-toc="item" data-tag="D10" data-toc-name="Dot product and cosine">
+<h3><span class="chip">D10</span>What the SAM formula computes</h3><p class="src">Geometry behind Eq. (4), Section III-C</p><p>The top of the SAM formula, sᵀx, equals the background length times the pixel's shadow on the background. Dividing by both lengths leaves the cosine of the angle between them.</p>
+<div class="nx" data-nx="D10"></div>
+<p class="al-foot">Two-light example with s = [100, 50].</p></section>
+<div class="keyeq" data-live="sam"><div class="keyeq-head"><b>Key formula</b><span>SAM, Eq. (4), Section III-C</span></div><p class="plain">SAM scores the <span class="w-a">pixel</span> by the <span class="w-c">angle</span> to a <span class="w-b">reference</span> (the background or the cube mean). Making the pixel <span class="w-d">k</span> times brighter does not change the score.</p><div class="tex-block">\cos\cc{\theta} = \frac{\cb{s}^{T}\ca{x}}{\lVert\cb{s}\rVert\,\lVert\ca{x}\rVert}, \qquad \cos\cc{\theta}(\cd{k}\ca{x},\cb{s}) = \cos\cc{\theta}(\ca{x},\cb{s})</div><p class="keyeq-note">Check with D8: s = [100, 50]; x = [200, 100] gives 1.00; x = [50, 100] gives 10000 / 12500 = 0.80.</p></div>
+<section class="kp" id="kp-D3" data-kp="D3" data-toc="item" data-tag="D3" data-toc-name="SID: brightness shares">
+    <h3><span class="chip">D3</span>SID: comparing the share of each brightness</h3>
+    <p class="src">In the paper: <a class="ann" href="annotated.html#s3c">Section III-C</a> · <a class="ann" href="annotated.html#eq5">Eq. (5)</a></p>
+    <p><b>How much of the total brightness does each lighting take?</b> First turn a set of brightness values into shares, then compare the shares of the two sets. An SID of 0 means the shares are identical. The bigger the difference, the higher the score.</p>
+    <p class="al-goal">Try it: first click "Reference itself". SID is 0. Then click "Dent center" and see how the shares differ. Finally multiply the whole set of brightness values by 2. Do the shares and the score change?</p>
+    <div class="al-lesson" id="algorithm-D3" data-algorithm="SID"></div>
+    <p class="al-foot">This section is for understanding the method. You can operate the score and threshold decision for a whole part in the <a href="#algorithms-demo">defect detection demo</a>.</p>
+  </section><div class="keyeq" data-live="sid"><div class="keyeq-head"><b>Key formula</b><span>SID, Eq. (5)</span></div><p class="plain">Turn both lists into shares that sum to 1, then measure how different the two <span class="w-a">share distributions</span> are (a symmetric KL divergence). 0 means identical.</p><div class="tex-block">y_{SID}(x,s) = \sum_{j=1}^{L} \ca{p_j}\log\frac{\ca{p_j}}{\cb{q_j}} + \sum_{j=1}^{L} \cb{q_j}\log\frac{\cb{q_j}}{\ca{p_j}}, \qquad \ca{p} = \frac{s}{\sum s},\ \cb{q} = \frac{x}{\sum x}</div></div>
+<section class="kp" id="kp-D4" data-kp="D4" data-toc="item" data-tag="D4" data-toc-name="TAU: brightness ranking">
+    <h3><span class="chip">D4</span>TAU: comparing the bright-dark ranking</h3>
+    <p class="src">In the paper: <a class="ann" href="annotated.html#s3c">Section III-C</a> · <a class="ann" href="annotated.html#eq6">Eq. (6)</a></p>
+    <p><b>If you ignore the brightness values and remember only which one is brighter, can you still compare?</b> TAU pairs up the lighting components two by two and checks whether the bright-dark order of the two sets agrees. Green means they agree, pink means they are opposite, and gray means at least one set has equal brightness.</p>
+    <p class="al-goal">Try it: while it plays, check the pairs one by one. 12 components give 66 pairs. Brightening everything by the same ratio does not change the ranking.</p>
+    <div class="al-lesson" id="algorithm-D4" data-algorithm="TAU"></div>
+    <p class="al-foot">When the paper uses the background as the reference, it converts TAU's similarity score into a difference direction, and then uses a threshold to find positions that do not resemble the background.</p>
+  </section><div class="keyeq" data-live="tau"><div class="keyeq-head"><b>Key formula</b><span>Kendall's tau, Eq. (6)</span></div><p class="plain">Only the <span class="w-a">order</span> of the brightness values counts: for every pair of lights, do pixel and reference go up and down together? +1 = same order, −1 = opposite.</p><div class="tex-block">y_{TAU}(x,s) = \frac{2}{L(L-1)}\sum_{l=1}^{L-1}\sum_{k=l+1}^{L}\operatorname{sign}\big[(\ca{x_k-x_l})(\cb{s_k-s_l})\big]</div></div>
+<section class="kp" id="kp-D5" data-kp="D5" data-toc="item" data-tag="D5" data-toc-name="RX: background outliers">
+    <h3><span class="chip">D5</span>RX: finding positions beyond the background's variation</h3>
+    <p class="src">In the paper: <a class="ann" href="annotated.html#s3b">Section III-B</a> · <a class="ann" href="annotated.html#eq3">Eq. (3)</a></p>
+    <p><b>Is this position ordinary fluctuation, or a clear anomaly?</b> RX compares the distance between a pixel and the background mean. At the same time it takes into account how much the background varies and how the different components change together. For example, the background usually gets brighter in two shots together, so a change where one gets brighter and the other darker is rarer. RX uses this joint behavior when it scores. The standard deviation of each component alone cannot fully describe this joint behavior.</p>
+    <p class="al-goal">Try it: switch between the dent and the background and look at the brightness difference under each lighting. The blue band shows each component's mean ± 1 standard deviation. The standard deviation describes how large the brightness fluctuation is. The blue band is not the decision boundary. In the end you still need to look at the RX score and the threshold.</p>
+    <div class="al-lesson" id="algorithm-D5" data-algorithm="RX"></div>
+    <p class="al-foot">This section is for understanding the method. You can operate the score and threshold decision for a whole part in the <a href="#algorithms-demo">defect detection demo</a>.</p>
+  </section><div class="keyeq" data-live="rx"><div class="keyeq-head"><b>Key formula</b><span>RX, Eq. (3)</span></div><p class="plain">Distance of the pixel from the <span class="w-a">background mean</span>, measured in units of the background’s own <span class="w-b">spread</span> (Mahalanobis distance). No defect template needed.</p><div class="tex-block">y_{RX}(x) = (x-\ca{\mu})^{T}\,\cb{\hat\Gamma^{-1}}\,(x-\ca{\mu})</div></div>
+<section class="kp" id="kp-D6" data-kp="D6" data-toc="item" data-tag="D6" data-toc-name="AMF: template matching">
+    <h3><span class="chip">D6</span>AMF: matching against a known defect template</h3>
+    <p class="src">In the paper: <a class="ann" href="annotated.html#s3a">Section III-A</a> · <a class="ann" href="annotated.html#eq1">Eq. (1)</a></p>
+    <p><b>You already know what a dent looks like. How do you find similar positions?</b> Use the set of brightness values at the center of a dent as the template. Then reduce the influence of the variations that are common in the background, and look for the template's features. This adjustment is a kind of weighting. The covariance matrix records the fluctuation and joint behavior of the background, and its inverse matrix is used in scoring. So AMF is more than a direct comparison of two brightness curves.</p>
+    <p class="al-goal">Try it: first choose the dent center, then multiply the whole set of brightness values by 2. If the template and the background weights stay fixed and only the tested pixel's whole set of brightness values is multiplied by 2, the AMF score becomes 4 times larger.</p>
+    <div class="al-lesson" id="algorithm-D6" data-algorithm="AMF"></div>
+    <p class="al-foot">This section is for understanding the method. You can operate the score and threshold decision for a whole part in the <a href="#algorithms-demo">defect detection demo</a>.</p>
+  </section><div class="keyeq" data-live="amf"><div class="keyeq-head"><b>Key formula</b><span>AMF, Eq. (1)</span></div><p class="plain">How strongly the pixel matches a known <span class="w-a">defect template s</span>, after weighting by the inverse <span class="w-b">background covariance</span>.</p><div class="tex-block">y_{AMF}(x,s) = \frac{\big(\ca{s}^{T}\cb{\hat\Gamma^{-1}}x\big)^{2}}{\ca{s}^{T}\cb{\hat\Gamma^{-1}}\ca{s}}</div></div>
+<section class="kp" id="kp-D7" data-kp="D7" data-toc="item" data-tag="D7" data-toc-name="ACE: brightness-free matching">
+    <h3><span class="chip">D7</span>ACE: template matching that ignores overall brightness</h3>
+    <p class="src">In the paper: <a class="ann" href="annotated.html#s3a">Section III-A</a> · <a class="ann" href="annotated.html#eq2">Eq. (2)</a></p>
+    <p><b>If it looks like the same defect but is just brighter, should the score change?</b> ACE uses the same background weights as AMF. Compared with AMF, it also divides by the pixel's weighted squared length. With the template and background weights fixed, if the whole set of brightness values of the tested pixel is multiplied by the same positive number, the score stays the same. If only some components change, or a constant brightness is added, the score is not guaranteed to stay the same.</p>
+    <p class="al-goal">Try it: stay at the same position and change only the brightness multiplier. The curve rises and falls, but the ACE score does not change. When compared with the template itself, the score is 1.</p>
+    <div class="al-lesson" id="algorithm-D7" data-algorithm="ACE"></div>
+    <p class="al-foot">This section is for understanding the method. You can operate the score and threshold decision for a whole part in the <a href="#algorithms-demo">defect detection demo</a>.</p>
+  </section><div class="keyeq" data-live="ace"><div class="keyeq-head"><b>Key formula</b><span>ACE, Eq. (2)</span></div><p class="plain">AMF divided by the pixel’s own weighted length, so overall brightness cancels. In effect it is a squared cosine, like SAM, after <span class="w-b">whitening</span>.</p><div class="tex-block">y_{ACE}(x,s) = \frac{\big(\ca{s}^{T}\cb{\hat\Gamma^{-1}}x\big)^{2}}{\big(\ca{s}^{T}\cb{\hat\Gamma^{-1}}\ca{s}\big)\big(x^{T}\cb{\hat\Gamma^{-1}}x\big)}</div></div>
+
+</section>
+<section id="ch-threshold" class="talk-step" data-toc="group" data-tag="3d" data-toc-name="This paper: decide with a threshold"><h2><span class="step-no">3d</span>This paper: decide with a threshold</h2>
+<p class="chapter-lead">Every pixel gets a score; the threshold decides which pixels are marked.</p>
+<section class="kp nx-kp" id="kp-E4" data-kp="E4" data-toc="item" data-tag="E4" data-toc-name="Score direction">
+<h3><span class="chip">E4</span>Turning similarity into a defect score</h3><p class="src">Section IV (complement of the normalized map) and appendix (U3)</p><p>SAM gives a high score to pixels that look like the background, which is the opposite of what we want to mark. The paper first scales every map to 0–1, then flips it (1 − y), so that a high score means “unlike the background”. Step through it on three real pixels of Defect I.</p>
+<div class="nx" data-nx="E4"></div>
+<p class="al-foot">Real data: Defect I, 12 monochromatic components, cosine to the image mean.</p></section>
+<section class="kp" id="kp-E1" data-kp="E1" data-toc="item" data-tag="E1" data-toc-name="Threshold trade-off">
+    <h3><span class="chip">E1</span>Threshold: the trade-off between finding more and flagging less wrongly</h3>
+    <p class="src">In the paper: <a class="ann" href="annotated.html#s3">Section III</a> · <a class="ann" href="annotated.html#s5">Section V</a></p>
+    <p><b>Is outlining more always better?</b> The algorithm first gives each pixel a score, and then the threshold decides which pixels are flagged. Lowering the threshold usually finds more of the defect, but it also tends to count normal surface as defect.</p>
+    <p class="al-goal">Try it: first flag less, then flag more. Watch how the right image gains or loses flagged pixels, and compare the share of missed and wrongly flagged pixels.</p>
+    <div class="al-lesson" id="algorithm-E1" data-algorithm="threshold"></div>
+    <p class="al-foot">The comparison results are calculated using this page's dent-area labels. "At least 90% found" uses these labels to pick the threshold. It does not mean a new, unlabeled part would also reach 90%. The two methods use the same set of monochromatic-light images and the same labels.</p>
+  </section><div class="keyeq" data-live="rates"><div class="keyeq-head"><b>Key formula</b><span>detection rate, false alarm rate, FAR</span></div><p class="plain">Pixels scoring at least the <span class="w-a">threshold η</span> are marked. <span class="w-b">P<sub>D</sub></span> = share of defect pixels marked; <span class="w-c">P<sub>FA</sub></span> = share of background marked. FAR is P<sub>FA</sub> at the threshold that finds 90% of the defect.</p><div class="tex-block">\cb{P_D}(\ca{\eta}) = \frac{\#\{\text{defect}: y \ge \ca{\eta}\}}{\#\,\text{defect}}, \qquad \cc{P_{FA}}(\ca{\eta}) = \frac{\#\{\text{background}: y \ge \ca{\eta}\}}{\#\,\text{background}}</div><div class="tex-block">\text{FAR} = \cc{P_{FA}}(\ca{\eta^{*}}), \qquad \ca{\eta^{*}} = \max\{\ca{\eta} : \cb{P_D}(\ca{\eta}) \ge 0.9\}</div></div>
+
+</section>
+<section id="ch-result" class="talk-step" data-toc="group" data-tag="4" data-toc-name="Result: SAM has the fewest false alarms; single-color light beats white light"><h2><span class="step-no">4</span>Result: SAM has the fewest false alarms; single-color light beats white light</h2>
+<p class="chapter-lead">Run it on the real photos, then score it the paper's way: find 90% of the defect and count the false alarms.</p>
+<section id="core-demo" data-toc="item" data-tag="Demo" data-toc-name="Defect detection demo"><div class="ag-guide" id="algorithms-demo">
+    <h4>Find the dent using brightness records under different lighting</h4>
+    <p class="al-route">First compare white light with monochromatic light, then play the scan, and finally adjust the threshold.</p>
+    <p>The left image is the metal part. The right image shows the area the algorithm outlines. Play the scan first, then move the threshold. Is the dent found? Is normal surface also flagged?</p>
+    <div class="ag-controls"><label>Image to analyze <select class="ai-cube"><option value="12">Monochromatic light: 12 components</option><option value="3">White light: 3 components</option><option value="15">All: 15 components</option></select></label><span>Compare first</span><button data-method="SAM">SAM: brightness ratios</button><button data-method="RX">RX: background anomalies</button></div>
+    <div class="ag-controls"><span>Other methods</span><button data-method="SID">SID</button><button data-method="TAU">TAU</button><button data-method="AMF">AMF</button><button data-method="ACE">ACE</button><span class="ag-family">AMF and ACE use the center of the dent as the template.</span></div>
+    <div class="ai-toolbar"><label>Preview lighting <select class="ai-light"><option value="5">505 nm · G channel</option><option value="1">White light · G channel</option><option value="12">850 nm · R channel</option></select></label><button class="ai-play">▶ Watch how it searches</button><button class="ai-all">Show full result</button><span class="ai-progress" aria-live="polite"></span></div>
+    <div class="ai-images"><figure><figcaption>Metal part image <span>Click to inspect this position</span></figcaption><canvas class="ai-source" tabindex="0" aria-label="Metal part image. Arrow keys move the sampling position"></canvas></figure><figure><figcaption>Detection result <span class="ai-method"></span></figcaption><canvas class="ai-result" tabindex="0" aria-label="Detection result. Arrow keys move the sampling position"></canvas></figure></div>
+    <div class="ai-legend"><span style="color:#b7791f">■ Dent found</span><span style="color:#d6455d">■ Dent missed</span><span style="color:#0e8fa3">■ Background wrongly flagged</span><span>Compared using this page's dent-area labels</span></div>
+    <div class="ai-threshold"><label>Decision threshold <input type="range" class="ai-eta" min="0" max="1" step=".001" aria-label="Decision threshold"><output class="ai-eta-value"></output></label><span>Left: flag more / Right: flag less</span></div>
+    <p class="ai-outcome" aria-live="polite"></p>
+    <div class="ai-inspect"><div><h5>Why is this position flagged?</h5><p class="ai-point"></p><p class="ai-explain"></p><div class="ag-controls"><button class="ai-dent">View dent center</button><button class="ai-bg">View normal background</button></div></div><div><p class="ai-chart-label">Yellow: selected position / Blue: comparison reference</p><canvas class="ai-spectrum" aria-label="Brightness curves of the selected position and the reference"></canvas></div></div>
+    <p class="ag-caption">The starting threshold is set to find at least 90% of the dent, which makes it easier to compare the wrongly flagged areas. The preview lighting only changes the image shown behind the result. The image to analyze decides which brightness values the algorithm uses. SAM, SID, and TAU use the average of the whole image set as the reference. RX compares against the background mean and its covariance. Each method's scores are scaled separately to 0–1, so their sizes cannot be compared directly. The scan animation reveals the pixel-by-pixel results in order.</p>
+  </div></section><section class="kp" id="kp-E2" data-kp="E2" data-toc="item" data-tag="E2" data-toc-name="False alarms and ROC">
+    <h3><span class="chip">E2</span>Missed detections, false alarms, and the ROC curve: comparing detection results fairly</h3>
+    <p class="src">In the paper: <a class="ann" href="annotated.html#s3">Section III</a> · <a class="ann" href="annotated.html#s5">Section V</a></p>
+    <p><b>Two methods outline different areas. How do you compare which is better?</b> The detection rate PD is the share of dent pixels that are found. The false alarm rate PFA is the share of normal background that is wrongly flagged. Each threshold gives one pair (false alarm rate, detection rate), which is one point on the plot. When you change the threshold, the point moves. The different thresholds together form a whole ROC curve.</p>
+    <p class="al-goal">Try it: first fix the comparison condition at finding at least 90% of the dent, then compare how much background is wrongly flagged. This rate is the FAR used in the paper. AFAR is the average FAR over several settings.</p>
+    <div class="al-lesson" id="algorithm-E2" data-algorithm="roc"></div>
+    <p class="al-foot">The comparison results are calculated using this page's dent-area labels. "At least 90% found" uses these labels to pick the threshold. It does not mean a new, unlabeled part would also reach 90%. The two methods use the same set of monochromatic-light images and the same labels.</p>
+  </section><div class="keyeq" data-live="roc"><div class="keyeq-head"><b>Key formula</b><span>ROC curve, Section III</span></div><p class="plain">Every threshold gives one point (<span class="w-c">false alarm rate</span>, <span class="w-b">detection rate</span>); sweeping the threshold from 0 to 1 in steps of 0.001 traces the curve.</p><div class="tex-block">\text{ROC} = \{\,(\cc{P_{FA}}(\ca{\eta}),\ \cb{P_D}(\ca{\eta})) : \ca{\eta} = 0,\ 0.001,\ \dots,\ 1\,\}</div></div>
+<section id="report-result" data-toc="item" data-tag="Result" data-toc-name="Results and limits"><h2>What results does this paper report?</h2><p>In this paper's SAM comparison, when each method is set to find at least 90% of the defect pixels, the monochromatic-light combination gives fewer false alarms than the white-light combination. The effect of polarization depends on the setting.</p><p class="opening-source">In the paper: Fig. 3, Section V. The experiments include 3 artificial defects. For the full results and limits, see the <a href="#s5">results explanation</a> and the <a href="#s6">limits explanation</a>.</p></section><div class="keyeq"><div class="keyeq-head"><b>Key formula</b><span>AFAR, Table III</span></div><p class="plain">The paper averages the FAR over <span class="w-a">5 cubes</span> × <span class="w-b">4 references</span> = 20 settings (5 for RX). SAM: 0.50%, 0.01%, 1.32%.</p><div class="tex-block">\text{AFAR} = \frac{1}{20}\sum_{\ca{c}=1}^{5}\sum_{\cb{t}=1}^{4}\text{FAR}_{\ca{c},\cb{t}}</div></div>
+<section id="s5" data-toc="item" data-tag="5"><h2>5. Evidence and the size of the improvement</h2>
+  <p><b>How the scoring works.</b> Each detection map is first normalized to 0 to 1, and then thresholds are tested at steps of 0.001. Every threshold gives a detection rate <dfn data-term="PD">PD</dfn> (the share of true defect pixels that are found) and a false alarm rate <dfn data-term="PFA">PFA</dfn> (the share of normal background pixels wrongly judged as defect). Lower the threshold from high to low and plot every pair of PD and PFA as a curve. This is the <dfn data-term="ROC curve">ROC curve</dfn>.</p>
+  <p>To compare with a single number, the paper fixes the target detection rate <dfn data-term="GDR">GDR</dfn> at 90%. Among the thresholds that reach a detection rate of at least 90%, the one with the lowest false alarm rate is chosen, and this rate is called <dfn data-term="FAR">FAR</dfn>. The FARs of the 20 settings formed from 5 cubes and 4 reference spectra are then averaged to give <dfn data-term="AFAR">AFAR</dfn>. RX needs no reference spectrum, so it averages only 5 detection maps (reported in the paper, Section V).</p>
+  <p>A FAR of 0% means there were no false alarms for this set of pixels and scoring conditions. A FAR of 50% means that, to find 90% of the defect pixels, half of the background was also judged as defect. Take the data this page calculated for Defect I as an example. The image is 170×420 pixels, with 8515 labeled defect pixels and 62885 background pixels. A FAR of 1% is about 629 background pixels wrongly judged. The paper lists the size as 170×240, which differs from the image embedded in the PDF. The paper sets no value that a production line can accept, so this page uses these results to compare the relative performance of the methods.</p>
+  <div class="stats">
+    <div class="stat"><b>0.01–1.32%</b><span>SAM's AFAR on the 3 defects, the lowest of the 6 methods (reported in the paper, Table III)</span></div>
+    <div class="stat"><b class="low">49–76%</b><span>AFAR of AMF and ACE, the worst group (reported in the paper, Table III)</span></div>
+    <div class="stat"><b class="gold">2.96–45.66%</b><span>RX's AFAR: only 2.96% and 4.83% for the small Defects II and III, but 45.66% for the large-area Defect I (reported in the paper, Table III)</span></div>
+  </div>
+  <p><b>The paper's results.</b> In Table III, SAM's AFAR for the 3 defects is 0.50%, 0.01%, and 1.32%. The other methods' results range from 2.96% to 76.11%. The authors think AMF and ACE perform worse for 2 reasons. The spectrum of the same defect changes with position, so a single template can hardly cover all the defect pixels. Also, their assumptions of a uniform background and a normal distribution may not hold for metal parts (reported in the paper, Section V). The ROC curves of Fig. 3 show that, under the conditions compared in the figure, the monochromatic-light cube (green lines) is clearly better than the white-light cube (red lines).</p>
+  <div class="fig-row two">
+    <figure class="figure"><a href="figs/benmoussat12-tab3-r4-d1-real.png"><img src="figs/benmoussat12-tab3-r4-d1-real.png" alt="SAM detection mask"></a><figcaption>Table III of the paper (p.5): a representative SAM detection mask for Defect I (cube 4, reference t3). The AFAR of 0.50% is averaged over 20 settings. It is not the FAR of this single mask.</figcaption></figure>
+    <figure class="figure"><a href="figs/benmoussat12-tab3-r1-d1-real.png"><img src="figs/benmoussat12-tab3-r1-d1-real.png" alt="AMF detection mask"></a><figcaption>Table III of the paper (p.5): a representative AMF detection mask for Defect I (cube 3, template t1). The AFAR of 74.63% is averaged over 20 settings. It is not the FAR of this single mask.</figcaption></figure>
+  </div>
+  <figure class="figure"><a href="figs/benmoussat12-fig3-real.png"><img src="figs/benmoussat12-fig3-real.png" alt="ROC curves"></a><figcaption>Fig. 3 of the paper (p.6): the left column is SAM (target t4) and the right column is RX. Red is the white-light cubes 1 and 2, green is the monochromatic-light cubes 3 and 4, and blue is the merged cube 5. The horizontal line is PD = 0.9.</figcaption></figure>
+  <p><b>This page's reproduction.</b> The paper's PDF provides 15 unpolarized photos for each of the 3 defects, which correspond to cubes 1 and 3. This page uses these photos to rebuild cubes 1 and 3 and their merge, and tests 6 methods (reproduced on this page). The calculated results of this page and the conditions for interpreting them are listed below:</p>
+  <ul>
+    <li><b>The false alarm rate of the monochromatic-light cube is clearly lower.</b> When SAM uses the average spectrum of the whole cube (t4) as the reference, the FAR for Defects I, II, and III falls from 26.59%, 1.53%, and 14.03% for the white-light cube to 0.17%, 0.06%, and 0.68% for the monochromatic-light cube.</li>
+    <li><b>The direct plug-in AMF/ACE results on this page have high false alarms.</b> For the 36 settings (2 methods × 3 defects × 3 sets of image data × 2 defect templates, t1 and t2), the FAR is above 94% in every case. This page uses the raw brightness directly and did not first subtract the background mean from the pixel and the template. However, Eq. (1) and (2) assume the background mean is 0. From these results alone, we cannot tell whether the high false alarms come from the template choice, the preprocessing, or other conditions. The paper does not clearly say whether the original authors centered the data.</li>
+  </ul>
+  <p>The authors point out that RX may perform poorly when the background is not uniform or the defect area is large (reported in the paper, Section V). The Defect I dents labeled on this page take up about 12% of the frame. If the background statistics are estimated from the whole cube, these pixels are also counted in.</p>
+  <p>This page's reproduction of RX on cube 3 gives a FAR of 0.11% to 1.84%, close to SAM. In the paper, RX's AFAR on Defect I is 45.66%. The conditions of these two sets of numbers differ. The paper's AFAR includes the polarized cubes, while this page has only unpolarized photos. The paper also does not say how the defect area was labeled, while this page labeled it by eye from the 505 nm photo. Without the polarized photos and the paper's defect labels, we cannot yet tell which condition causes the gap.</p>
+</section><section class="kp" id="kp-E3" data-kp="E3" data-toc="item" data-tag="E3" data-toc-name="How labeling affects scores">
+<h3><span class="chip">E3</span>How defect labeling affects the score</h3><p class="src">Scoring background: <a href="#eq-u2">detection rate and false alarm rate</a>; Section III, V of the paper</p><p>You must first outline the true defect area before you can score. Keep the yellow decision unchanged and adjust only the blue label area.</p>
+<div class="extra-demo" data-kind="annotation"><div class="ag-controls"><label>Defect label area <input type="range" min="0" max="2" value="1"><output>3 × 3 cells</output></label></div><svg viewBox="0 0 620 260" role="img" aria-label="Interactive diagram of how defect labeling affects the score"></svg><p class="extra-result" aria-live="polite"></p></div>
+<p class="al-foot">Labels should be decided from evidence of the defect, and never adjusted just to raise the score. This is a demo of the scoring mechanism. The paper does not say how it drew its defect labels.</p></section><section id="s6" data-toc="item" data-tag="6"><h2>6. What is solved and what is not</h2>
+  <p><b>Results with evidence.</b> Among the 3 artificial defects tested in the paper, SAM's AFAR does not exceed 1.32% for any of them. This is the average over 4 reference spectra and 5 cubes (reported in the paper, Table III). The authors also report that when using t3 and t4, which need no defect spectrum, the FAR of each cube can drop to 0% (reported in the paper, Section V). This is the result under a specific setting. It cannot be read as meaning that every combination of reference spectrum and cube has no false alarms. This page reproduced, with the photos embedded in the paper, the trend that the monochromatic-light cube is clearly better than the white-light cube (reproduced on this page).</p>
+  <p>SAM's amount of computation is proportional to the number of components (reported in the paper, Section V). Whether it is usable on a real production line still has to be judged from the image capture speed and the processing time.</p>
+  <p><b>Conditions to keep in mind.</b> The effect of polarization changes with the defect shape and the algorithm. The authors say only that it helps in some cases (reported in the paper, Section V). The results of monochromatic-light cubes 3 and 4 are close, and the better choice also varies with the defect, so the authors suggest merging all of them as a compromise (reported in the paper, Section V). In addition, the monochromatic-light cube both increases the number of components and changes the wavelengths. The experiments did not compare these 2 factors separately.</p>
+  <p><b>Open questions.</b> The authors point out that real defects vary greatly in appearance, are hard to represent with a single spectrum, and are hard to cover in advance. This is the motivation for studying unsupervised methods (reported in the paper, Section VI). This paper tests only artificial defects on 3 flat metal parts. The paper lists the 3 image sizes as 170×240, 90×360, and 130×230 pixels (Section IV). For Defect I, the image embedded in the PDF is actually 170×420, and this page calculates from the embedded image. So the scope of the results is still limited by these conditions.</p>
+  <p>Scoring also needs to know which pixels are the true defect, that is, the ground truth. Making the labeled area larger or smaller affects the FAR. The paper does not describe how it labeled, and the first author's doctoral thesis does not add this information either (<a href="papers/benmoussat13thesis.md">Benmoussat 2013</a>, p.58).</p>
+  <p>Later industrial inspection research keeps exploring methods that use only normal samples and need no defect template in advance. It has also built public datasets with pixel-level manual labels (<a href="papers/bergmann19.md">Bergmann et al. 2019</a>). The same team switched to thermal imaging for its follow-up work (<a href="papers/benmoussat13b.md">Benmoussat et al. 2013</a>).</p>
+</section><section id="summary" class="summary" data-toc="item" data-tag="Sum" data-toc-name="Key takeaways"><h2>Key takeaways</h2>
+  <p><b>Core problem:</b> How visible a metal defect is changes with the lighting, and it is hard to pick the best lighting in advance. A single-image brightness-threshold method can reach a false alarm rate of 100% under some lightings (reproduced on this page).</p>
+  <p><b>Improvement supported by evidence:</b> Building a pseudo-spectral cube from images under many lightings, and then comparing the spectral shape with SAM, reduces the dependence on a single photo. Under the condition of detecting 90% of the defect pixels, SAM's average false alarm rate over 5 cubes and 4 reference spectra is 0.01% to 1.32%. The authors also report that reference settings that need no defect template can give a FAR of 0% (reported in the paper, Table III, Section V). This page's reproduction also shows that, when SAM uses t4, the false alarm rate of the monochromatic-light cube is clearly lower than that of the white-light cube (reproduced on this page).</p>
+  <p><b>Still unsolved:</b> The experiments have only 3 artificial defects. The effect of polarization changes with conditions. The effects of adding components and switching to monochromatic light have not been separated. These results are not yet enough to confirm performance on a real production line.</p>
+</section>
+</section>
+<section id="ch-critique" class="talk-step" data-toc="group" data-tag="5" data-toc-name="Critique: what to doubt and what to do next"><h2><span class="step-no">5</span>Critique: what to doubt and what to do next</h2>
+<p class="chapter-lead">The headline result holds up well (SAM wins by a wide margin), but the evidence for “better light” is mixed with “more numbers”, and the test is small.</p>
+<section id="crit-errors" data-toc="item" data-tag="5a"><h3>Problems in the paper</h3><ol class="crit"><li><b>More lights or just more numbers?</b> The cubes that win also have more components (3, 9, 12, 36, 60). The design cannot tell whether the gain comes from better lighting or from simply having more numbers per pixel. <span class="crit-src">(Table I, Section V)</span><figure class="crit-fig"><img src="figs/crit-1.png" alt="Original paper text for: More lights or just more numbers?" loading="lazy"><figcaption>Original text from the paper PDF; the red box marks the problem.</figcaption></figure></li><li><b>Scoring cannot be checked.</b> The paper never says how the true defect pixels were labeled, ranks methods at one operating point only (90% found), and gives no spread across the 20 settings. <span class="crit-src">(Section V)</span><figure class="crit-fig"><img src="figs/crit-2.png" alt="Original paper text for: Scoring cannot be checked" loading="lazy"><figcaption>Original text from the paper PDF; the red box marks the problem.</figcaption></figure></li><li><b>Very small test.</b> Three lab-made defects on flat parts, one part each. That is a feasibility check, not proof for a production line. <span class="crit-src">(Section IV)</span><figure class="crit-fig"><img src="figs/crit-3.png" alt="Original paper text for: Very small test" loading="lazy"><figcaption>Original text from the paper PDF; the red box marks the problem.</figcaption></figure></li><li><b>Unfair background estimate.</b> AMF, ACE and RX estimate the background from the whole cube, defect pixels included. The authors themselves say these detectors' assumptions may not hold, so the comparison with SAM is not on equal terms. <span class="crit-src">(Section V)</span><figure class="crit-fig"><img src="figs/crit-4.png" alt="Original paper text for: Unfair background estimate" loading="lazy"><figcaption>Original text from the paper PDF; the red box marks the problem.</figcaption></figure></li><li><b>Claims stronger than the data.</b> Section V says SAM's FAR “can reach 0% … for all modalities”, but Fig. 3 shows the white-light cubes 1 and 2 clearly worse, and Table III averages are 0.50%, 0.01% and 1.32%. <span class="crit-src">(Section V, Fig. 3, Table III)</span><figure class="crit-fig"><img src="figs/crit-5.png" alt="Original paper text for: Claims stronger than the data" loading="lazy"><figcaption>Original text from the paper PDF; the red box marks the problem.</figcaption></figure></li><li><b>Speed claim not checked.</b> All methods are said to cost O(NML). AMF, ACE and RX need a covariance matrix, which costs about O(NML²) plus a matrix inverse. No run time is reported. <span class="crit-src">(Section V)</span><figure class="crit-fig"><img src="figs/crit-6.png" alt="Original paper text for: Speed claim not checked" loading="lazy"><figcaption>Original text from the paper PDF; the red box marks the problem.</figcaption></figure></li><li><b>Polarization is hard to reproduce.</b> The “unpolarized” setting still keeps the analyzer in front of the camera, and the polarizer angle is never given. <span class="crit-src">(Sections II-B, II-D, IV)</span><figure class="crit-fig"><img src="figs/crit-7.png" alt="Original paper text for: Polarization is hard to reproduce" loading="lazy"><figcaption>Original text from the paper PDF; the red box marks the problem.</figcaption></figure></li><li><b>One of three knobs is fixed.</b> The introduction names light direction, wavelength and polarization, but the experiment never changes the direction and does not say why. <span class="crit-src">(Sections I, II)</span><figure class="crit-fig"><img src="figs/crit-8.png" alt="Original paper text for: One of three knobs is fixed" loading="lazy"><figcaption>Original text from the paper PDF; the red box marks the problem.</figcaption></figure></li><li><b>Small errors.</b> “CFRA” should be CFAR; reference [1] lists the wrong first author (it is Zhang et al., 2011); Section IV gives 170 × 240 pixels for Defect I, but the image in the PDF is 170 × 420. <span class="crit-src">(Sections I, IV, V)</span><figure class="crit-fig"><img src="figs/crit-9.png" alt="Original paper text for: Small errors" loading="lazy"><figcaption>Original text from the paper PDF; the red box marks the problem.</figcaption></figure></li></ol></section><section id="crit-future" data-toc="item" data-tag="5b"><h3>Where this can go next</h3><ol class="crit"><li><b>Separate lights from numbers.</b> Compare cubes with the same number of components but different lights, e.g. 9 single-color components vs. the 9 polarized white-light ones.</li><li><b>Use fewer, better lights.</b> Pick the few lights that matter most for each defect type, so a line needs fewer photos per part, and measure the real capture and processing time.</li><li><b>Test real parts.</b> Curved and stamped parts, real production defects, many samples per type, with the labeling method and several detection targets (80%, 90%, 95%) reported.</li><li><b>What the authors did next.</b> Benmoussat et al. 2013 apply the same idea to thermal image sequences: stack them into a cube, reduce the dimension first, then run RX-type anomaly detectors without any defect prior. Reducing the dimension is one answer to “60 components is a lot”.</li><li><b>Where the field went.</b> MVTec AD (Bergmann et al., 2019) made the paper's setting standard: train only on defect-free images, find unknown defects, score with pixel-level ROC. Its finding that no method wins on every category echoes this paper's mixed results.</li></ol></section><section id="crit-vlm" data-toc="item" data-tag="5c"><h3>A first idea with a vision-language model</h3><ul class="crit"><li><b>SAM finds, the VLM explains.</b> Keep SAM as the detector. Then give the photo and its SAM map to a vision-language model, which names the defect (dent, scratch, ...) and writes a one-line report. Today the paper only outputs a mask. <span class="crit-src">Similar idea: AnomalyGPT (AAAI 2024) and Myriad (2023) feed an anomaly map into a vision-language model. Caution: on the MMAD benchmark (ICLR 2025) the best model, GPT-4o, averages 74.9% on industrial defect questions, so the VLM should explain, not detect.</span></li></ul><p class="crit-refs">Sources: <a href="https://arxiv.org/abs/2308.15366">Gu et al., AnomalyGPT, AAAI 2024</a>; <a href="https://arxiv.org/abs/2310.19070">Li et al., Myriad, arXiv 2023</a>; <a href="https://arxiv.org/abs/2410.09453">Jiang et al., MMAD, ICLR 2025</a></p></section>
+</section>
+<div class="backup-divider"><span>Backup material</span><p>Not part of the talk. Use these sections to answer questions.</p></div>
+<section id="map" data-toc="group" data-toc-name="Backup · Topic map"><h2>Topic map</h2>
+  <p class="sub">There are 23 topics. They start with light and spectra (A), polarization (B), and metal reflection and cameras (C), then move to data and algorithms (D) and decisions and scoring (E). Data, algorithms, and scoring are concentrated in D and E. Every topic has an interactive demo.</p>
+  <table>
+    <tr><th>No.</th><th>Topic</th><th>In the paper</th></tr>
+    <tr><td colspan="3"><b>A. Light and spectra</b></td></tr>
+    <tr><td><a href="#kp-A1">A1</a></td><td>Wavelength and color of light</td><td>Section II-C</td></tr>
+    <tr><td><a href="#kp-A2">A2</a></td><td>Spectrum, multispectral, and hyperspectral</td><td>Section I, II-D</td></tr>
+    <tr><td><a href="#kp-A3">A3</a></td><td>LED light sources</td><td>Section II-A, IV</td></tr>
+    <tr><td><a href="#kp-A4">A4</a></td><td>How white light and monochromatic light differ in photos</td><td>Section II-A, Table II</td></tr>
+    <tr><td colspan="3"><b>B. Polarization</b></td></tr>
+    <tr><td><a href="#kp-B1">B1</a></td><td>What polarization is: two fences</td><td>Section II-B</td></tr>
+    <tr><td><a href="#kp-B2">B2</a></td><td>Analyzer angle and brightness</td><td>Section II-B, IV</td></tr>
+    <tr><td><a href="#kp-B3">B3</a></td><td>The imaging system</td><td>Fig. 1, Section II-B</td></tr>
+    <tr><td><a href="#kp-B4">B4</a></td><td>Four kinds of lighting: UWL, PWL, UML, PML</td><td>Section II-D, Table I</td></tr>
+    <tr><td colspan="3"><b>C. Metal reflection and cameras</b></td></tr>
+    <tr><td><a href="#kp-C1">C1</a></td><td>Light angle and metal reflection</td><td>Section I, II-B, V</td></tr>
+    <tr><td><a href="#kp-C3">C3</a></td><td>Contrast between defect and background</td><td>Section I, Table II</td></tr>
+    <tr><td><a href="#kp-C2">C2</a></td><td>How a color camera records color</td><td>Section II-C, IV, Fig. 2</td></tr>
+    <tr><td><a href="#kp-C4">C4</a></td><td>Image alignment</td><td>Needed background; relates to Section II-D</td></tr>
+    <tr><td colspan="3"><b>D. Data and algorithms</b></td></tr>
+    <tr><td><a href="#kp-D1">D1</a></td><td>Stacking photos into a cube</td><td>Section II-D, Table II</td></tr>
+    <tr><td><a href="#kp-D8">D8</a></td><td>How to choose the reference record</td><td>Section IV (t1–t4)</td></tr>
+    <tr><td><a href="#kp-D2">D2</a></td><td>SAM: telling overall brightening from a difference from the background</td><td>Section III-C, Eq. (4)</td></tr>
+    <tr><td><a href="#kp-D3">D3</a></td><td>SID: comparing the share of each brightness</td><td>Section III-C, Eq. (5)</td></tr>
+    <tr><td><a href="#kp-D4">D4</a></td><td>TAU: comparing the bright-dark ranking</td><td>Section III-C, Eq. (6)</td></tr>
+    <tr><td><a href="#kp-D5">D5</a></td><td>RX: finding positions beyond the background's variation</td><td>Section III-B, Eq. (3)</td></tr>
+    <tr><td><a href="#kp-D6">D6</a></td><td>AMF: matching against a known defect template</td><td>Section III-A, Eq. (1)</td></tr>
+    <tr><td><a href="#kp-D7">D7</a></td><td>ACE: template matching that ignores overall brightness</td><td>Section III-A, Eq. (2)</td></tr>
+    <tr><td colspan="3"><b>E. Decisions and scoring</b></td></tr>
+    <tr><td><a href="#kp-E1">E1</a></td><td>Threshold: the trade-off between finding more and flagging less wrongly</td><td>Section III, V</td></tr>
+    <tr><td><a href="#kp-E2">E2</a></td><td>Missed detections, false alarms, and the ROC curve: comparing detection results fairly</td><td>Section III, V</td></tr>
+    <tr><td><a href="#kp-E3">E3</a></td><td>How defect labeling affects the score</td><td>Scoring background; relates to Section III, V</td></tr>
+  </table>
+</section><section id="map-formulas" data-toc="group" data-tag="Map" data-toc-name="How the formulas relate">
+    <h3><span class="chip">Map</span>How the formulas relate</h3>
+    <p class="sub">Pick one method below and read upward along the solid lines. Click a box to see its formula.</p>
+    <div class="formula-pair"><div id="fmap"></div><aside id="formula-reference" aria-label="Formulas for the map"><h4>Matching formulas</h4><p class="sub">U1–U4 are summarized on this page. Eq. (1)–(6) correspond to the paper. Click a name to see the symbols and conditions.</p><div class="formula-reference-list"></div></aside></div>
+    <p class="formula-foot"><b>Solid lines: each method computes its own score</b> → arrange the high-low direction → outline with a threshold → score against the labels → compare false alarms under the condition of finding at least 90% of the defect.</p>
+    <p><b>Dashed line: with the same input and background weights, ACE = AMF ÷ the pixel's weighted squared length.</b> This step cancels the effect of the whole tested vector getting brighter. It does not mean AMF must be run before ACE. The denominator must be greater than 0.</p>
+  </section><section id="reading-background" data-toc="group" data-toc-name="Backup · Research background"><h2>Research background and results in detail</h2><header>
+  <h1>Surface Defect Detection of Metal Parts: Use of Multimodal Illuminations and Hyperspectral Imaging Algorithms</h1>
+  <p class="meta">Mohammed Benmoussat, Klaus Spinnler, Mireille Guillaume, 2012, IEEE conference paper (Fraunhofer IIS, Institut Fresnel), 6 pages. Reading record and section notes: <a href="papers/benmoussat12.md">papers/benmoussat12.md</a>. Paragraph-by-paragraph bilingual comparison and annotations of the original paper: <a href="annotated.html">annotated.html</a>.</p>
+</header><section id="reading-intro">
+  <p class="lede">Finding tiny <dfn data-term="dent">dents</dfn> and <dfn data-term="scratch">scratches</dfn> on a <dfn data-term="metal part">metal part</dfn> is hard, because the way metal reflects light changes with the lighting. The same defect can be clearly visible under one light and blend into the background under another. It is also hard to know in advance which lighting is best.</p>
+  <p>This paper uses light sources of many wavelengths together with different polarization settings, photographs the same position under each, and stacks the images. Every pixel then has a set of numbers that says "how bright it is under each lighting". Detection methods from hyperspectral imaging can be borrowed to find positions that differ from the background.</p>
+  <p>Among the 3 artificial defects tested in the paper, SAM, which compares the shape of the spectrum, has the lowest average false alarm rate. When a background pixel or the average spectrum of the whole cube is used as the reference, no defect template needs to be supplied in advance.</p>
+</section><section id="s1" data-toc="item" data-tag="1"><h2>1. An everyday example and the difficulty</h2>
+  <p><b>A concrete example.</b> The paper makes one artificial defect on each of 3 flat metal parts. Defect I is two dents, each 2 mm in diameter and 0.2 mm deep. Defect II is two small dents, each about 0.5 mm in diameter and 0.05 mm deep. Defect III is a scratch about 0.2 mm wide, 6 mm long, and 0.03 mm deep (reported in the paper, Section IV). A color photo can be split into 3 channels (red, green, and blue), and each channel is a grayscale image. This page reproduces the results using the photos embedded in the paper's <dfn data-term="PDF">PDF</dfn> file.</p>
+  <p>Under <dfn data-term="white light">white light</dfn> and using the green channel, the two dents of Defect I appear as clear dark circles. With 505 <dfn data-term="nm">nm</dfn> green light and the same green channel, the reflection at the center of the dent is as bright as the background.</p>
+  <p>If you use only this green-light photo and look for dents with a brightness difference and a <dfn data-term="threshold">threshold</dfn>, then to detect 90% of the dent pixels you end up judging 100% of the background as defect as well. Under the same conditions, the white-light green channel wrongly flags only about 0.52% of the background (reproduced on this page). This example shows that even for the same defect, changing the lighting can make the false alarm rate rise sharply.</p>
+  <div class="fig-row two">
+    <figure class="figure"><a href="figs/benmoussat12-tab2-d1-WL-G-real.png"><img src="figs/benmoussat12-tab2-d1-WL-G-real.png" alt="Defect I, white light, green channel"></a><figcaption>Table II of the paper (p.4): the green channel of Defect I under white light. The two dents are dark circles.</figcaption></figure>
+    <figure class="figure"><a href="figs/benmoussat12-tab2-d1-505-G-real.png"><img src="figs/benmoussat12-tab2-d1-505-G-real.png" alt="Defect I, 505 nm, green channel"></a><figcaption>Table II of the paper (p.4): the same defect under 505 nm green light. The center of the dent is as bright as the background.</figcaption></figure>
+  </div>
+  <p><b>An everyday example.</b> When a car mechanic checks a small dent on a car door, they shine a long tube light at a slant across the paint and watch where the reflection of the tube bends. What the eye sees is the change in the reflected light after the surface slope changes. A shiny metal surface is like a mirror and mostly shows <dfn data-term="specular reflection">specular reflection</dfn>. The slopes of a dent send light in different directions. So whether a defect looks bright or dark in a photo depends on the light direction, the wavelength, and the surface condition.</p>
+  <p><b>Where the difficulty lies.</b> The paper points out that lighting should make important features clearer and raise <dfn data-term="contrast">contrast</dfn> and <dfn data-term="SNR">SNR</dfn> (signal-to-noise ratio: how strong the useful signal is compared with the noise). The conditions you can adjust include the direction of the light, the wavelength range, and the <dfn data-term="polarization">polarization</dfn> (the vibration direction of the light wave; ordinary lamp light contains many vibration directions) (reported in the paper, Section I). The paper uses white light and <dfn data-term="LED">LED</dfn> <dfn data-term="monochromatic light">monochromatic light</dfn> of 9 wavelengths, and it compares settings with and without polarization.</p>
+  <p>The best lighting is not the same for every defect. On this page, contrast is measured as the difference between the average brightness of the defect and of the background, divided by the brightness fluctuation of the two. For Defect I, the highest contrast comes from the 850 nm red channel. For Defects II and III, it comes from the 590 nm red channel (reproduced on this page). So the authors chose to use the images under many lightings together, which reduces the dependence on picking one lighting (reported in the paper, Abstract).</p>
+</section>
+<section id="s2" data-toc="item" data-tag="2"><h2>2. The traditional approach and its limits</h2>
+  <p><b>Traditional industrial surface inspection.</b> The steel surface inspection process summarized by <a href="papers/neogi14.md">Neogi et al. 2014</a> first chooses the lighting, takes grayscale images, and then uses a brightness threshold, edges, or texture features to judge defects. The lighting can be bright-field (the camera receives the main reflected light, and the surface usually looks brighter) or dark-field (the camera avoids the main reflected light, so the light scattered by a defect stands out). A classifier is a program that uses these features to decide automatically between "defect" and "normal". <a href="papers/wu11.md">Zhang et al. 2011</a>, cited by this paper, studied surface defect inspection of highly reflective metal. The information obtained so far is not enough to confirm its lighting setup. This kind of process needs lighting that shows the defect clearly.</p>
+  <p><b>Testing the traditional method on the same images.</b> This page tests the paper's 15 unpolarized photos one by one. The score is "the difference between a pixel's brightness and the background median", and then a threshold decides defects (reproduced on this page). All the false alarm rates below are calculated under the condition that 90% of the defect pixels are detected. They show the share of background judged as defect. The results fall into two kinds:</p>
+  <ul>
+    <li><b>With a suitable photo, a single image can also give a low false alarm rate.</b> For Defect II, the white-light green channel gives a false alarm rate of 0.05%. For Defect I, the lowest is the 880 nm red channel (0.23%). For Defect III, the lowest is the 590 nm red channel (0.54%). This is a ranking by false alarm rate, and it differs slightly from the ranking by contrast in Section 1. On these high-contrast samples, a suitable single photo can get results close to the method the paper recommends.</li>
+    <li><b>With an unsuitable photo, the false alarm rate can be very high.</b> For each of the 3 defects, 2 to 4 photos have a false alarm rate of 100%, for example the 505 nm green photo mentioned above. For Defect III under the white-light blue channel, the false alarm rate also reaches 87.48%.</li>
+  </ul>
+  <p>These results show that the main difficulty of single-image methods is that <b>you must know in advance which lighting and channel are suitable</b>, and the answer changes with the defect. The paper tested only 3 artificial defects. The authors also point out that real defects vary greatly in appearance, so it is hard to cover all possible defects in advance (reported in the paper, Section VI).</p>
+  <p><b>Borrowing remote sensing methods also requires care about when they apply.</b> Satellite remote sensing records, for each pixel, a set of brightness values at different wavelengths, called a <dfn data-term="spectrum">spectrum</dfn>. The imaging technique that records a large amount of wavelength information is called <dfn data-term="hyperspectral imaging">hyperspectral imaging</dfn> (<dfn data-term="HSI">HSI</dfn>). Some HSI detection methods need the background to be uniform and to follow a <dfn data-term="normal distribution">normal distribution</dfn>, or need the target spectrum to be given in advance (<a href="papers/manolakis03.md">Manolakis et al. 2003</a>). The paper points out that these conditions may not hold for metal parts (reported in the paper, Section V). In addition, the amount of HSI data and the computing load make it harder to use for real-time industrial inspection (reported in the paper, Section I).</p>
+</section>
+<section id="s3" data-toc="item" data-tag="3"><h2>3. Related papers and the research gap</h2>
+  <p>To understand this 6-page paper, this page also collects 35 papers and textbooks. They fall into 5 themes, and each adds to a section, method, or formula of the original paper (see the full list in the <a href="#cluster">paper cluster comparison</a>):</p>
+  <ul>
+    <li><b>Lighting and imaging</b>: polarization and metal reflection (<a href="papers/nayar97.md">Nayar et al. 1997</a>, <a href="papers/atkinson06.md">Atkinson and Hancock 2006</a>, <a href="papers/wolff90.md">Wolff 1990</a>), the reflection color model (<a href="papers/shafer85.md">Shafer 1985</a>), and color interpolation in color cameras (<a href="papers/malvar04.md">Malvar et al. 2004</a>, <a href="papers/gunturk05.md">Gunturk et al. 2005</a>). They explain Section II, Fig. 1, and Fig. 2.</li>
+    <li><b>Detection theory</b>: <a href="papers/kelly86.md">Kelly 1986</a>, <a href="papers/robey92.md">Robey et al. 1992</a>, <a href="papers/kraut01.md">Kraut et al. 2001</a>, <a href="papers/manolakis02.md">Manolakis 2002</a>, <a href="papers/manolakis03.md">Manolakis et al. 2003</a>, <a href="papers/manolakis04.md">Manolakis et al. 2009</a>, <a href="papers/fawcett06.md">Fawcett 2006</a>. They explain how the two detection methods that need a defect template are derived, and how to score with the detection rate and false alarm rate.</li>
+    <li><b><dfn data-term="anomaly detection">Anomaly detection</dfn></b> (you do not need to know what the defect looks like; you only look for pixels that differ from the background): <a href="papers/stein02.md">Stein et al. 2002</a>, <a href="papers/chang02.md">Chang and Chiang 2002</a>. They explain the detection method that measures only "how far from the background", and whether the background mean should be estimated from the whole image or from a small surrounding patch.</li>
+    <li><b>Spectral distances</b>: <a href="papers/kruse93.md">Kruse et al. 1993</a>, <a href="papers/chang00.md">Chang 2000</a>. They are the original sources of two methods that "compare only the shape of the spectrum".</li>
+    <li><b>Industrial inspection and follow-up work</b>: <a href="papers/neogi14.md">Neogi et al. 2014</a>; the first author's doctoral thesis <a href="papers/benmoussat13thesis.md">Benmoussat 2013</a> (its Chapter 2 expands this paper); <a href="papers/benmoussat13b.md">Benmoussat et al. 2013</a> from the same team; and an industrial defect dataset trained only on normal samples, <a href="papers/bergmann19.md">Bergmann et al. 2019</a>.</li>
+  </ul>
+  <p><b>Research question.</b> Remote sensing and metal surface inspection face different imaging conditions, so we cannot simply assume that the same method will perform the same way. This paper compares many lighting combinations and HSI detection methods. It tests whether "building a pseudo-spectrum from images under different lighting" can identify metal defects, and which combinations work better. The same team later also applied these detection methods to thermal images (<a href="papers/benmoussat13b.md">Benmoussat et al. 2013</a>).</p>
+</section>
+<section id="s4" data-toc="item" data-tag="4"><h2>4. The core idea and method</h2>
+  <p>The method has 3 steps, and each step matches the topics below.</p>
+  <p><b>Step 1: Photograph the same position under many kinds of lighting.</b> The imaging system consists of a color camera and light sources that can be swapped (Fig. 1 of the paper). The light sources include 1 white LED and 9 monochromatic LED arrays with wavelengths from 470 to 940 nm. From 780 nm up, the light is <dfn data-term="near-infrared">near-infrared</dfn>, which human eyes cannot see (reported in the paper, Section IV).</p>
+  <p>In polarized mode, a <dfn data-term="polarizer">polarizer</dfn> is placed in front of the light source to let through light with one vibration direction. An <dfn data-term="analyzer">analyzer</dfn> is placed in front of the camera as well. The analyzer is also a polarizer, and turning it changes how much reflected light passes. The experiments take images at 30°, 60°, and 90°.</p>
+  <p>On a color camera's sensor, each pixel is covered by a small filter of only one color. This arrangement is called a <dfn data-term="Bayer pattern">Bayer pattern</dfn>. The two other colors missing at each pixel are estimated by interpolation from neighboring pixels. This step is called <dfn data-term="demosaicing">demosaicing</dfn>. The red, green, and blue channels each have a different wavelength response. For example, under 470 nm blue light the signal in the red channel is very weak, so the paper keeps only the channels that have enough signal under each lighting.</p>
+  <figure class="figure"><a href="figs/benmoussat12-fig1-real.png"><img src="figs/benmoussat12-fig1-real.png" alt="The imaging system"></a><figcaption>Fig. 1 of the paper (p.2): (a) polarized mode: a polarizer in front of the light source and an analyzer in front of the camera; (b) unpolarized mode: the polarizer in front of the light source is removed.</figcaption></figure>
+  <p><b>Step 2: Stack the images into a <dfn data-term="pseudo-spectral cube">pseudo-spectral cube</dfn> (<dfn data-term="PSC">PSC</dfn>).</b> Grayscale images of different lightings and channels are stacked together, and each image is called a <dfn data-term="component">component</dfn>. The <dfn data-term="RGB">RGB</dfn> (red, green, blue) channels of white light make 3 components. For the 9 monochromatic lights, the channels with enough signal are kept. At 470 and 505 nm, green and blue are used. At 590 nm, red and green are used. At 630 nm and the 5 near-infrared lights, only red is used. This gives 12 components (Table II; the paper explains the reasons for the choice only for 470 nm and near-infrared).</p>
+  <p>Polarized mode uses 3 analyzer angles, so the number of components is multiplied by 3. The paper builds 5 cubes in total. Cube 1 is white light (3 components). Cube 2 is white light with polarization (3×3 = 9). Cube 3 is monochromatic light (12). Cube 4 is monochromatic light with polarization (12×3 = 36). Cube 5 merges all of them (60) (reported in the paper, Table I, Table II). After stacking, each pixel has a set of brightness values across the lightings, which can be compared like a spectrum.</p>
+  <p><b>Step 3: Compute a score for each pixel, then decide whether it is a defect.</b> For now, just keep this shared purpose in mind. Each method outputs a <dfn data-term="detection map">detection map</dfn>, and then a threshold decides which pixels belong to the defect. This paper compares 6 hyperspectral imaging (HSI) detection methods. To understand the main results, first look at <a href="#kp-D2">SAM: comparing the angle between two sets of brightness values</a>, and treat the other 5 as method comparisons.</p>
+  <div class="method-comparison"><h4>How the 6 methods differ</h4><p>The 6 methods fall into 3 groups:</p>
+  <ul>
+    <li><b><dfn data-term="supervised">Supervised</dfn> target detection</b>: A defect template must be supplied in advance, that is, the set of brightness values of one defect pixel. <dfn data-term="AMF">AMF</dfn> lowers the weight of the directions in which the background often gets brighter or darker together, and then computes how similar a pixel is to the template. <dfn data-term="ACE">ACE</dfn> goes one step further and divides by the pixel's weighted squared length. With the template and background weights fixed, if the whole set of brightness values is multiplied by the same positive number, the ACE score does not change.</li>
+    <li><b>Anomaly detection</b>: <dfn data-term="RX">RX</dfn> measures the distance between a pixel and the average spectrum of the background. In the directions where the background normally varies more, a lower weight is given when computing the distance.</li>
+    <li><b>Spectral distance</b>: These compare the shape of two spectra. <dfn data-term="SAM">SAM</dfn> treats two sets of numbers as two arrows and computes the angle between them. <dfn data-term="SID">SID</dfn> turns each component into its "share of the sum of the whole set" and compares the two sets of shares. <dfn data-term="Kendall's tau">Kendall's tau</dfn> (called <dfn data-term="TAU">TAU</dfn> for short in the paper) only compares whether the brightness ranking of the components agrees.</li>
+  </ul>
+  </div>
+
+
+
+
+
+  
+  <p><b>The key move: use the background as the reference.</b> A spectral distance needs one reference spectrum. The paper tested 4 sources: the pixel at the defect center (t1), the pixel at the defect edge (t2), one background pixel (t3), and the average spectrum of the whole cube (t4). The paper does not give the exact positions of t1, t2, and t3. In this page's reproduction, one point each was chosen at the defect center, at the edge, and in the background far from the defect.</p>
+  <p>t3 requires choosing a normal background pixel first. t4 directly uses the average of all pixels, which may include the effect of the defect. Neither needs a defect template in advance. Instead they look for positions that differ from the background. This is also the direction in which the paper explores <dfn data-term="unsupervised">unsupervised</dfn> methods.</p>
+  <p>When the background is the reference, a high SAM or TAU score means "looks like the background", and a defect may actually get a low score. If you change the normalized score to 1 minus its original value, pixels that do not look like the background get high scores, and you can keep the rule "a score above the threshold is judged a defect" (reported in the paper, Section IV). SID is a distance. The larger it is, the less alike the two are. So when the background is the reference, this page uses SID's difference score directly, and no complement is needed.</p>
+
+
+</section>
+
+</section><section id="cluster" data-toc="group" data-toc-name="Backup · Paper cluster"><h2>Paper cluster comparison</h2>
+  <p class="sub">This section collects 35 papers and textbooks. It compares the difficulty each one addresses, its core design, its evidence, and the questions it leaves open.</p>
+  <div class="table-wrap"><table><tr><th>Paper</th><th>Role</th><th>Difficulty addressed</th><th>Core design</th><th>Evidence (source)</th><th>Open questions</th></tr>
+  <tr><td><a href="papers/benmoussat13thesis.md">Benmoussat 2013 (doctoral thesis)</a></td><td>Extension of this paper</td><td>Definitions and the evaluation process that did not fit in the 6 pages of 2012</td><td>Chapter 2 expands this paper. It adds the definitions of PD and PFA and the choice of LEDs and color channels (Table 2.3). SAM is defined by the angle cos⁻¹ (Eq. 1.28)</td><td>Table 2.4 has exactly the same 18 AFAR values as Table III of this paper (p.61)</td><td>Still does not say how the defect ground truth was drawn (p.58). Polarization has no separate comparison table</td></tr>
+  <tr><td><a href="papers/benmoussat13b.md">Benmoussat et al. 2013 (non-destructive testing conference)</a></td><td>Follow-up by the same team</td><td>Metal defects, using thermal images instead</td><td>A thermal image sequence is stacked into a data cube. Singular value decomposition (a method that compresses a large amount of data into a few main components) reduces its dimension, and then RX is used</td><td>Evaluated with FAR and ROC. The effect of dimension reduction on computing time is quantified</td><td>Switched to thermal images and did not return to multiple lightings</td></tr>
+  <tr><td><a href="papers/benmoussat13.md">Benmoussat et al. 2013 (journal)</a></td><td>Follow-up by the same team</td><td>Detecting metal defects with thermal images (journal version)</td><td>Thermal images + RX</td><td>Abstract</td><td>—</td></tr>
+  <tr><td><a href="papers/bergmann19.md">Bergmann et al. 2019</a></td><td>Follow-up: industrial unsupervised anomaly detection</td><td>The kinds of defects are unknown in advance</td><td>Train only on defect-free images. Defect areas are labeled by hand at pixel level</td><td>About 1888 manually labeled regions (p.5)</td><td>Handles RGB and grayscale images and does not include spectra</td></tr>
+  <tr><td><a href="papers/neogi14.md">Neogi et al. 2014</a></td><td>Traditional approach (survey)</td><td>Steel surface defect inspection</td><td>Choose the lighting (bright-field, dark-field) + threshold or features + classifier</td><td>Summarizes many systems (Sections 7–11)</td><td>The methods lack a common standard of comparison (conclusion)</td></tr>
+  <tr><td><a href="papers/wu11.md">Zhang et al. 2011 (misprinted as Wu in the paper)</a></td><td>Reference [1] of the paper</td><td>Defects on highly reflective metal surfaces</td><td>Multi-class support vector machine (a kind of classifier). The lighting setup is not yet confirmed</td><td>—</td><td>—</td></tr>
+  <tr><td><a href="papers/hornberg06.md">Hornberg 2006 (textbook)</a></td><td>Reference [2] of the paper</td><td>Lighting design for machine vision</td><td>Chapter 3: light direction, color, polarization, and contrast</td><td>Publisher's sample chapter and table of contents</td><td>—</td></tr>
+  <tr><td><a href="papers/gowen07.md">Gowen et al. 2007</a></td><td>HSI in quality control</td><td>HSI for food quality control</td><td>—</td><td>Abstract</td><td>—</td></tr>
+  <tr><td><a href="papers/nayar97.md">Nayar et al. 1997</a></td><td>Polarization and reflection</td><td>Specular and diffuse reflection are mixed together</td><td>Use color and polarization to separate the reflection components</td><td>pp.168–169 point out that passive polarization methods are almost useless for metal</td><td>Metal shows a polarization difference only at very oblique angles</td></tr>
+  <tr><td><a href="papers/atkinson06.md">Atkinson and Hancock 2006</a></td><td>Polarization and 3D shape</td><td>Recovering the surface direction from images</td><td>The degree of polarization maps to the tilt angle, and the polarization angle maps to the azimuth (Eq. 5, 7, 17)</td><td>Experiments on smooth dielectric objects</td><td>Explicitly does not handle metal (p.1655)</td></tr>
+  <tr><td><a href="papers/wolff90.md">Wolff 1990</a></td><td>Polarization and metal</td><td>Telling metal from dielectric</td><td>—</td><td>—</td><td>—</td></tr>
+  <tr><td><a href="papers/shafer85.md">Shafer 1985</a></td><td>Reflection color model</td><td>Why different wavelengths give different information</td><td>Dichromatic reflection model (splits reflected light into a specular part and a diffuse part; Eq. 2-1, 2-2)</td><td>Theoretical derivation, no experiments</td><td>Explicitly not applicable to metal (p.3)</td></tr>
+  <tr><td><a href="papers/malvar04.md">Malvar et al. 2004</a></td><td>Color interpolation in color cameras</td><td>Each pixel of a Bayer pattern has only one color</td><td>Bilinear interpolation + gradient correction (Eq. 1–5)</td><td>Image quality compared with bilinear interpolation</td><td>—</td></tr>
+  <tr><td><a href="papers/gunturk05.md">Gunturk et al. 2005</a></td><td>Color interpolation in color cameras (survey)</td><td>Color artifacts from demosaicing</td><td>Uses the correlation between channels</td><td>Fig. 16 shows that the red channel still responds above 700 nm</td><td>—</td></tr>
+  <tr><td><a href="papers/kelly86.md">Kelly 1986</a></td><td>Source of detection theory</td><td>How to detect when the covariance is unknown</td><td>Generalized likelihood ratio test (compares how likely the data are under two hypotheses, "target present" and "no target"). The covariance is estimated from training samples</td><td>Derivation on pp.115–119</td><td>—</td></tr>
+  <tr><td><a href="papers/robey92.md">Robey et al. 1992</a></td><td>Original source of Eq. (1) AMF</td><td>Matched filtering when the covariance is unknown</td><td>AMF (Eq. 7–8)</td><td>Proves that AMF has the CFAR property (Eq. 9–11)</td><td>Poor at rejecting signals that do not match</td></tr>
+  <tr><td><a href="papers/kraut01.md">Kraut et al. 2001</a></td><td>Original source of Eq. (2) ACE</td><td>The signal strength and the noise scale are unknown</td><td>A scale-invariant subspace detector</td><td>Sec VI, Fig. 7</td><td>Under the conditions in the paper with a high signal-to-noise ratio and enough training samples, AMF can do better than ACE. With a low signal-to-noise ratio or fewer samples, the order may reverse. It cannot be summarized as ACE always needing a stronger signal</td></tr>
+  <tr><td><a href="papers/manolakis02.md">Manolakis 2002 (MIT Lincoln Laboratory report)</a></td><td>Report version of reference [5] of the paper</td><td>A survey of HSI detection algorithms</td><td>Derivation of AMF, ACE, and RX (Eq. 52–56)</td><td>RX follows a chi-square distribution under a normal background (Eq. 11)</td><td>Lists 4 assumptions</td></tr>
+  <tr><td><a href="papers/manolakis03.md">Manolakis et al. 2003</a></td><td>Teaching material on detection theory</td><td>The overall framework of target detection</td><td>Hypothesis testing, ROC, AMF, ACE, RX</td><td>pp.89–91, 99–101, 110–113</td><td>When the background tails are heavier than normal, the CFAR threshold becomes inaccurate</td></tr>
+  <tr><td><a href="papers/manolakis04.md">Manolakis et al. 2009</a></td><td>Substitute for reference [4] of the paper</td><td>Is there a best detection method?</td><td>Compares AMF, ACE, and RX (Eq. 33–37, 53–54)</td><td>The effect of target pixels mixed into the covariance estimate (Section 6.4)</td><td>—</td></tr>
+  <tr><td><a href="papers/reed90.md">Reed and Yu 1990</a></td><td>Original source of Eq. (3) RX</td><td>Detection when the target spectrum is unknown</td><td>—</td><td>—</td><td>—</td></tr>
+  <tr><td><a href="papers/stein02.md">Stein et al. 2002</a></td><td>Reference [6] of the paper</td><td>Anomaly detection</td><td>Local and global background models. RX is derived from the generalized likelihood ratio</td><td>pp.59–60, Eq. (3)–(6)</td><td>A local normal model does not always hold for real data (p.62)</td></tr>
+  <tr><td><a href="papers/chang02.md">Chang and Chiang 2002</a></td><td>A variant of RX</td><td>Anomaly detection with a global background</td><td>RX using the mean and covariance of the whole image, and its variants</td><td>Sec II–III</td><td>The effect of removing target contamination is not clear (p.4)</td></tr>
+  <tr><td><a href="papers/matteoli10.md">Matteoli et al. 2010</a></td><td>Survey of anomaly detection</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+  <tr><td><a href="papers/kwon05.md">Kwon and Nasrabadi 2005</a></td><td>Nonlinear version of RX</td><td>A non-uniform background</td><td>First map the data to a higher-dimensional space and then apply RX</td><td>—</td><td>—</td></tr>
+  <tr><td><a href="papers/kruse93.md">Kruse et al. 1993</a></td><td>Original definition of Eq. (4) SAM</td><td>Spectral matching is affected by brightness</td><td>Match by the angle between two spectra, which is invariant to scaling</td><td>pp.156–157, Fig. 6</td><td>—</td></tr>
+  <tr><td><a href="papers/chang00.md">Chang 2000</a></td><td>Original source of Eq. (5) SID</td><td>Spectral similarity</td><td>Treat a spectrum as a probability distribution and compare with relative entropy</td><td>Eq. (1)(3)(4); comparison with SAM in Sec V</td><td>—</td></tr>
+  <tr><td><a href="papers/du04.md">Du et al. 2004</a></td><td>Reference [7] of the paper</td><td>Comparing SAM and SID</td><td>A hybrid measure of SID and SAM</td><td>Abstract</td><td>—</td></tr>
+  <tr><td><a href="papers/keshava04.md">Keshava 2004</a></td><td>Comparison of spectral distances</td><td>Distance measures and band selection</td><td>—</td><td>Abstract</td><td>—</td></tr>
+  <tr><td><a href="papers/huck06.md">Huck and Guillaume 2006</a></td><td>Reference [8] of the paper</td><td>Kendall's tau for spectral detection</td><td>—</td><td>—</td><td>—</td></tr>
+  <tr><td><a href="papers/huck09thesis.md">Huck 2009 (doctoral thesis)</a></td><td>Possible source of Kendall's tau</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+  <tr><td><a href="papers/kendall38.md">Kendall 1938</a></td><td>Statistical source of Eq. (6)</td><td>Rank correlation</td><td>—</td><td>—</td><td>—</td></tr>
+  <tr><td><a href="papers/fawcett06.md">Fawcett 2006</a></td><td>Introduction to ROC</td><td>How to evaluate a detector</td><td>Threshold sweep, ROC curve</td><td>Sections 1–5, 11</td><td>It has no metric of "fix the detection rate and read the false alarm rate"</td></tr>
+  <tr><td><a href="papers/kay98.md">Kay 1998 (textbook)</a></td><td>Detection theory textbook</td><td>—</td><td>—</td><td>Publisher's table of contents</td><td>—</td></tr>
+  <tr><td><a href="papers/chang03book.md">Chang 2003 (textbook)</a></td><td>HSI detection textbook</td><td>—</td><td>—</td><td>Table of contents</td><td>—</td></tr>
+  </table></div>
+</section><div id="appendix">
+<section id="overview" data-toc="group" data-toc-name="Appendix: formula overview"><h2><span class="mark">Appendix</span>Formula overview</h2>
+  <p class="sub">For readers who want to go deeper: every formula in the paper, how they connect, and what each symbol means. The paper has 6 numbered formulas. (U1)–(U4) are relations this page put together from the decision, scoring, and normalization process. The min–max normalization and the maximum feasible threshold are specific choices made on this page, and they are not formulas the authors list.</p>
+  
+  <section id="symbols" data-toc="item" data-tag="Symbols" data-toc-name="Symbol cheat sheet">
+    <h3><span class="chip">Symbols</span>Symbol cheat sheet</h3>
+    <table id="symbol-table"><tr><th>Symbol</th><th>Meaning</th><th>Setting in the paper</th></tr>
+      <tr><td><span class="tex">x \in \mathbb{R}^L</span></td><td>Spectrum of the tested pixel (pseudo-spectrum)</td><td>L is the number of components in the cube, 3 to 60 (Table I)</td></tr>
+      <tr><td><span class="tex">s \in \mathbb{R}^L</span></td><td>Target or reference spectrum</td><td>t1 defect center, t2 defect edge, t3 background pixel, t4 average spectrum of the cube (Section IV)</td></tr>
+      <tr><td><span class="tex">\mu</span></td><td>Background mean spectrum</td><td>Estimated from the whole cube (Section V)</td></tr>
+      <tr><td><span class="tex">\hat\Gamma</span></td><td>Estimated covariance matrix</td><td>Estimated from the whole cube, assuming the target and background are the same (Section III-A, V)</td></tr>
+      <tr><td><span class="tex">\sigma</span></td><td>In ACE, the factor by which the target covariance exceeds the background</td><td>Unknown, estimated from the data (Section III-A)</td></tr>
+      <tr><td><span class="tex">y = D(x)</span></td><td>Score output by the detector</td><td>One of Eq. (1)–(6)</td></tr>
+      <tr><td><span class="tex">\eta</span></td><td>Threshold</td><td>0 to 1 after normalization, step 10⁻³ (Section V)</td></tr>
+      <tr><td><span class="tex">P_D,\ P_{FA}</span></td><td>Detection rate, false alarm rate</td><td>Computed for every threshold (Section III, V)</td></tr>
+      <tr><td><span class="tex">p_j,\ q_j</span></td><td>The j-th value of s and x divided by their sums</td><td>Eq. (5)</td></tr>
+      <tr><td><span class="tex">\operatorname{sign}(u)</span></td><td>1 for positive, −1 for negative, 0 for zero</td><td>Eq. (6)</td></tr>
+      <tr><td><span class="tex">N, M, L</span></td><td>The two spatial dimensions of the image and the number of components</td><td>170×240, 90×360, 130×230 pixels (Section IV)</td></tr>
+      <tr><td><span class="tex">\text{GDR}, \text{FAR}, \text{AFAR}</span></td><td>Fixed detection rate, the false alarm rate at that point, and the average over several maps</td><td>GDR = 90% (Section V)</td></tr>
+    </table>
+  </section>
+</section><section id="grp-dec" data-toc="group" data-toc-name="Appendix · Decision and scoring"><h2><span class="mark">Appendix</span>Decision and scoring: from score to AFAR</h2>
+  <p class="sub">The start of Section III and Section V of the main text.</p>
+  <section class="eq-sec" id="eq-u1" data-toc="item" data-tag="(U1)">
+    <h3><span class="chip">(U1)</span>Threshold decision</h3>
+    <div class="eq">
+      <div class="tex-block">y = D(x) \;\underset{H_0}{\overset{H_1}{\gtrless}}\; \eta</div>
+      <div class="where">p.3 · §III</div>
+      <dl><dt><span class="tex">H_0, H_1</span></dt><dd>The two cases of the hypothesis test: the pixel has no target, and the pixel has a target.</dd><dt><span class="tex">\eta</span></dt><dd>Threshold. Lowering it raises the detection rate, but false alarms also increase.</dd></dl>
+      <div class="links">Receives the score processed by <a href="#eq-u3">(U3)</a>. The decision at each threshold is passed to <a href="#eq-u2">(U2)</a> for scoring</div>
+    </div>
+  </section>
+  <section class="eq-sec" id="eq-u2" data-toc="item" data-tag="(U2)">
+    <h3><span class="chip">(U2)</span>Detection rate, false alarm rate, and ROC</h3>
+    <div class="eq">
+      <div class="tex-block">P_D(\eta) = \frac{\#\{i \in \text{defect}: y_i \ge \eta\}}{\#\,\text{defect}},\qquad P_{FA}(\eta) = \frac{\#\{i \in \text{background}: y_i \ge \eta\}}{\#\,\text{background}}</div>
+      <div class="where">p.3 · §III; p.5 · §V</div>
+      <dl><dt><span class="tex">P_D(\eta)</span></dt><dd>The share of defect pixels detected at threshold η.</dd><dt><span class="tex">P_{FA}(\eta)</span></dt><dd>The share of background pixels wrongly judged at threshold η. The ROC curve plots PD(η) against PFA(η).</dd></dl>
+      <div class="links">Compute PD/PFA for the different thresholds of <a href="#eq-u1">(U1)</a>. Then <a href="#eq-u4">(U4)</a> selects the comparison condition</div>
+    </div>
+  </section>
+  <section class="eq-sec" id="eq-u3" data-toc="item" data-tag="(U3)">
+    <h3><span class="chip">(U3)</span>Normalization and complement</h3>
+    <div class="eq">
+      <div class="tex-block">y' = \frac{y-\min y}{\max y-\min y},\qquad y'' = 1-y' \;\;(\text{background as reference})</div>
+      <div class="where">p.4 · §IV; p.5 · §V</div>
+      <dl><dt><span class="tex">y'</span></dt><dd>This page normalizes with the minimum and maximum of the whole score map. If all scores are the same, the denominator is 0, and another way of handling it must be set. This page's implementation adds a tiny amount to the denominator to avoid dividing by 0.</dd><dt><span class="tex">y''</span></dt><dd>When SAM, TAU, AMF, and ACE on this page use the background (t3, t4) as reference, the similarity score is complemented: the larger the difference from the background, the higher the score. When SID uses the background as reference, this page uses a distance score and needs no complement. When it uses the defect as reference, the direction is reversed so that pixels that look more like the defect get high scores. RX is not complemented.</dd></dl>
+      <div class="links">Each method scores first, and then this step is applied. The processed score is passed to <a href="#eq-u1">(U1)</a> for the decision</div>
+    </div>
+  </section>
+  <section class="eq-sec" id="eq-u4" data-toc="item" data-tag="(U4)">
+    <h3><span class="chip">(U4)</span>False alarm rate and average at a fixed GDR</h3>
+    <div class="eq">
+      <div class="tex-block">\eta^* = \max\{\eta \in \mathcal T: P_D(\eta) \ge \text{GDR}\},\quad \text{FAR} = P_{FA}(\eta^*),\quad \text{AFAR} = \frac{1}{20}\sum_{c=1}^{5}\sum_{t=1}^{4}\text{FAR}_{c,t}</div>
+      <div class="where">p.5 · §V</div>
+      <dl><dt><span class="tex">\text{GDR}</span></dt><dd>Set to 90% on this page. 𝒯 is the set of thresholds tested here. Among the thresholds where PD is at least 90%, the largest is taken. PD is not required to equal exactly 90%.</dd><dt><span class="tex">c, t</span></dt><dd>Cube number 1–5 and reference spectrum t1–t4. RX needs no reference spectrum and averages only 5 maps.</dd></dl>
+      <div class="links">Uses the scoring result of <a href="#eq-u2">(U2)</a>. The 20-setting average applies to the paper's comparison that uses 5 cubes and 4 references. This page's data combination is different, so this page's FAR cannot be treated as the AFAR of Table III</div>
+    </div>
+  </section>
+</section><section id="grp-tgt" data-toc="group" data-toc-name="Appendix · Target and anomaly detection"><h2><span class="mark">Appendix</span>Target detection and anomaly detection</h2>
+  <p class="sub">Section III-A and III-B of the main text.</p>
+  <section class="eq-sec" id="eq-1" data-toc="item" data-tag="(1)">
+    <h3><span class="chip">(1)</span>AMF</h3>
+    <div class="eq">
+      <div class="tex-block">H_0: x \sim \mathcal N(0,\Gamma),\quad H_1: x \sim \mathcal N(s,\Gamma),\qquad y_{AMF}(x,s) = \frac{\|s^T\hat\Gamma^{-1}x\|^2}{s^T\hat\Gamma^{-1}s}</div>
+      <div class="where">p.3 · §III-A · <a class="ann" href="annotated.html#eq1">Paragraph-by-paragraph view</a></div>
+      <dl><dt><span class="tex">\mathcal N(s,\Gamma)</span></dt><dd>A multivariate normal distribution with mean s and covariance Γ.</dd><dt><span class="tex">\hat\Gamma</span></dt><dd>The estimated covariance, assuming the background and the target are the same.</dd></dl>
+      <div class="links">Its algebraic relation to <a href="#eq-2">(2)</a>: divide further by the pixel's weighted squared length. After scoring, the result is passed to <a href="#eq-u3">(U3)</a></div>
+    </div>
+  </section>
+  <section class="eq-sec" id="eq-2" data-toc="item" data-tag="(2)">
+    <h3><span class="chip">(2)</span>ACE</h3>
+    <div class="eq">
+      <div class="tex-block">H_1: x \sim \mathcal N(s,\sigma\Gamma),\qquad y_{ACE}(x,s) = \frac{\|s^T\hat\Gamma^{-1}x\|^2}{(s^T\hat\Gamma^{-1}s)(x^T\hat\Gamma^{-1}x)}</div>
+      <div class="where">p.3 · §III-A · <a class="ann" href="annotated.html#eq2">Paragraph-by-paragraph view</a></div>
+      <dl><dt><span class="tex">\sigma</span></dt><dd>The unknown factor by which the covariance is enlarged when a target is present. It is estimated from the data.</dd><dt><span class="tex">x^T\hat\Gamma^{-1}x</span></dt><dd>The pixel's weighted squared length. Dividing by this term makes the score unaffected by proportional scaling of the whole set of values.</dd></dl>
+      <div class="links">With the same input and background weights, ACE score = <a href="#eq-1">AMF score</a> ÷ the pixel's weighted squared length (the length must be greater than 0). This is an algebraic relation between statistics, and it does not mean the two hypothesis models are the same. After scoring, the result is passed to <a href="#eq-u3">(U3)</a></div>
+    </div>
+  </section>
+  <section class="eq-sec" id="eq-3" data-toc="item" data-tag="(3)">
+    <h3><span class="chip">(3)</span>RX</h3>
+    <div class="eq">
+      <div class="tex-block">y_{RX}(x) = (x-\mu)^T\hat\Gamma^{-1}(x-\mu)</div>
+      <div class="where">p.3 · §III-B · <a class="ann" href="annotated.html#eq3">Paragraph-by-paragraph view</a></div>
+      <dl><dt><span class="tex">\mu</span></dt><dd>The background mean. It can be taken from a local neighborhood or the whole image. The paper takes the whole cube.</dd><dt><span class="tex">y_{RX}</span></dt><dd>When the background follows a multivariate normal distribution and its mean and covariance are known, the RX score follows a chi-square distribution. When the background is estimated from finite data, the threshold distribution also depends on the way of estimating.</dd></dl>
+      <div class="links">After scoring, the result is passed to <a href="#eq-u3">(U3)</a></div>
+    </div>
+  </section>
+</section><section id="grp-dist" data-toc="group" data-toc-name="Appendix · Spectral distances"><h2><span class="mark">Appendix</span>Spectral distances</h2>
+  <p class="sub">Section III-C of the main text. The threshold must be chosen empirically.</p>
+  <section class="eq-sec" id="eq-4" data-toc="item" data-tag="(4)">
+    <h3><span class="chip">(4)</span>SAM</h3>
+    <div class="eq">
+      <div class="tex-block">y_{SAM}(x,s) = \frac{s^Tx}{(s^Ts)^{1/2}(x^Tx)^{1/2}}</div>
+      <div class="where">p.3 · §III-C · <a class="ann" href="annotated.html#eq4">Paragraph-by-paragraph view</a></div>
+      <dl><dt><span class="tex">y_{SAM}</span></dt><dd>The cosine of the angle between two spectra. A value of 1 means the shapes are identical. The original definition (Kruse et al. 1993) reports the angle arccos(y).</dd></dl>
+      <div class="links">Compare with <a href="#eq-5">(5)</a> and <a href="#eq-6">(6)</a>. The score is then processed by <a href="#eq-u3">(U3)</a></div>
+    </div>
+  </section>
+  <section class="eq-sec" id="eq-5" data-toc="item" data-tag="(5)">
+    <h3><span class="chip">(5)</span>SID</h3>
+    <div class="eq">
+      <div class="tex-block">y_{SID}(x,s) = \sum_{j=1}^{L} p_j\log\frac{p_j}{q_j} + \sum_{j=1}^{L} q_j\log\frac{q_j}{p_j},\qquad p = \frac{s}{\sum s},\ q = \frac{x}{\sum x}</div>
+      <div class="where">p.3 · §III-C · <a class="ann" href="annotated.html#eq5">Paragraph-by-paragraph view</a></div>
+      <dl><dt><span class="tex">p, q</span></dt><dd>The probability distributions of the reference spectrum and the tested spectrum after dividing by their sums.</dd><dt><span class="tex">y_{SID}</span></dt><dd>The sum of the relative entropy in both directions. A value of 0 means the shapes are the same.</dd></dl>
+      <div class="links">Compare with <a href="#eq-4">(4)</a> and <a href="#eq-6">(6)</a>. It is also used for spectral matching</div>
+    </div>
+  </section>
+  <section class="eq-sec" id="eq-6" data-toc="item" data-tag="(6)">
+    <h3><span class="chip">(6)</span>Kendall's tau</h3>
+    <div class="eq">
+      <div class="tex-block">y_{TAU}(x,s) = \frac{2}{L(L-1)}\sum_{l=1}^{L-1}\sum_{k=l+1}^{L}\operatorname{sign}\big[(x_k-x_l)(s_k-s_l)\big]</div>
+      <div class="where">p.3 · §III-C · <a class="ann" href="annotated.html#eq6">Paragraph-by-paragraph view</a></div>
+      <dl><dt><span class="tex">\operatorname{sign}</span></dt><dd>Counts 1 if the size order of two components is the same in the two spectra, −1 if it is opposite, and 0 if they are equal.</dd><dt><span class="tex">y_{TAU}</span></dt><dd>The value is between −1 and 1. In the paper's data it falls between 0.114 and 1. This means the overall ranking mostly agrees, and it does not mean every pair of components agrees (Section V).</dd></dl>
+      <div class="links">Compare with <a href="#eq-4">(4)</a> and <a href="#eq-5">(5)</a>. The score is then processed by <a href="#eq-u3">(U3)</a></div>
+    </div>
+  </section>
+</section></div>
+
+</main>
+</div>
+<script>
+/* warm neutrals inside canvases (talk.html only): slate greys become warm greys; data colours are unchanged */
+(function () {
+  const M = { '#94a3b8': '#bba98f', '#a3afbf': '#bfae96', '#64748b': '#8f7d69', '#475569': '#6e5d4c', '#334155': '#4d4036',
+    '#2b3643': '#4a3d33', '#1e293b': '#3b3029', '#0f172a': '#231c17', '#0b1220': '#231c17', '#111827': '#231c17',
+    '#e2e8f0': '#f1e8dc', '#cbd5e1': '#dfd2c1', '#f8fafc': '#fbf6ee', '#f1f5f9': '#fbf6ee' };
+  const R = [['rgba(148,163,184,', 'rgba(187,169,143,'], ['rgba(15,20,25,', 'rgba(35,28,23,'], ['rgba(5,10,18,', 'rgba(35,28,23,']];
+  const map = v => { if (typeof v !== 'string') return v; const k = v.toLowerCase(); if (M[k]) return M[k];
+    for (const [a, b] of R) if (k.startsWith(a)) return b + v.slice(a.length); return v; };
+  const P = CanvasRenderingContext2D.prototype;
+  ['fillStyle', 'strokeStyle'].forEach(p => { const d = Object.getOwnPropertyDescriptor(P, p);
+    Object.defineProperty(P, p, { get: d.get, set(v) { d.set.call(this, map(v)); }, configurable: true }); });
+})();
+</script>
+<script src="katex/katex.min.js"></script>
+<script src="widgets.js?v=report-20261005-3-en"></script>
+<script src="formula-reference.js?v=report-20261005-3-en"></script>
+<script src="data.js"></script>
+<script src="demos.js?v=report-20261005-2-en"></script>
+<script src="lessons.js?v=readable-20261005-4-en7"></script>
+<script src="algorithms-guide.js?v=image-20261005-en2"></script>
+<script src="extra-lessons.js?v=20261005-1-en4"></script>
+<script src="algorithm-lessons.js?v=readable-20261005-4-en4"></script>
+<script>
+/* opening "Author" card: real data, defect III (scratch), 12 monochromatic components, SAM with t4 */
+(function () {
+  const A = PR.algorithmData, D = A.defect(3), idx = [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
+  const val = (x, y) => idx.map(i => D.raw[i * D.N + y * D.W + x]);
+  const scratch = val(100, 73), bg = val(150, 110);
+  const bars = document.querySelector('.ov-bars'), b = bars.getContext('2d');
+  const BW = bars.width, BH = bars.height, L = 40, R = 12, T = 16, B = BH - 62, n = idx.length;
+  const X = j => L + (BW - L - R) * j / (n - 1), Y = v => B - (B - T) * Math.min(v, 1.1) / 1.1;
+  b.font = '24px sans-serif'; b.fillStyle = '#a3afbf'; b.textAlign = 'right'; b.textBaseline = 'middle';
+  [0.5, 1].forEach(v => { b.fillText(String(v), L - 6, Y(v)); });
+  b.strokeStyle = '#64748b'; b.setLineDash([5, 5]); b.beginPath(); b.moveTo(L, Y(1)); b.lineTo(BW - R, Y(1)); b.stroke(); b.setLineDash([]);
+  const nir = idx.findIndex(i => HSI.bands[i].startsWith('780'));
+  b.strokeStyle = '#2b3643'; b.beginPath(); b.moveTo((X(nir - 1) + X(nir)) / 2, T); b.lineTo((X(nir - 1) + X(nir)) / 2, B); b.stroke();
+  b.textAlign = 'center'; b.textBaseline = 'top';
+  b.fillText('Visible', (X(0) + X(nir - 1)) / 2, B + 32); b.fillText('Near-IR', (X(nir) + X(n - 1)) / 2, B + 32);
+  b.font = '22px sans-serif'; b.fillText('470', X(0), B + 4); b.fillText('630', X(nir - 1), B + 4); b.fillText('940 nm', X(n - 1) - 26, B + 4);
+  const ok = idx.map((_, j) => scratch[j] < 255 && bg[j] < 255), ratio = idx.map((_, j) => scratch[j] / bg[j]);
+  b.strokeStyle = '#fbbf24'; b.lineWidth = 4; b.beginPath(); let first = true;
+  idx.forEach((_, j) => { if (!ok[j]) return; first ? b.moveTo(X(j), Y(ratio[j])) : b.lineTo(X(j), Y(ratio[j])); first = false; }); b.stroke();
+  idx.forEach((_, j) => {
+    b.beginPath(); b.arc(X(j), ok[j] ? Y(ratio[j]) : Y(1), 8, 0, 2 * Math.PI);
+    if (ok[j]) { b.fillStyle = '#fbbf24'; b.fill(); } else { b.strokeStyle = '#94a3b8'; b.lineWidth = 2.5; b.stroke(); }
+  });
+  const s = A.score('SAM', 3, idx, 't4'), hit = A.farAt(s, D.gt), eta = hit.eta;
+  document.querySelector('.ov-far').textContent = (hit.far * 100).toFixed(2) + '% of the background, about ' + hit.fp + ' pixels';
+  const mask = document.querySelector('.ov-mask'); mask.width = D.W; mask.height = D.H;
+  const m = mask.getContext('2d'), img = m.createImageData(D.W, D.H);
+  for (let i = 0; i < D.N; i++) {
+    const g = D.raw[5 * D.N + i] * 0.35;
+    img.data.set(s[i] >= eta ? [251, 191, 36, 255] : [g, g, g, 255], i * 4);
+  }
+  m.putImageData(img, 0, 0);
+})();
+</script>
+<script>
+  if (location.search.indexOf('selftest') >= 0) {
+    var s = document.createElement('script'); s.src = '_work/selftest.js'; document.body.appendChild(s);
+  }
+</script>
+<script src="talk-formulas.js?v=1"></script>
+<script src="talk-extra.js?v=2"></script>
+</body>
+</html>

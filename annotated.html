@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>金屬表面缺陷檢測論文批註</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#1a2744; --page:#faf8f4; --ink:#2a2a2a; --muted:#666;
+  --y:#fff3b0; --r:#ffd6d6; --b:#d6e5ff; --g:#d6f5d6; --p:#e8d6ff;
+  --zh-bg:#f0ece2; --zh-bar:#c4b99a; --note-bg:#f5f5f5;
+  --ui:'IBM Plex Sans','Noto Sans TC','Microsoft JhengHei',sans-serif;
+  --serif:'Lora',Georgia,'Noto Sans TC','Microsoft JhengHei',serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--page);color:var(--ink);font-family:var(--ui);line-height:1.7}
+
+/* ===== 區塊 A：固定頂部導航列 ===== */
+#topbar{position:fixed;top:0;left:0;right:0;height:60px;z-index:1000;background:var(--navy);color:#fff;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;padding:0 20px}
+#topbar .meta{min-width:0}
+#topbar .t{font-weight:600;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#topbar .c{font-size:12px;opacity:.75;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#legend{display:flex;gap:10px;flex-shrink:0;font-size:12px}
+#legend span{display:flex;align-items:center;gap:5px;white-space:nowrap}
+#legend i{width:14px;height:14px;border-radius:3px;display:inline-block}
+
+/* ===== 區塊 B：sticky 章節導航 ===== */
+#secnav{position:sticky;top:60px;z-index:900;height:48px;background:#fff;border-bottom:1px solid #e3ded3;
+  display:flex;align-items:center;gap:6px;padding:0 16px;overflow-x:auto;scrollbar-width:thin}
+#secnav a{flex-shrink:0;font-size:13px;color:var(--navy);text-decoration:none;padding:5px 12px;border-radius:16px;border:1px solid #d8d2c4;transition:.15s}
+#secnav a:hover{background:#eef0f5}
+#secnav a.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+
+/* ===== 區塊 C：主體 ===== */
+main{max-width:1320px;margin:0 auto;padding:120px 24px 60px}
+.paper-head{text-align:center;margin-bottom:36px}
+.paper-head h1{font-family:var(--serif);font-weight:600;font-size:28px;line-height:1.35;margin:0 0 8px;color:var(--navy)}
+.paper-head .zh-title{font-size:17px;color:#555;margin-bottom:10px}
+.paper-head .authors{font-size:14px;color:var(--muted)}
+.paper-head .back{margin-top:10px;font-size:14px}
+.paper-head .back a{color:var(--navy)}
+.colhead{display:grid;grid-template-columns:1.35fr 1fr;gap:28px;font-size:12px;letter-spacing:.08em;color:var(--muted);
+  border-bottom:2px solid var(--navy);padding-bottom:6px;margin-bottom:18px}
+.sec-head{scroll-margin-top:120px;margin:42px 0 18px;padding-bottom:6px;border-bottom:1px solid #d8d2c4}
+.sec-head h2{font-family:var(--serif);font-size:21px;margin:0;color:var(--navy)}
+.sec-head .sub{font-size:14px;color:var(--muted)}
+.sub-head{font-family:var(--serif);font-style:italic;font-size:16px;color:var(--navy);margin:22px 0 10px;scroll-margin-top:120px}
+
+.row{display:grid;grid-template-columns:1.35fr 1fr;gap:28px;align-items:start;margin-bottom:22px;scroll-margin-top:120px}
+.para{background:#fff;border:1px solid #ebe6da;border-radius:6px;overflow:hidden}
+.en{font-family:var(--serif);font-size:15.5px;line-height:1.8;padding:16px 18px;border-bottom:1px solid #ddd}
+.en ul,.en ol{margin:.4em 0;padding-left:1.4em}
+.en li{margin:.25em 0}
+.zh{background:var(--zh-bg);border-left:3px solid var(--zh-bar);padding:14px 18px;font-family:'Noto Sans TC','Microsoft JhengHei',var(--ui);font-size:15px;line-height:1.9;color:#333}
+.zh ul{margin:.3em 0;padding-left:1.3em}
+
+mark{color:inherit;padding:1px 2px;border-radius:3px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+mark.y{background:var(--y)} mark.r{background:var(--r)} mark.b{background:var(--b)} mark.g{background:var(--g)} mark.p{background:var(--p)}
+
+.eq{font-family:var(--serif);text-align:center;margin:12px 0;overflow-x:auto;font-size:16px}
+.frac{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;margin:0 4px}
+.frac>span:last-child{border-top:1px solid #333;padding-top:2px}
+.figbox{margin:12px 0 4px;padding:10px 12px;border:1px dashed #c9c2b0;border-radius:5px;font-size:13.5px;background:#fcfbf8;font-family:var(--ui)}
+.figbox img{display:block;max-width:100%;margin:10px auto 0;background:#fff}
+.t2wrap{overflow-x:auto}
+table.t2img{border-collapse:collapse;margin:10px auto 0;font-size:12px}
+table.t2img th,table.t2img td{border:1px solid #ddd;padding:2px 4px;text-align:center;white-space:nowrap}
+table.t2img img{display:block;height:42px;width:auto;max-width:none;margin:0}
+table.dt{border-collapse:collapse;margin:12px auto;font-family:var(--ui);font-size:13px}
+table.dt th,table.dt td{border:1px solid #bbb;padding:4px 10px;text-align:center}
+table.dt th{background:#f1eee6}
+table.dt tr.hl-row td{background:var(--b)}
+
+/* 批註卡片 */
+details.note-wrap>summary{display:none}
+.note{background:var(--note-bg);border-left:4px solid #999;border-radius:4px;padding:12px 16px;font-size:14px;line-height:1.75}
+.note .fn{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.note .lbl{font-size:12px;color:var(--muted);font-weight:600}
+.note .tag{display:inline-block;font-size:12px;font-weight:600;padding:1px 9px;border-radius:10px;color:#fff;background:#888}
+.note dl{margin:0}
+.note dt{font-size:12px;color:var(--muted);font-weight:600;margin-top:8px}
+.note dd{margin:2px 0 0}
+.f-claim{border-left-color:#c9a400}.f-claim .tag{background:#b8960a}
+.f-concept{border-left-color:#d9534f}.f-concept .tag{background:#c9423e}
+.f-evid{border-left-color:#3b6fd8}.f-evid .tag{background:#3b6fd8}
+.f-concede{border-left-color:#3a9a3a}.f-concede .tag{background:#2f8a2f}
+.f-method{border-left-color:#8a4fd8}.f-method .tag{background:#7b45c4}
+.f-trans{border-left-color:#888}.f-trans .tag{background:#777}
+.f-sum{border-left-color:#1a2744}.f-sum .tag{background:#1a2744}
+
+/* ===== 區塊 D：總覽 ===== */
+#overview{scroll-margin-top:120px;margin-top:56px;background:#fff;border:1px solid #e3ded3;border-top:4px solid var(--navy);border-radius:6px;padding:26px 30px}
+#overview h2{font-family:var(--serif);color:var(--navy);margin:0 0 18px}
+.ov-item{margin-bottom:20px}
+.ov-item h3{font-size:15px;margin:0 0 6px;color:var(--navy);display:flex;align-items:center;gap:8px}
+.ov-item h3::before{content:"";width:6px;height:18px;background:var(--navy);border-radius:2px}
+.ov-item p,.ov-item li{font-size:14.5px}
+.ov-item ol,.ov-item ul{padding-left:1.4em;margin:4px 0}
+.thesis{font-size:16px;background:var(--y);padding:10px 14px;border-radius:4px}
+.sw{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.sw>div{padding:12px 14px;border-radius:5px;font-size:14.5px}
+.sw .s{background:#e9f6e9;border-left:4px solid #2f8a2f}
+.sw .w{background:#fbeaea;border-left:4px solid #c9423e}
+.sw h4{margin:0 0 6px;font-size:14px}
+footer{text-align:center;font-size:12px;color:var(--muted);padding:24px}
+
+/* ===== 響應式 ===== */
+@media (max-width:1023px){
+  #legend b{display:none}
+  #legend{gap:6px}
+  .colhead{display:none}
+  .row{grid-template-columns:1fr;gap:8px}
+  details.note-wrap>summary{display:block;cursor:pointer;font-size:13px;color:var(--navy);font-weight:600;padding:6px 10px;
+    background:#eef0f5;border-radius:4px;list-style:none}
+  details.note-wrap>summary::-webkit-details-marker{display:none}
+  details.note-wrap>summary::before{content:"▸ ";}
+  details.note-wrap[open]>summary::before{content:"▾ ";}
+  details.note-wrap[open]>summary{margin-bottom:6px}
+  .sw{grid-template-columns:1fr}
+  main{padding-left:14px;padding-right:14px}
+  .paper-head h1{font-size:22px}
+}
+@media (max-width:600px){
+  #topbar{padding:0 12px}
+  #legend span{gap:0}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== 區塊 A ===== -->
+<header id="topbar">
+  <div class="meta">
+    <div class="t">Surface Defect Detection of Metal Parts: Multimodal Illuminations &amp; Hyperspectral Imaging Algorithms</div>
+    <div class="c">Benmoussat, Spinnler &amp; Guillaume · IEEE 2012 ｜ 課程／用途：學術論文精讀</div>
+  </div>
+  <div id="legend">
+    <span><i style="background:#fff3b0"></i><b>核心論點</b></span>
+    <span><i style="background:#ffd6d6"></i><b>關鍵概念</b></span>
+    <span><i style="background:#d6e5ff"></i><b>實證數據</b></span>
+    <span><i style="background:#d6f5d6"></i><b>讓步反駁</b></span>
+    <span><i style="background:#e8d6ff"></i><b>方法論</b></span>
+  </div>
+</header>
+
+<!-- ===== 區塊 B（按鈕由 JS 自動生成）===== -->
+<nav id="secnav" aria-label="章節導航"></nav>
+
+<!-- ===== 區塊 C ===== -->
+<main>
+  <div class="paper-head">
+    <h1>Surface Defect Detection of Metal Parts:<br>Use of Multimodal Illuminations and Hyperspectral Imaging Algorithms</h1>
+    <div class="zh-title">金屬零件表面缺陷檢測：多模態照明與高光譜影像演算法之應用</div>
+    <div class="authors">Mohammed Benmoussat（Fraunhofer IIS）· Klaus Spinnler（Fraunhofer IIS）· Mireille Guillaume（Institut Fresnel）</div>
+    <div class="back"><a href="index.html">← 回到互動教學頁</a></div>
+  </div>
+
+  <div class="colhead"><div>原文與譯文</div><div>批註</div></div>
+
+  <!-- ================= ABSTRACT ================= -->
+  <div class="sec-head" id="abstract" data-nav="摘要"><h2>Abstract</h2><div class="sub">摘要</div></div>
+
+  <div class="row">
+    <div class="para">
+      <div class="en">The illumination technique used in the industrial inspection systems can affect the quality of the acquired images. The choice of this technique plays an important role in the designing process of the system. <mark class="y">Using multiple modalities can then avoid a difficult choice and increase the performances.</mark> We propose to consider multi-modal data <mark class="p">by constructing <mark class="r">pseudo-spectral cubes</mark> and by using hyperspectral imagery algorithms</mark> to detect 3D surface defects on metal parts. In this paper, <mark class="p">four basic lighting modalities (white source light and monochromatic source light including non-polarized and polarized light) are proposed and tested</mark> to illuminate the metal parts, and different detection algorithms have been compared. <mark class="y">We show that the <mark class="r">spectral angle mapper</mark> is able to detect the defects with a non-supervised approach, and gives good detection performances.</mark><br><i>Index Terms</i>—Hyperspectral imaging, Inspection, Lighting, Object detection.</div>
+      <div class="zh">工業檢測系統所採用的照明技術會直接影響影像擷取品質，因此照明方式的選擇是系統設計中的關鍵環節。若能同時運用多種照明模態，便可避開「只能擇一」的兩難，並提升檢測效能。本文提出以多模態資料建構「偽光譜立方體」，再套用高光譜影像演算法，以偵測金屬零件表面的三維缺陷。研究中提出並測試四種基本照明模態（白光與單色光，各分為非偏振與偏振），並比較多種檢測演算法。結果顯示，光譜角映射（SAM）在非監督式設定下即可偵測缺陷，且具有良好的檢測表現。<br>關鍵詞：高光譜影像、檢測、照明、物件偵測。</div>
+    </div>
+    <details class="note-wrap"><summary>展開批註</summary><aside class="note f-sum">
+      <div class="fn"><span class="lbl">段落功能</span><span class="tag">全文預告</span></div>
+      <dl><dt>邏輯角色</dt><dd>本段以「照明選擇困難」為問題起點，提出「多模態加上偽光譜立方體」作為解方，最後預告 SAM 為主要發現，構成全文「問題、方法、結果」的三段骨架。</dd>
+      <dt>論證觀察</dt><dd>「避免艱難選擇」是本文最核心的動機。然而摘要沒有交代比較基準與任何量化結果，讀者無法從摘要判斷「good performances」的實際程度，因此這是一個定性宣稱。</dd></dl>
+    </aside></details>
+  </div>
+
+  <!-- ================= I. INTRODUCTION ================= -->
+  <div class="sec-head" id="s1" data-nav="I 引言"><h2>I. Introduction</h2><div class="sub">引言</div></div>
+
+  <div class="row">
+    <div class="para">
+      <div class="en">Illumination is a particularly important component of the image acquisition system for both human and automatic surface inspection. <mark class="y">The choice of the illumination technique is a crucial step in the designing process of any machine vision system.</mark> The goal of illumination in machine vision is to make the important features of the object to be inspected visible and reduce undesired features [1]. The quality of these important features is related to the illumination concept, as they need to be presented with a maximum of <mark class="r">contrast</mark>. The challenge of illumination is to increase the <mark class="r">signal to noise ratio</mark>, and to emphasize and explore these features to maximize the contrast. The means to increase the contrast are <mark class="r">the direction of the light, the choice of the light spectral band and the effect of polarization</mark> [2].</div>
+      <div class="zh">無論是人工目視或自動化表面檢測，照明都是影像擷取系統中格外重要的一環；任何機器視覺系統在設計時，照明技術的選擇都是關鍵步驟。機器視覺中照明的目的，在於讓待測物的重要特徵清楚可見，同時抑制不需要的特徵 [1]。這些特徵能否被良好呈現取決於照明設計，因為它們必須以最大對比度呈現。照明所面對的挑戰，是提高訊雜比，並凸顯這些特徵以使對比度最大化。提升對比度的手段主要有三：光線的入射方向、光譜波段的選擇，以及偏振效應 [2]。</div>
+    </div>
+    <details class="note-wrap"><summary>展開批註</summary><aside class="note f-trans">
+      <div class="fn"><span class="lbl">段落功能</span><span class="tag">引出問題</span></div>
+      <dl><dt>邏輯角色</dt><dd>本段建立全文第一個前提：照明決定對比度。作者列出三種提升對比的手段，而本文只操作其中的「光譜波段」與「偏振」，為後續「波長與偏振」的實驗設計埋下伏筆。</dd>
+      <dt>論證觀察</dt><dd>本段以教科書式文獻 [1][2] 建立共識前提，論證上相當穩固。值得注意的是，作者列出了「光線方向」，實驗中卻將其固定不變；這是一種隱性的研究範圍限縮，文中沒有說明理由。</dd></dl>
+    </aside></details>
+  </div>
+
+  <div class="row">
+    <div class="para">
+      <div class="en">The <mark class="r">hyperspectral imaging (HSI)</mark> algorithms are mainly used in remote sensing applications, which treat <mark class="r">three-dimensional data (spatial and spectral information)</mark> generated from hyperspectral sensors. HSI are non-destructive technologies that represent an attractive solution for characterization, classification and quality control of different materials in several industrial sectors.</div>
+      <div class="zh">高光譜影像（HSI）演算法主要應用於遙測領域，處理由高光譜感測器所產生、同時包含空間與光譜資訊的三維資料。由於屬於非破壞性技術，HSI 在多個產業中被視為材料特性分析、分類與品質管制的理想方案。</div>
+    </div>
+    <details class="note-wrap"><summary>展開批註</summary><aside class="note f-concept">
+      <div class="fn"><span class="lbl">段落功能</span><span class="tag">引入概念</span></div>
+      <dl><dt>邏輯角色</dt><dd>本段引入第二條主線，即 HSI 演算法，並暗示這些方法可以從遙測移植到工業檢測。這條主線將在後面提出 PSC 的段落與照明主線匯合。</dd>
+      <dt>論證觀察</dt><dd>「三維資料」的定義是理解後文「偽光譜立方體」的關鍵：作者之後將以「多張不同照明下的影像」取代「真實的光譜波段」，在資料形式上同樣是空間乘以空間再乘以第三維。本段稱 HSI 為理想方案，但沒有附上引證。</dd></dl>
+    </aside></details>
+  </div>
+
+  <div class="row">
+    <div class="para">
+      <div class="en">The studies based on the application of HSI techniques to material classification and inspection are increasing every day, demonstrating that this technique represents a very smart and promising analytical tool for quality control. <mark class="g">However, despite these advantages, HSI is still difficult to be systematically applied, especially in real-time industrial applications, because of the huge amount of data constituting a spectral image.</mark> The long computation time sometimes represents a big constraint at industrial level, where often, a fast processing of the collected information is required.</div>
+      <div class="zh">將 HSI 應用於材料分類與檢測的研究與日俱增，顯示此技術是極具潛力的品管分析工具。然而，儘管具備上述優點，HSI 在實務上仍難以被系統性地導入，特別是在要求即時處理的工業場域：一幅光譜影像的資料量極為龐大，冗長的運算時間往往成為工業應用的主要瓶頸，因為產線通常需要快速處理所蒐集的資訊。</div>
+    </div>
+    <details class="note-wrap"><summary>展開批註</summary><aside class="note f-concede">
+      <div class="fn"><span class="lbl">段落功能</span><span class="tag">讓步轉折</span></div>
+      <dl><dt>邏輯角色</dt><dd>本段先肯定 HSI，再指出其缺點（資料量大、速度慢），為下一段提出「簡單的偽光譜立方體」做合理化鋪墊。這是典型的「肯定、然而、研究缺口」結構。</dd>
+      <dt>論證觀察</dt><dd>「研究與日俱增」沒有文獻支持，屬於未佐證的概括；以「研究數量增加」推論「技術有前景」也是較弱的推論。另外，作者在此批評 HSI 資料量大，但本文最大的立方體有 60 個分量，與部分高光譜資料的規模差距並不懸殊；這個張力在後文沒有被正面處理。</dd></dl>
+    </aside></details>
+  </div>
+
+  <div class="row">
+    <div class="para">
+      <div class="en"><mark class="y">In this paper, we propose a simple technique to produce <mark class="r">pseudo-spectral-cubes (PSC)</mark> using different lighting modalities</mark> (white source light, monochromatic source lights in combination with polarized light) to illuminate flat metal parts containing artificial surface defects.</div>
+      <div class="zh">本文提出一種簡易方法：利用不同照明模態（白光、單色光源，並結合偏振光）照射含有人工表面缺陷的平面金屬零件，藉此產生「偽光譜立方體」（PSC）。</div>
+    </div>
+    <details class="note-wrap"><summary>展開批註</summary><aside class="note f-claim">
+      <div class="fn"><span class="lbl">段落功能</span><span class="tag">立場宣告</span></div>
+      <dl><dt>邏輯角色</dt><dd>這是全文的核心貢獻句。它把「照明」與「HSI」兩條主線合併：以照明條件的多樣性，取代昂貴的高光譜感測器。</dd>
+      <dt>論證觀察</dt><dd>「pseudo」一詞誠實地表明第三維並非連續光譜，而是異質的照明條件。這也意味著借用的光譜演算法，其理論前提未必成立，作者沒有進一步討論。「simple」是相對性措辭，全文沒有與真實 HSI 系統比較成本或速度。</dd></dl>
+    </aside></details>
+  </div>
+
+  <div class="row">
+    <div class="para">
+      <div class="en">At first, we create four PSCs that correspond respectively to the four basics lighting modalities:
+        <mark class="p">(i) <mark class="r">Unpolarized white light (UWL)</mark>, (ii) <mark class="r">Polarized white light (PWL)</mark>, (iii) <mark class="r">Unpolarized monochromatic light (UML)</mark>, (iv) <mark class="r">Polarized monochromatic light (PML)</mark>.</mark>
+        <mark class="p">Another cube is created which corresponds to the combination of these basic cubes: (v) The entirety of all modalities.</mark></div>
+      <div class="zh">首先，我們建立四個 PSC，分別對應四種基本照明模態：（i）非偏振白光（UWL）、（ii）偏振白光（PWL）、（iii）非偏振單色光（UML）、（iv）偏振單色光（PML）。另外再建立第五個立方體，即（v）結合上述所有模態的完整立方體。</div>
+    </div>
+    <details class="note-wrap"><summary>展開批註</summary><aside class="note f-method">
+      <div class="fn"><span class="lbl">段落功能</span><span class="tag">定義變項</span></div>
+      <dl><dt>邏輯角色</dt><dd>本段將實驗設計表述為二乘二的組合（光源類型與是否偏振），再加上一個「全部合併」的條件。這五個立方體就是後文所有比較的自變項。</dd>
+      <dt>論證觀察</dt><dd>二乘二設計的呈現非常清楚，便於讀者追蹤。然而第（v）個立方體同時改變了「模態種類」與「分量數量」，日後若它表現最好，就難以判斷原因是資訊互補，還是單純維度較高（詳見區塊 D 的最弱處）。</dd></dl>
+    </aside></details>
+  </div>
+
+  <div class="row">
+    <div class="para">
+      <div class="en"><mark class="y">The goal of this paper is to evaluate, combine and test different lighting modalities for defects detection in industrial context, using HSI methods.</mark> <mark class="p">We have used three metallic parts, which contain three types of artificial defects produced in the laboratory and for each part we built the five PSCs as presented above. We used supervised and unsupervised HSI algorithms for the detection of the defects.</mark></div>
+      <div class="zh">本文的目標，是在工業情境下運用 HSI 方法，評估、組合並測試不同照明模態用於缺陷檢測的效果。我們使用三件金屬零件，分別含有三種於實驗室中製作的人工缺陷，並為每件零件建立上述五個 PSC，再以監督式與非監督式 HSI 演算法進行缺陷檢測。</div>
+    </div>
+    <details class="note-wrap"><summary>展開批註</summary><aside class="note f-claim">
+      <div class="fn"><span class="lbl">段落功能</span><span class="tag">研究目標</span></div>
+      <dl><dt>邏輯角色</dt><dd>本段將前面的方法貢獻轉化為可評估的研究目標，並預告實驗規模：三件零件、五個立方體、多種演算法。</dd>
+      <dt>論證觀察</dt><dd>「評估、組合並測試」偏向描述性，沒有形成可檢驗的假說，例如「多模態可使誤報率降至某水準」。樣本只有三件，而且都是人工缺陷，因此外部效度（能否推廣到真實產線缺陷）是讀者應優先保留的疑問。</dd></dl>
+    </aside></details>
+  </div>
+
+  <div class="row">
+    <div class="para">
+      <div class="en">The remainder of this paper is organized as follows. Section II presents the set-up used to achieve different lighting modalities and to acquire the corresponding images. Section III reviews some existing algorithms from HSI literature dedicated to target detection, anomaly detection and measurement of spectral distances. Section IV outlines the technical specifications of the components used in the acquisition system, shows some acquired images and explains how the targets to be detected are chosen. Section V will show the experimental results and section VI concludes this work.</div>
+      <div class="zh">本文其餘部分安排如下：第 II 節說明實現各種照明模態的架設與影像擷取方式；第 III 節回顧高光譜文獻中用於目標檢測、異常檢測與光譜距離量測的演算法；第 IV 節說明擷取系統各元件的規格、展示部分擷取影像，並解釋待測目標的選取方式；第 V 節呈現實驗結果；第 VI 節為結論。</div>
+    </div>
+    <details class="note-wrap"><summary>展開批註</summary><aside class="note f-trans">
+      <div class="fn"><span class="lbl">段落功能</span><span class="tag">過渡銜接</span></div>
+      <dl><dt>邏輯角色</dt><dd>本段是全文路線圖，採用標準的 IEEE 會議論文結構。</dd>
+      <dt>論證觀察</dt><dd>路線圖提醒讀者，第 IV 節才會說明「目標如何選取」。這一點很重要，因為後文監督式與非監督式的區分，正是由目標選取方式決定的。</dd></dl>
+    </aside></details>
+  </div>
+
+  <!-- ================= II. IMAGE ACQUISITION SYSTEM ================= -->
+  <div class="sec-head" id="s2" data-nav="II 擷取系統"><h2>II. Image Acquisition System</h2><div class="sub">影像擷取系統</div></div>
+  <div class="sub-head" id="s2a">A. Light sources｜光源</div>
+
+  <div class="row">
+    <div class="para">
+      <div class="en"><mark class="r">Light emitting diodes (LEDs)</mark> are diodes made of semiconducting materials, which emit radiation with a distinctive spectral position [3]. Since LEDs have so many practical advantages such as longevity, high efficiency, and thus low heat dissipation; they are currently the primary illumination technology used in machine vision applications [2].</div>
+      <div class="zh">發光二極體（LED）是以半導體材料製成、能在特定光譜位置發出輻射的二極體 [3]。由於 LED 具備壽命長、效率高、因而發熱低等實務優點，目前已是機器視覺應用中的主流照明技術 [2]。</div>
+    </div>
+    <details class="note-wrap"><summary>展開批註</summary><aside class="note f-concept">
+      <div class="fn"><span class="lbl">段落功能</span><span class="tag">背景定義</span></div>
+      <dl><dt>邏輯角色</dt><dd>本段為選用 LED 作為光源提供正當性，屬於對方法選擇的辯護。</dd>
+      <dt>論證觀察</dt><dd>「效率高因而發熱低」的因果連接是合理的。不過，LED 的「特定光譜位置」實際上帶有數十奈米的頻寬，這會影響「單色光」的精確程度，而文中沒有提供各 LED 的頻寬資料。</dd></dl>
+    </aside></details>
+  </div>
+
+  <div class="row" id="fig1">
+    <div class="para">
+      <div class="en">The acquisition system is set as (Fig. 1):
+        <ul><li><mark class="p">LED source is used to generate white light (WL) illumination which emits WL in visible domain.</mark></li>
+        <li><mark class="p">LED array sources are used to generate monochromatic light (ML) illuminations in visible and near-infrared domains.</mark></li></ul>
+        <div class="figbox"><img src="figs/benmoussat12-fig1-real.png" alt="Fig. 1 acquisition system: light, polarizer, metal part, analyzer, camera"><b>Fig. 1.</b> Acquisition system: (a) polarized white/monochromatic lights (b) unpolarized white/monochromatic lights.</div></div>
+      <div class="zh">擷取系統的配置如圖 1 所示：
+        <ul><li>以 LED 光源產生可見光範圍的白光（WL）照明。</li><li>以 LED 陣列光源產生可見光及近紅外線範圍的單色光（ML）照明。</li></ul>
+        圖 1 為擷取系統示意：（a）偏振白光／單色光；（b）非偏振白光／單色光。</div>
+    </div>
+    <details class="note-wrap"><summary>展開批註</summary><aside class="note f-method">
+      <div class="fn"><span class="lbl">段落功能</span><span class="tag">方法說明</span></div>
+      <dl><dt>邏輯角色</dt><dd>本段定義兩種光源，對應二乘二設計中的「光源類型」因子。</dd>
+      <dt>論證觀察</dt><dd>此處僅作定性描述，具體型號與波長延到第 IV 節才交代，章節分工清楚。</dd></dl>
+    </aside></details>
+  </div>
+
+  <div class="sub-head" id="s2b">B. Polarized light｜偏振光</div>
+
+  <div class="row">
+    <div class="para">
+      <div class="en">Almost all light sources emit <mark class="r">unpolarized (natural) light</mark> (LEDs, incandescent lamps, fluorescent lamps). This means that the light contains electromagnetic waves that oscillate in all directions perpendicular to the propagation direction.</div>
+      <div class="zh">幾乎所有光源（LED、白熾燈、螢光燈）發出的都是非偏振（自然）光，也就是說，其電磁波在垂直於傳播方向的所有方向上振盪。</div>
+    </div>
+    <details class="note-wrap"><summary>展開批註</summary><aside class="note f-concept">
+      <div class="fn"><span class="lbl">段落功能</span><span class="tag">概念定義</span></div>
+      <dl><dt>邏輯角色</dt><dd>本段為偏振照明設定對照基準。</dd>
+      <dt>論證觀察</dt><dd>定義正確且簡潔，屬於物理常識，不需要額外佐證。</dd></dl>
+    </aside></details>
+  </div>
+
+  <div class="row">
+    <div class="para">
+      <div class="en">Polarized illumination (Fig. 1a) for both white and monochromatic sources is <mark class="p">achieved using a polarization filter in front of the light sources.</mark> The polarized light interacts with the metal part surface (scattering or reflection) that changes the polarizing properties in relation with the incoming light. To grasp this, another polarizing filter, <mark class="r">the analyzer</mark>, is mounted in front of the camera lens. Depending on the angular position of this filter the incoming polarized light from the test part is analyzed. <mark class="y">One main interest of using polarized light is due to the interaction with the metal surface, which depends on the 3D geometry of the defect, while only 2D information is usually available from unpolarized illumination.</mark></div>
+      <div class="zh">偏振照明（圖 1a）：無論白光或單色光，都在光源前方加裝偏振濾鏡來實現。偏振光與金屬表面作用（散射或反射）之後，其偏振特性會相對於入射光發生改變。為了捕捉這項變化，相機鏡頭前另裝一片偏振濾鏡，稱為檢偏器；依照檢偏器的旋轉角度，可以分析來自待測物的偏振光。使用偏振光的主要價值在於：偏振光與金屬表面的交互作用取決於缺陷的三維幾何形狀，而非偏振照明通常只能提供二維資訊。</div>
+    </div>
+    <details class="note-wrap"><summary>展開批註</summary><aside class="note f-claim">
+      <div class="fn"><span class="lbl">段落功能</span><span class="tag">理論依據</span></div>
+      <dl><dt>邏輯角色</dt><dd>本段為「偏振」因子提供物理動機：偏振光可攜帶三維幾何資訊。這項宣稱是後文「偏振在某些情況可改善檢測」的理論前提。</dd>
+      <dt>論證觀察</dt><dd>關鍵宣稱「非偏振照明通常只能提供二維資訊」沒有附上引證，而且說法過強；非偏振照明透過陰影與明暗變化，仍能反映部分三維形貌（Table II 中凹痕的明暗即為一例）。這是論證鏈上一個未被支撐的環節。</dd></dl>
+    </aside></details>
+  </div>
+
+  <div class="row">
+    <div class="para">
+      <div class="en"><mark class="p">Unpolarized illumination for both white and monochromatic sources is achieved with the same acquisition system by just removing the polarizing filter (Fig. 1b).</mark> The analyzer filter could be kept and fixed to a selected degree of rotation to enhance the image’s contrast.</div>
+      <div class="zh">非偏振照明（圖 1b）：同一套擷取系統只需移除光源前的偏振濾鏡即可實現。檢偏器可以保留，並固定於選定的旋轉角度，以增強影像對比。</div>
+    </div>
+    <details class="note-wrap"><summary>展開批註</summary><aside class="note f-method">
+      <div class="fn"><span class="lbl">段落功能</span><span class="tag">方法說明</span></div>
+      <dl><dt>邏輯角色</dt><dd>本段說明對照條件的實作方式；對照條件與偏振條件共用同一系統，有利於控制其他變因。</dd>
+      <dt>論證觀察</dt><dd>「只改動一個元件」符合控制變因原則。然而非偏振條件仍保留檢偏器，代表影像實際上經過偏振篩選；「非偏振」只描述照明端，這個名稱容易誤導讀者。</dd></dl>
+    </aside></details>
+  </div>
+
+  <div class="sub-head" id="s2c">C. Light perception and colors interpretation｜光線感知與色彩判讀</div>
+
+  <div class="row">
+    <div class="para">
+      <div class="en">The light perception of machine vision cameras differs from the human eye. Machine vision uses in most cases light with <mark class="b">wavelengths between 380 nm and 1100 nm</mark> (from blue light to near infrared). To interpret and determine colors, it is necessary to combine the information of three (or four) pixels with different color sensitivity, corresponding to red, green and blue (RGB) for example, or the complementary colors cyan, yellow and magenta, which are typical triples to determine the color values. In practice this is realized with micro-optical mosaic filters for single chip color cameras. These color filters cover the single pixels inside the image sensor with a special pattern (for example the <mark class="r">Bayer pattern</mark>) and make them spectrally sensitive (one-chip-color camera). Another construction uses three separate sensors. Each sensor is made sensitive for only one color (RGB). The information of all three sensors is correlated and delivers the color information (<mark class="r">3-CCD-cameras</mark>) [2].</div>
+      <div class="zh">機器視覺相機感知光線的方式與人眼不同，多數情況下使用 380 至 1100 nm 的波長（從藍光到近紅外線）。為了判讀色彩，必須結合三個（或四個）具有不同色彩敏感度的像素資訊，例如紅、綠、藍（RGB），或其互補色青、黃、洋紅，這些都是決定色彩值的典型三元組。實務上，單晶片彩色相機以微光學馬賽克濾鏡實現此功能：濾鏡以特定排列（例如 Bayer 排列）覆蓋感測器上的各個像素，使其具有光譜選擇性。另一種構造則使用三個獨立感測器，各自只對一種顏色敏感，再整合三者資訊得出色彩，即所謂 3-CCD 相機 [2]。</div>
+    </div>
+    <details class="note-wrap"><summary>展開批註</summary><aside class="note f-concept">
+      <div class="fn"><span class="lbl">段落功能</span><span class="tag">背景說明</span></div>
+      <dl><dt>邏輯角色</dt><dd>本段解釋彩色相機如何以 RGB 濾鏡記錄顏色，為第 IV 節「依波長挑選 R、G、B 分量」的做法提供技術基礎。</dd>
+      <dt>論證觀察</dt><dd>本段偏向教科書內容，與論證主線的關係較間接，可視為對非影像處理背景讀者的補充。若篇幅受限，此段可大幅壓縮而不影響論證。</dd></dl>
+    </aside></details>
+  </div>
+
+  <div class="sub-head" id="s2d">D. Modalities｜照明模態</div>
+
+  <div class="row">
+    <div class="para">
+      <div class="en">In order to produce multiple data cubes representing different pseudo-spectra for the same area of interest on the tested metallic parts we have used the acquisition system (Fig. 1) that enables us to realize the four basic lighting modalities:
+        <ul><li><b>UWL (respectively UML) modality</b> is realized by <mark class="p">placing white LED (respectively monochromatic LEDs) for illumination and polarizing filter (analyzer) in the front of the camera which is fixed in a selected angular position.</mark></li>
+        <li><b>PWL (respectively PML) modality</b> is realized by <mark class="p">placing white LED (respectively monochromatic LEDs) for illumination followed by a polarizing filter (polarizer) and by placing another polarizing filter (analyzer) in the front of the camera.</mark> The polarizer is fixed in a defined angular position.</li></ul></div>
+      <div class="zh">為了對待測金屬零件的同一感興趣區域產生多個代表不同偽光譜的資料立方體，我們以圖 1 的擷取系統實現四種基本照明模態：
+        <ul><li>UWL（或 UML）模態：以白光 LED（或單色 LED）照明，並在相機前方放置固定於選定角度的偏振濾鏡（檢偏器）。</li>
+        <li>PWL（或 PML）模態：以白光 LED（或單色 LED）照明，光源後方加裝偏振濾鏡（偏振器），相機前方再放置另一片偏振濾鏡（檢偏器）；偏振器固定於某一指定角度。</li></ul></div>
+    </div>
+    <details class="note-wrap"><summary>展開批註</summary><aside class="note f-method">
+      <div class="fn"><span class="lbl">段落功能</span><span class="tag">操作定義</span></div>
+      <dl><dt>邏輯角色</dt><dd>本段把第 I 節的四種模態轉化為具體的硬體配置，是由概念走向操作的轉換點。</dd>
+      <dt>論證觀察</dt><dd>文中以「respectively」把白光與單色光兩種情況壓縮在同一句，雖然精簡，但閱讀負擔較高。偏振器的固定角度始終沒有說明，檢偏器的角度則要到第 IV 節才補充，這會影響實驗的可重現性。</dd></dl>
+    </aside></details>
+  </div>
+
+  <div class="row">
+    <div class="para">
+      <div class="en">For each of these four modalities corresponds one PSC, <mark class="p">which is formed by a simple stack of the acquired images from the corresponding modality where the stacking order is not important.</mark> Another cube is created from these basic cubes, which contains all the acquired images.</div>
+      <div class="zh">四種模態各自對應一個 PSC，其建構方式只是將該模態下擷取的影像直接堆疊，堆疊順序並不重要。另外再由這些基本立方體合成一個包含全部擷取影像的立方體。</div>
+    </div>
+    <details class="note-wrap"><summary>展開批註</summary><aside class="note f-method">
+      <div class="fn"><span class="lbl">段落功能</span><span class="tag">方法說明</span></div>
+      <dl><dt>邏輯角色</dt><dd>本段定義 PSC 的建構方式，也就是單純堆疊影像。</dd>
+      <dt>論證觀察</dt><dd>「堆疊順序不重要」對本文所用演算法確實成立：AMF、ACE、RX、SAM、SID 對所有向量同步置換分量順序時結果不變，Kendall's τ 只比較成對分量的大小關係，同步置換也不影響結果。但這同時意味著偽光譜中沒有「相鄰波段」的意義，任何依賴光譜曲線形狀或導數的方法都不適用；作者沒有明言此限制。</dd></dl>
+    </aside></details>
+  </div>
+
+  <div class="row" id="tab1">
+    <div class="para">
+      <div class="en">TABLE I shows the different PSCs and their corresponding modalities. Each PSC contains the acquired images from the modalities marked by the black filled circle. <mark class="p">The images are ranked in a chosen ascending order of polarization degree, wavelength and then color component; and then are stacked the one on top of the others in order to build the PSC.</mark> <mark class="b">The number of components varies from 3 to 60</mark> and represents the number of stacked images.
+        <table class="dt">
+          <tr><th>Modalities \ Cubes</th><th>(1)</th><th>(2)</th><th>(3)</th><th>(4)</th><th>(5)</th></tr>
+          <tr><td>UWL</td><td>●</td><td></td><td></td><td></td><td>●</td></tr>
+          <tr><td>PWL</td><td></td><td>●</td><td></td><td></td><td>●</td></tr>
+          <tr><td>UML</td><td></td><td></td><td>●</td><td></td><td>●</td></tr>
+          <tr><td>PML</td><td></td><td></td><td></td><td>●</td><td>●</td></tr>
+          <tr class="hl-row"><td>Number of components</td><td>3</td><td>9</td><td>12</td><td>36</td><td>60</td></tr>
+        </table>
+        <div style="text-align:center;font-size:12.5px">TABLE I — Pseudo-spectral cubes</div></div>
+      <div class="zh">表 I 列出各 PSC 及其對應的照明模態；每個 PSC 包含以實心圓標示之模態所擷取的影像。影像依偏振角度、波長、色彩分量的順序遞增排列，再逐層堆疊成 PSC。分量數從 3 到 60 不等，代表所堆疊的影像張數。</div>
+    </div>
+    <details class="note-wrap"><summary>展開批註</summary><aside class="note f-evid">
+      <div class="fn"><span class="lbl">段落功能</span><span class="tag">資料結構</span></div>
+      <dl><dt>邏輯角色</dt><dd>表 I 是後續所有結果的索引表，讀者需要記住立方體編號與分量數的對應關係。</dd>
+      <dt>論證觀察</dt><dd>分量數可以驗算：白光有 R、G、B 共 3 個；偏振白光為 3 個分量乘以 3 個檢偏角，共 9 個；單色光依第 IV 節挑選共 12 個（470、505、590 nm 各 2 個，630 nm 1 個，780 至 940 nm 共 5 個）；偏振單色光為 12 乘以 3，共 36 個；全部合計 3 + 9 + 12 + 36 = 60。數字自洽，但分量數隨立方體編號單調遞增，這正是後文難以分離「模態效果」與「維度效果」的根源。</dd></dl>
+    </aside></details>
+  </div>
+
+  <!-- ================= III. ALGORITHMS ================= -->
+  <div class="sec-head" id="s3" data-nav="III 演算法"><h2>III. Algorithms</h2><div class="sub">演算法</div></div>
+
+  <div class="row">
+    <div class="para">
+      <div class="en">In the literature, many algorithms for detection and classification are proposed, applied in multispectral and hyperspectral imagery. In the framework of this work, <mark class="p">we have tested and compared supervised and non-supervised methods for defect detection.</mark> More often, the task of a detection algorithm is to decide, by means of a <mark class="r">statistical hypothesis test</mark>, whether a target of interest is present or not in a pixel-under-test with observed pixel vector <i>x</i> [4]. <mark class="p">To take a decision, we calculate the scalar <i>y</i> = D(<i>x</i>) and compare <i>y</i> to a threshold η.</mark></div>
+      <div class="zh">文獻中已有許多應用於多光譜與高光譜影像的檢測與分類演算法。本研究測試並比較了監督式與非監督式的缺陷檢測方法。檢測演算法的任務，通常是透過統計假設檢定，判斷某個待測像素（其觀測向量為 <i>x</i>）中是否存在感興趣的目標 [4]。決策方式是計算純量 <i>y</i> = D(<i>x</i>)，再與閾值 η 比較。</div>
+    </div>
+    <details class="note-wrap"><summary>展開批註</summary><aside class="note f-method">
+      <div class="fn"><span class="lbl">段落功能</span><span class="tag">方法框架</span></div>
+      <dl><dt>邏輯角色</dt><dd>本段將所有演算法統一為「計算分數後與閾值比較」的框架，使後文能以相同指標比較性質不同的演算法。</dd>
+      <dt>論證觀察</dt><dd>統一框架是本文比較設計得以成立的基礎。但嚴格來說，只有 AMF、ACE、RX 是由統計假設檢定推導而來；SAM、SID、TAU 是距離或相似度量，並非由假設檢定導出。作者以同一框架包裝兩類方法，在概念上略有簡化。</dd></dl>
+    </aside></details>
+  </div>
+
+  <div class="row">
+    <div class="para">
+      <div class="en">A practical question of paramount importance for a detection algorithm user is how to set the threshold to keep the number of detection errors small. Indeed, there is always a compromise between choosing a low threshold to increase the <mark class="r">probability of (target) detection (P<sub>D</sub>)</mark> and a high threshold to keep the <mark class="r">probability of false alarm (P<sub>FA</sub>)</mark> low. For any given detector, the trade-off between P<sub>D</sub> and P<sub>FA</sub> is described by the <mark class="r">receiver operating characteristic (ROC) curves</mark>, which plot P<sub>D</sub>(η) versus P<sub>FA</sub>(η) as a function of threshold.</div>
+      <div class="zh">對使用者而言，最重要的實務問題之一，是如何設定閾值以減少檢測錯誤。選擇低閾值可提高（目標）偵測機率 P<sub>D</sub>，選擇高閾值則可壓低誤報機率 P<sub>FA</sub>，兩者之間永遠存在權衡。對任一檢測器而言，這種權衡可以用接收者操作特徵（ROC）曲線描述，即以閾值為參數，繪出 P<sub>D</sub>(η) 對 P<sub>FA</sub>(η) 的關係。</div>
+    </div>
+    <details class="note-wrap"><summary>展開批註</summary><aside class="note f-concept">
+      <div class="fn"><span class="lbl">段落功能</span><span class="tag">評估概念</span></div>
+      <dl><dt>邏輯角色</dt><dd>本段定義 P<sub>D</sub>、P<sub>FA</sub> 與 ROC，為第 V 節「固定偵測率下比較誤報率」的評估方式奠定基礎。</dd>
+      <dt>論證觀察</dt><dd>ROC 曲線描述的是整條權衡關係，但作者後來主要只取 GDR = 90% 這一個操作點，資訊被大幅壓縮。讀者應記住此處的完整概念，以便判斷第 V 節的簡化是否合理。</dd></dl>
+    </aside></details>
+  </div>
+
+  <div class="sub-head" id="s3a">A. Target Detection Algorithms｜目標檢測演算法</div>
+
+  <div class="row">
+    <div class="para">
+      <div class="en"><mark class="r">Adaptive matched filter (AMF)</mark> and <mark class="r">adaptive cosine estimator (ACE)</mark> are spectral detection algorithms, <mark class="p">which require spectral information about the target of interest.</mark></div>
+      <div class="zh">自適應匹配濾波器（AMF）與自適應餘弦估計器（ACE）都是光譜檢測演算法，需要事先取得目標的光譜資訊。</div>
+    </div>
+    <details class="note-wrap"><summary>展開批註</summary><aside class="note f-concept">
+      <div class="fn"><span class="lbl">段落功能</span><span class="tag">方法分類</span></div>
+      <dl><dt>邏輯角色</dt><dd>本段將 AMF 與 ACE 歸類為監督式方法。</dd>
+      <dt>論證觀察</dt><dd>「需要目標光譜」這項前提，正是作者在第 V 節解釋 AMF 與 ACE 表現不佳的伏筆：缺陷的光譜變異大，難以挑選單一代表光譜。</dd></dl>
+    </aside></details>
+  </div>
+
+  <div class="row" id="eq1">
+    <div class="para">
+      <div class="en">The AMF detector is based on following hypothesis test, for full pixel detection
+        <div class="eq">H<sub>0</sub> : <i>x</i> → N(0, Γ) &nbsp;&nbsp;&nbsp; H<sub>1</sub> : <i>x</i> → N(<i>s</i>, Γ)</div>
+        Its expression can be found in [4]
+        <div class="eq"><i>y</i><sub>AMF</sub>(<i>x</i>, <i>s</i>) = <span class="frac"><span>‖<i>s</i><sup>T</sup> Γ̂<sup>−1</sup> <i>x</i>‖<sup>2</sup></span><span><i>s</i><sup>T</sup> Γ̂<sup>−1</sup> <i>s</i></span></span> &nbsp;&nbsp;(1)</div>
+        where <i>x</i> and <i>s</i> are respectively the spectrum of the pixel under the test and the spectrum of the desired target; <mark class="p">Γ̂ is the estimated covariance matrix, supposed to be the same for the background and the target.</mark></div>
+      <div class="zh">AMF 檢測器建立在上述假設檢定之上（全像素檢測）：虛無假設 H<sub>0</sub> 為像素服從均值為 0 的常態分佈，對立假設 H<sub>1</sub> 為像素服從均值為目標光譜 <i>s</i> 的常態分佈，兩者共用共變異數矩陣 Γ。其檢測統計量如式（1）[4]，其中 <i>x</i> 為待測像素光譜，<i>s</i> 為目標光譜，Γ̂ 為估計的共變異數矩陣，並假設背景與目標共用此矩陣。</div>
+    </div>
+    <details class="note-wrap"><summary>展開批註</summary><aside class="note f-method">
+      <div class="fn"><span class="lbl">段落功能</span><span class="tag">方法說明</span></div>
+      <dl><dt>邏輯角色</dt><dd>本段給出第一個監督式檢測器的數學形式及其統計假設。</dd>
+      <dt>論證觀察</dt><dd>由於 <i>s</i><sup>T</sup>Γ̂<sup>−1</sup><i>x</i> 是純量，式（1）的範數平方就是其平方值。作者假設目標與背景共用共變異數矩陣，並在第 V 節說明以整個立方體估計 Γ̂；當缺陷像素也被納入估計樣本時，目標會「污染」共變異數估計並降低偵測力。這個問題到第 V 節才被間接承認。</dd></dl>
+    </aside></details>
+  </div>
+
+  <div class="row" id="eq2">
+    <div class="para">
+      <div class="en">The ACE detector is based on the hypothesis that <mark class="p">the covariance matrix of the target is proportional to the covariance matrix of the background, modeled as a Gaussian noise.</mark>
+        <div class="eq">H<sub>0</sub> : <i>x</i> → N(0, Γ) &nbsp;&nbsp;&nbsp; H<sub>1</sub> : <i>x</i> → N(<i>s</i>, σΓ)</div>
+        The coefficient σ is unknown and estimated, leading to following expression [4]
+        <div class="eq"><i>y</i><sub>ACE</sub>(<i>x</i>, <i>s</i>) = <span class="frac"><span>‖<i>s</i><sup>T</sup> Γ̂<sup>−1</sup> <i>x</i>‖<sup>2</sup></span><span>(<i>s</i><sup>T</sup> Γ̂<sup>−1</sup> <i>s</i>)(<i>x</i><sup>T</sup> Γ̂<sup>−1</sup> <i>x</i>)</span></span> &nbsp;&nbsp;(2)</div></div>
+      <div class="zh">ACE 檢測器假設目標的共變異數矩陣與背景（以高斯雜訊建模）的共變異數矩陣成比例。比例係數 σ 未知，需要加以估計，由此得到式（2）[4]。</div>
+    </div>
+    <details class="note-wrap"><summary>展開批註</summary><aside class="note f-method">
+      <div class="fn"><span class="lbl">段落功能</span><span class="tag">方法說明</span></div>
+      <dl><dt>邏輯角色</dt><dd>本段給出第二個監督式檢測器，它對 AMF 的假設做了放寬，允許目標的變異程度不同。</dd>
+      <dt>論證觀察</dt><dd>式（2）等於在以 Γ̂<sup>−1/2</sup> 白化後的空間中，計算 <i>x</i> 與 <i>s</i> 夾角餘弦的平方。換言之，ACE 與後文 SAM 的主要差別只在於是否先白化。這個關係有助於理解兩者結果為何相差甚大：差異很可能來自共變異數估計的品質。作者沒有點出這個關聯。</dd></dl>
+    </aside></details>
+  </div>
+
+  <div class="row">
+    <div class="para">
+      <div class="en">AMF and ACE have the <mark class="r">constant false alarm rate (CFAR)</mark> property [5], and consequently the threshold can be set according to the desired false alarm rate.</div>
+      <div class="zh">AMF 與 ACE 具有恆定誤報率（CFAR）性質 [5]，因此可以依照期望的誤報率直接設定閾值。</div>
+    </div>
+    <details class="note-wrap"><summary>展開批註</summary><aside class="note f-concept">
+      <div class="fn"><span class="lbl">段落功能</span><span class="tag">性質說明</span></div>
+      <dl><dt>邏輯角色</dt><dd>本段指出監督式方法的一項理論優勢，與後文距離量測「閾值只能憑經驗設定」形成對比。</dd>
+      <dt>論證觀察</dt><dd>CFAR 的理論保證建立在背景服從高斯分佈的假設上；若假設不成立（作者在第 V 節自己承認了這點），CFAR 的優勢在實務上未必存在。作者後來也沒有利用 CFAR 設定閾值，而是以固定 GDR 反推閾值。</dd></dl>
+    </aside></details>
+  </div>
+
+  <div class="sub-head" id="s3b">B. Anomaly Detection Algorithm｜異常檢測演算法</div>
+
+  <div class="row" id="eq3">
+    <div class="para">
+      <div class="en">The <mark class="r">anomaly detectors</mark> are unsupervised algorithms, which do not require any knowledge of the spectral signatures of the target of interest. Anomalies are defined with reference to a model of the background. Background models are developed adaptively using reference data from either a local neighborhood of the test pixel or a large section of the image. Anomalies are defined as observations that deviate in some way from the neighboring clutter background or the image-wide clutter background, respectively [6]. The most common used algorithm is <mark class="r">RX</mark>, given by
+        <div class="eq"><i>y</i><sub>RX</sub>(<i>x</i>) = (<i>x</i> − µ)<sup>T</sup> Γ̂<sup>−1</sup> (<i>x</i> − µ) &nbsp;&nbsp;(3)</div>
+        This algorithm has also CFAR property [6].</div>
+      <div class="zh">異常檢測器屬於非監督式演算法，不需要任何關於目標光譜特徵的知識。異常是相對於背景模型來定義的：背景模型可依待測像素的局部鄰域或影像中的大範圍區域自適應地建立，而異常即是在某種意義上偏離局部背景或全影像背景的觀測值 [6]。最常用的演算法是 RX，如式（3）所示，此演算法同樣具有 CFAR 性質 [6]。</div>
+    </div>
+    <details class="note-wrap"><summary>展開批註</summary><aside class="note f-concept">
+      <div class="fn"><span class="lbl">段落功能</span><span class="tag">方法說明</span></div>
+      <dl><dt>邏輯角色</dt><dd>本段引入第一個非監督式方法，作為 SAM 之外的非監督對照組。</dd>
+      <dt>論證觀察</dt><dd>式（3）即像素到背景均值的馬氏距離平方。作者提到「局部鄰域」與「大範圍區域」兩種背景模型，但實驗只採用全域模型（見第 V 節），局部 RX 並未被測試；若局部 RX 在缺陷 I 上表現較好，結論可能會改變。</dd></dl>
+    </aside></details>
+  </div>
+
+  <div class="sub-head" id="s3c">C. Spectral Distance Measures｜光譜距離量測</div>
+
+  <div class="row">
+    <div class="para">
+      <div class="en">Spectral distance measures have been developed to differentiate between two pixel vectors and can also be used to detect defects. <mark class="g">In that case, the threshold must be empirically chosen.</mark></div>
+      <div class="zh">光譜距離量測原本用於區分兩個像素向量，也可以用來偵測缺陷；但在此情況下，閾值必須憑經驗選定。</div>
+    </div>
+    <details class="note-wrap"><summary>展開批註</summary><aside class="note f-concede">
+      <div class="fn"><span class="lbl">段落功能</span><span class="tag">承認限制</span></div>
+      <dl><dt>邏輯角色</dt><dd>本段是由統計檢測器過渡到距離量測的銜接段，同時預先承認後者的弱點。</dd>
+      <dt>論證觀察</dt><dd>作者坦承距離量測沒有 CFAR 性質，這是誠實的限制說明。但對工業應用而言，這是一項實質缺點，因為產線需要能預先設定的閾值；而本文最推崇的 SAM 正屬於此類。這個張力在結論中沒有得到回應。</dd></dl>
+    </aside></details>
+  </div>
+
+  <div class="row" id="eq4">
+    <div class="para">
+      <div class="en"><mark class="r">Spectral angle mapper (SAM)</mark> has been widely used in multispectral and hyperspectral image analysis as a spectral similarity measure for material identification. It calculates the angle between two spectra and uses it as a measure of discrimination. The resulting of SAM is given by [7]
+        <div class="eq"><i>y</i><sub>SAM</sub>(<i>x</i>, <i>s</i>) = <span class="frac"><span><i>s</i><sup>T</sup> <i>x</i></span><span>(<i>s</i><sup>T</sup><i>s</i>)<sup>1/2</sup> (<i>x</i><sup>T</sup><i>x</i>)<sup>1/2</sup></span></span> &nbsp;&nbsp;(4)</div></div>
+      <div class="zh">光譜角映射（SAM）廣泛用於多光譜與高光譜影像分析，作為材料辨識的光譜相似度指標。它計算兩條光譜之間的夾角，並以此作為區分依據，其計算式如式（4）[7]。</div>
+    </div>
+    <details class="note-wrap"><summary>展開批註</summary><aside class="note f-concept">
+      <div class="fn"><span class="lbl">段落功能</span><span class="tag">關鍵方法</span></div>
+      <dl><dt>邏輯角色</dt><dd>本段定義全文最終勝出的演算法，是理解核心結論的關鍵。</dd>
+      <dt>論證觀察</dt><dd>式（4）實際給出的是夾角的餘弦值，真正的「光譜角」是它的反餘弦。由於反餘弦是單調函數，以閾值判斷時兩者等價，結果不受影響。更重要的是，SAM 對整體亮度的縮放不敏感，這對照明強度不均勻的金屬表面是重要優勢，很可能是 SAM 表現最好的原因之一，但作者沒有從這個角度解釋。</dd></dl>
+    </aside></details>
+  </div>
+
+  <div class="row" id="eq5">
+    <div class="para">
+      <div class="en"><mark class="r">Spectral information divergence (SID)</mark> has been suggested to model the spectrum of a hyperspectral image pixel as a probability distribution and to measure the information divergence between the probability distributions generated by the test and target spectra <i>x</i> and <i>s</i>, respectively. The SID resulting is given by [7]
+        <div class="eq"><i>y</i><sub>SID</sub>(<i>x</i>, <i>s</i>) = Σ<sub><i>j</i>=1</sub><sup><i>L</i></sup> <i>p<sub>j</sub></i> log(<i>p<sub>j</sub></i>/<i>q<sub>j</sub></i>) + Σ<sub><i>j</i>=1</sub><sup><i>L</i></sup> <i>q<sub>j</sub></i> log(<i>q<sub>j</sub></i>/<i>p<sub>j</sub></i>) &nbsp;&nbsp;(5)</div>
+        where <i>p</i> = (<i>p</i><sub>1</sub>, <i>p</i><sub>2</sub> … <i>p<sub>L</sub></i>)<sup>T</sup> and <i>q</i> = (<i>q</i><sub>1</sub>, <i>q</i><sub>2</sub> … <i>q<sub>L</sub></i>)<sup>T</sup> are the two probability mass functions generated by normalizing to sum-to-unity the spectral vectors <i>s</i> and <i>x</i>, respectively and <i>L</i> is the number of the spectral bands.</div>
+      <div class="zh">光譜資訊散度（SID）將高光譜像素的光譜視為機率分佈，並量測待測光譜 <i>x</i> 與目標光譜 <i>s</i> 所對應機率分佈之間的資訊散度，其計算式如式（5）[7]。其中 <i>p</i> 與 <i>q</i> 分別是將 <i>s</i> 與 <i>x</i> 正規化為總和為 1 後得到的機率質量函數，<i>L</i> 為光譜波段數。</div>
+    </div>
+    <details class="note-wrap"><summary>展開批註</summary><aside class="note f-concept">
+      <div class="fn"><span class="lbl">段落功能</span><span class="tag">方法說明</span></div>
+      <dl><dt>邏輯角色</dt><dd>本段提供第二種距離量測，以資訊理論的角度衡量光譜差異。</dd>
+      <dt>論證觀察</dt><dd>SID 就是對稱化的 KL 散度。因為需要先正規化，SID 同樣對亮度縮放不敏感。當某些分量接近零時（例如近紅外下的弱訊號），對數項可能數值不穩定，文中沒有說明如何處理。</dd></dl>
+    </aside></details>
+  </div>
+
+  <div class="row" id="eq6">
+    <div class="para">
+      <div class="en">The <mark class="r">Kendall’s τ (TAU)</mark> is a measure based on the concordance level between <i>s</i> and <i>x</i>, a given target and test pixels, respectively. TAU expresses the probability of concordance less the probability of discordance between <i>x</i> and <i>s</i>. An empiric estimator of the Kendall’s τ is given by [8]
+        <div class="eq"><i>y</i><sub>TAU</sub>(<i>x</i>, <i>s</i>) = <span class="frac"><span>2</span><span><i>L</i>(<i>L</i> − 1)</span></span> Σ<sub><i>l</i>=1</sub><sup><i>L</i>−1</sup> Σ<sub><i>k</i>=<i>l</i>+1</sub><sup><i>L</i></sup> sign[(<i>x<sub>k</sub></i> − <i>x<sub>l</sub></i>)(<i>s<sub>k</sub></i> − <i>s<sub>l</sub></i>)] &nbsp;&nbsp;(6)</div>
+        with sign(<i>u</i>) = 1 if <i>u</i> &gt; 0, −1 if <i>u</i> &lt; 0, 0 if <i>u</i> = 0, where (<i>x<sub>i</sub></i>, <i>s<sub>i</sub></i>), <i>i</i> = 1 … <i>L</i>, is a sample of <i>L</i> observations of (<i>x</i>, <i>s</i>). Here, we associate a random variable (RV) to each vector pixel and its components are viewed as observations of this RV. The estimated value of τ belongs to [−1, 1]: τ = 0, if there is no dependent between <i>s</i> and <i>x</i>, τ = −1, if the pixels are discordant and τ = 1, when the pixels are concordant.</div>
+      <div class="zh">Kendall's τ（TAU）是以目標光譜 <i>s</i> 與待測像素 <i>x</i> 之間的一致程度為基礎的量測，表示兩者「一致」的機率減去「不一致」的機率，其經驗估計式如式（6）[8]。在此，每個像素向量被視為一個隨機變數，向量的各分量則是該隨機變數的觀測值。τ 的估計值介於 −1 與 1 之間：兩者無相依性時 τ = 0，完全不一致時 τ = −1，完全一致時 τ = 1。</div>
+    </div>
+    <details class="note-wrap"><summary>展開批註</summary><aside class="note f-concept">
+      <div class="fn"><span class="lbl">段落功能</span><span class="tag">方法說明</span></div>
+      <dl><dt>邏輯角色</dt><dd>本段提供第三種距離量測，以排序相關衡量光譜相似度；它也是第三位作者先前研究 [8] 的方法。</dd>
+      <dt>論證觀察</dt><dd>Kendall's τ 只看分量之間的大小順序，因此對單調轉換很穩健；但同時也遺失了幅度資訊。其計算需要比較所有分量對，複雜度為 O(<i>L</i><sup>2</sup>)，這正是第 V 節複雜度討論中 TAU 被單獨列出的原因。文中「no dependent」應為「no dependence」，屬語法小誤。</dd></dl>
+    </aside></details>
+  </div>
+
+  <!-- ================= IV. EXPERIMENTS ================= -->
+  <div class="sec-head" id="s4" data-nav="IV 實驗"><h2>IV. Experiments</h2><div class="sub">實驗</div></div>
+
+  <div class="row" id="fig2">
+    <div class="para">
+      <div class="en">We have used in the acquisition system (Fig. 1):
+        <ul><li><mark class="p">‘LUXEON Star Warm white LED’ source</mark> to generate WL illumination, which emits WL <mark class="b">between 400 and 750 nm</mark>.</li>
+        <li><mark class="p">‘Super high power LED array with 12 parallel 1 mm<sup>2</sup> power chips’</mark> sources to generate ML illuminations in visible and near-infrared domains. Nine LED arrays are used, which emit MLs in the following wavelengths: <mark class="b">470, 505, 590, 630, 780, 810, 850, 880 and 940 nm</mark>.</li>
+        <li><mark class="p">‘Heliopan Pol lin.’ linear polarizer filter</mark> to polarize white and monochromatic light.</li>
+        <li><mark class="p">‘AVT Dolphin F145C color camera</mark>, which incorporates a Sony ICX-285AQ sensor and is sensitive to wavelengths <mark class="b">up to 1000 nm</mark>’ to acquire color images. The camera sensor captures the color information via so-called primary color (RGB) filters placed over the individual pixels in a BAYER mosaic layout (Fig. 2a). Red, green or blue value is determined for each pixel, interpolating two adjacent lines (Fig. 2b).</li></ul>
+        <div class="figbox"><img src="figs/benmoussat12-fig2-real.png" alt="Fig. 2 Bayer demosaicing"><b>Fig. 2.</b> BAYER demosaicing: (a) example of 2x2 matrix (b) colors interpolation [9].</div></div>
+      <div class="zh">擷取系統（圖 1）所使用的元件如下：
+        <ul><li>LUXEON Star 暖白光 LED：產生 400 至 750 nm 的白光照明。</li>
+        <li>由 12 顆 1 mm² 晶片並聯的超高功率 LED 陣列：產生可見光與近紅外線的單色光照明，共使用 9 組陣列，波長分別為 470、505、590、630、780、810、850、880 與 940 nm。</li>
+        <li>Heliopan 線性偏振濾鏡：用於將白光與單色光偏振化。</li>
+        <li>AVT Dolphin F145C 彩色相機（搭載 Sony ICX-285AQ 感測器，感光範圍可達 1000 nm）：感測器以 Bayer 馬賽克排列的 RGB 濾鏡記錄色彩，每個像素的紅、綠、藍值則由相鄰兩列內插求得（圖 2）。</li></ul></div>
+    </div>
+    <details class="note-wrap"><summary>展開批註</summary><aside class="note f-method">
+      <div class="fn"><span class="lbl">段落功能</span><span class="tag">設備規格</span></div>
+      <dl><dt>邏輯角色</dt><dd>本段將第 II 節的抽象配置具體化，提供可重現實驗所需的硬體資訊。</dd>
+      <dt>論證觀察</dt><dd>提供具體型號有助於重現。相機感光上限約 1000 nm，而最長使用波長為 940 nm，配置合理。然而 LED 的頻寬、偏振器的消光比，以及各光源的強度是否經過校正等，都會影響結果，文中均未提供。</dd></dl>
+    </aside></details>
+  </div>
+
+  <div class="row" id="tab2">
+    <div class="para">
+      <div class="en">Depending on the wavelength illumination, each primary color (RGB) filter of the camera gives a different response. The spectral response curve presented in the data sheet of the sensor [9] used in the camera informs about this. For example, at λ = 470 nm, <mark class="b">the spectral responses of the red, green and blue filters are respectively about 3%, 30% and 82%</mark>. The red component of the acquired image at 470 nm is almost zero. <mark class="p">Therefore, this component will not be taken for the construction of the PSCs. On the other hand, only the red components will be used for near infrared wavelengths (from 780 nm to 940 nm).</mark> TABLE II shows the selected components.
+        <div class="figbox"><b>TABLE II.</b> Acquired images (unpolarized modalities).
+          <div class="t2wrap"><table class="t2img" id="t2grid"><tr><th></th><th>Defect I</th><th>Defect II</th><th>Defect III</th></tr></table></div></div></div>
+      <div class="zh">相機的各 RGB 濾鏡會依照明波長產生不同的響應，感測器規格書 [9] 中的光譜響應曲線即說明了這一點。例如在 λ = 470 nm 時，紅、綠、藍濾鏡的響應分別約為 3%、30% 與 82%，因此 470 nm 影像的紅色分量幾乎為零，不納入 PSC 的建構。反之，在近紅外波段（780 至 940 nm）則只使用紅色分量。表 II 列出所選取的分量。</div>
+    </div>
+    <details class="note-wrap"><summary>展開批註</summary><aside class="note f-evid">
+      <div class="fn"><span class="lbl">段落功能</span><span class="tag">以數據支持決策</span></div>
+      <dl><dt>邏輯角色</dt><dd>本段以感測器規格數據作為挑選 R、G、B 分量的依據，是全文少數以量化資料支撐設計決策之處，也解釋了表 I 中「12 個分量」的來源。</dd>
+      <dt>論證觀察</dt><dd>以響應率剔除弱分量的做法合理，但挑選準則沒有明確量化（例如以多少百分比為門檻）。630 nm 只保留 R、590 nm 卻保留 R 與 G，讀者無法從文中重建一致的規則。</dd></dl>
+    </aside></details>
+  </div>
+
+  <div class="row">
+    <div class="para">
+      <div class="en"><mark class="p">We have used three flat metal parts which contain different 3D artificial defects</mark> (called thereafter: Defect I, Defect II and Defect III) and fabricated with different tools. <mark class="b">Defect I contains two dent defects with 2 mm of diameter and 0.2 mm of depth, Defect II contains two dent defects with about 0.5 mm of diameter and 0.05 mm of depth, and Defect III contains a scratch defect with about 0.2 mm of width, 6 mm of length and 0.03 mm of depth.</mark> The acquired images for different parts are shown in TABLE II.</div>
+      <div class="zh">我們使用三件含有不同三維人工缺陷、以不同工具製作的平面金屬零件（以下稱缺陷 I、II、III）。缺陷 I 含兩個直徑 2 mm、深 0.2 mm 的凹痕；缺陷 II 含兩個直徑約 0.5 mm、深 0.05 mm 的凹痕；缺陷 III 含一道寬約 0.2 mm、長 6 mm、深 0.03 mm 的刮痕。各零件的擷取影像如表 II 所示。</div>
+    </div>
+    <details class="note-wrap"><summary>展開批註</summary><aside class="note f-evid">
+      <div class="fn"><span class="lbl">段落功能</span><span class="tag">樣本描述</span></div>
+      <dl><dt>邏輯角色</dt><dd>本段定義實驗樣本，三種缺陷構成結果表的三個欄位。</dd>
+      <dt>論證觀察</dt><dd>三種缺陷涵蓋大凹痕、小淺凹痕與刮痕，具有一定多樣性；但每類只有一件零件，而且都是人工製作，缺乏重複樣本，難以進行統計推論。最淺的缺陷只有 0.03 mm，若偏振確實有助偵測此類缺陷，將能支持「偏振可反映三維資訊」的主張；可惜作者沒有針對這一點做分析。</dd></dl>
+    </aside></details>
+  </div>
+
+  <div class="row">
+    <div class="para">
+      <div class="en">Concerning the polarization modalities, <mark class="p">three angular positions of the analyzer are used (30°, 60° and 90°)</mark> in order to have three different representations for the same scene. The same color components used for unpolarized modalities (TABLE II) are used also for the polarized modalities. So, for each image in TABLE II we have three other images which correspond respectively to the three used polarization degrees. <mark class="b">The spatial dimensions in pixel unit of the acquired images for each metal part are respectively (170 × 240), (90 × 360) and (130 × 230).</mark> The spectral dimensions are shown in TABLE I.</div>
+      <div class="zh">在偏振模態方面，檢偏器使用 30°、60° 與 90° 三個角度，以得到同一場景的三種不同表徵。偏振模態所使用的色彩分量與非偏振模態（表 II）相同，因此表 II 中的每張影像，都另有三張分別對應三個偏振角度的影像。三件零件影像的空間尺寸（像素）分別為 170 × 240、90 × 360 與 130 × 230，光譜維度則如表 I 所示。</div>
+    </div>
+    <details class="note-wrap"><summary>展開批註</summary><aside class="note f-method">
+      <div class="fn"><span class="lbl">段落功能</span><span class="tag">方法細節</span></div>
+      <dl><dt>邏輯角色</dt><dd>本段補足偏振模態的參數，並說明資料立方體的空間大小。</dd>
+      <dt>論證觀察</dt><dd>檢偏角選用 30°、60°、90°，缺少 0° 且沒有說明理由；由於偏振器的角度未知，讀者也無法判斷這三個角度相對於偏振器的關係（例如是否包含正交或平行配置）。三件零件的影像尺寸不同，代表背景像素數不同，會影響誤報率的計算基礎，跨零件比較結果時應留意。</dd></dl>
+    </aside></details>
+  </div>
+
+  <div class="row">
+    <div class="para">
+      <div class="en"><mark class="p">We have built the five cubes presented in TABLE I for each metal part and we have used the six algorithms presented in section III to detect four different targets.</mark> <mark class="r">target_1</mark> and <mark class="r">target_2</mark> are chosen respectively in the middle and border of the defect to be detected. <mark class="r">target_3</mark> is a background pixel and <mark class="r">target_4</mark> is the mean spectrum of the cube.</div>
+      <div class="zh">我們為每件零件建立表 I 所列的五個立方體，並以第 III 節介紹的六種演算法偵測四種不同目標：target_1 與 target_2 分別取自缺陷的中央與邊緣，target_3 為一個背景像素，target_4 則為整個立方體的平均光譜。</div>
+    </div>
+    <details class="note-wrap"><summary>展開批註</summary><aside class="note f-method">
+      <div class="fn"><span class="lbl">段落功能</span><span class="tag">實驗設計</span></div>
+      <dl><dt>邏輯角色</dt><dd>本段定義完整的實驗組合（3 件零件 × 5 個立方體 × 6 種演算法 × 4 種目標），是第 V 節結果表的直接來源。</dd>
+      <dt>論證觀察</dt><dd>t1 與 t2 取自缺陷本身，屬於監督式；t3 與 t4 來自背景，是作者主張「非監督」的關鍵。t1 與 t2 需要事先知道缺陷位置，這在實際產線上無法取得，因此監督式結果較接近理想情況下的上界。</dd></dl>
+    </aside></details>
+  </div>
+
+  <div class="row">
+    <div class="para">
+      <div class="en"><mark class="y">Choosing targets as background spectrum or as the mean spectrum of the data cube can make the detection quasi- or totally-unsupervised.</mark> <mark class="p">For those two last targets, we consider the complement-to-one of the normalized detection map, as the objects of interest are the defects and not the background.</mark></div>
+      <div class="zh">若以背景光譜或資料立方體的平均光譜作為目標，檢測就成為準非監督或完全非監督的方式。對這兩種目標，我們取正規化檢測圖的補數（即 1 減去原值），因為真正感興趣的對象是缺陷而不是背景。</div>
+    </div>
+    <details class="note-wrap"><summary>展開批註</summary><aside class="note f-claim">
+      <div class="fn"><span class="lbl">段落功能</span><span class="tag">方法論證</span></div>
+      <dl><dt>邏輯角色</dt><dd>本段是全文「非監督」主張的方法依據，直接支撐摘要中的核心結論。</dd>
+      <dt>論證觀察</dt><dd>這是相當巧妙的設計轉換：把「尋找缺陷」反轉為「尋找與背景不相似者」，因此取檢測圖的補數。不過 t3 仍需人工挑選一個背景像素，嚴格而言是「準非監督」；作者在此處的措辭（quasi-）是精確的，但摘要中籠統的「non-supervised approach」則略為放大了這一點。</dd></dl>
+    </aside></details>
+  </div>
+
+  <!-- ================= V. RESULTS ================= -->
+  <div class="sec-head" id="s5" data-nav="V 結果與討論"><h2>V. Results and Discussion</h2><div class="sub">結果與討論</div></div>
+
+  <div class="row">
+    <div class="para">
+      <div class="en">The detection results of the used algorithms are provided as detection maps, which represent the values of the scalar <i>y</i> defined in (1) − (6) for each pixel. The comparison between the detection results is done by calculating P<sub>FA</sub> and P<sub>D</sub> for all the defects present in each metal part. <mark class="p">In order to calculate these probabilities, we normalize the detection maps between [0 - 1] and by varying the detection threshold η between 0 and 1 with a chosen step of <mark class="b">10<sup>−3</sup></mark>, we calculate P<sub>D</sub> and P<sub>FA</sub> for each value of the threshold.</mark> Once P<sub>D</sub> and P<sub>FA</sub> are calculated, we can generate the ROC curves for each detection map.</div>
+      <div class="zh">各演算法的檢測結果以檢測圖呈現，圖中每個像素的值即式（1）至（6）所定義的純量 <i>y</i>。比較方式是針對每件零件上的所有缺陷計算 P<sub>FA</sub> 與 P<sub>D</sub>：先將檢測圖正規化到 0 至 1 之間，再以 0.001 為步長，讓閾值 η 從 0 掃描到 1，逐一計算 P<sub>D</sub> 與 P<sub>FA</sub>，進而繪出每張檢測圖的 ROC 曲線。</div>
+    </div>
+    <details class="note-wrap"><summary>展開批註</summary><aside class="note f-method">
+      <div class="fn"><span class="lbl">段落功能</span><span class="tag">評估流程</span></div>
+      <dl><dt>邏輯角色</dt><dd>本段把第 III 節的 ROC 概念落實為具體計算步驟。</dd>
+      <dt>論證觀察</dt><dd>正規化後以固定步長掃描閾值，是建構經驗 ROC 的標準做法。然而 P<sub>D</sub> 與 P<sub>FA</sub> 是以像素為單位計算，缺陷的真值標記如何取得（人工標註或依製作圖面）並未說明，而這直接決定所有數據的可信度。</dd></dl>
+    </aside></details>
+  </div>
+
+  <div class="row">
+    <div class="para">
+      <div class="en">In order to reduce the amount of information, <mark class="p">we calculate for each case the value of the threshold η and the <mark class="r">false alarm rate (FAR)</mark> that correspond to a fixed <mark class="r">good detection rate (GDR)</mark>.</mark> The binary detection mask can be created by thresholding the detection map according to the calculated value of η. <mark class="p">The best methods, combining algorithms and target choice, are those that give lower FAR.</mark></div>
+      <div class="zh">為了精簡資訊，我們針對每種情況，求出在固定良好偵測率（GDR）下所對應的閾值 η 與誤報率（FAR）。依此 η 對檢測圖進行二值化，即可得到二元檢測遮罩。演算法與目標選擇的組合中，FAR 愈低者即為愈佳的方法。</div>
+    </div>
+    <details class="note-wrap"><summary>展開批註</summary><aside class="note f-method">
+      <div class="fn"><span class="lbl">段落功能</span><span class="tag">評估準則</span></div>
+      <dl><dt>邏輯角色</dt><dd>本段確立全文唯一的排名準則：固定 GDR 下的 FAR。</dd>
+      <dt>論證觀察</dt><dd>以單一操作點概括整條 ROC 是為了精簡，但排名可能受 GDR 選擇影響；作者沒有報告其他 GDR（例如 80% 或 95%）下的排名是否一致，因此無法判斷結論的穩健性。</dd></dl>
+    </aside></details>
+  </div>
+
+  <div class="row" id="tab3">
+    <div class="para">
+      <div class="en">For each algorithm and metal part, we present one detection mask among 20 others (corresponding to five cubes and four targets, except for RX, unsupervised algorithm, which have only 5 detection masks corresponding to five cubes). The pair (c, t) indicates the used cube ‘c’ and the chosen target ‘t’ for the detection. <mark class="p"><mark class="r">AFAR</mark> (%) is the average false alarm rate of the 20 (respectively 5 for RX) detection maps for a fixed GDR to 90%.</mark> TABLE III shows the closest detection masks to the mean performance AFAR for the six algorithms presented in section III and for the three metal parts presented in section IV. ci<sub>{i=1…5}</sub> are respectively cube (i) and tj<sub>{j=1…4}</sub> are respectively target_j.
+        <table class="dt">
+          <tr><th>Algo.</th><th></th><th>Defect I</th><th>Defect II</th><th>Defect III</th></tr>
+          <tr><td rowspan="2">AMF</td><td>(c, t)</td><td>(c3, t1)</td><td>(c4, t2)</td><td>(c5, t1)</td></tr>
+          <tr><td>AFAR</td><td><mark class="b">74.63</mark></td><td><mark class="b">49.11</mark></td><td><mark class="b">63.37</mark></td></tr>
+          <tr><td rowspan="2">ACE</td><td>(c, t)</td><td>(c4, t2)</td><td>(c3, t1)</td><td>(c3, t1)</td></tr>
+          <tr><td>AFAR</td><td><mark class="b">76.11</mark></td><td><mark class="b">61.65</mark></td><td><mark class="b">69.99</mark></td></tr>
+          <tr><td rowspan="2">TAU</td><td>(c, t)</td><td>(c4, t2)</td><td>(c2, t3)</td><td>(c4, t2)</td></tr>
+          <tr><td>AFAR</td><td><mark class="b">54.77</mark></td><td><mark class="b">27.07</mark></td><td><mark class="b">37.10</mark></td></tr>
+          <tr><td rowspan="2"><b>SAM</b></td><td>(c, t)</td><td>(c4, t3)</td><td>(c3, t3)</td><td>(c4, t3)</td></tr>
+          <tr class="hl-row"><td>AFAR</td><td><b>00.50</b></td><td><b>00.01</b></td><td><b>01.32</b></td></tr>
+          <tr><td rowspan="2">SID</td><td>(c, t)</td><td>(c5, t2)</td><td>(c1, t3)</td><td>(c1, t3)</td></tr>
+          <tr><td>AFAR</td><td><mark class="b">48.65</mark></td><td><mark class="b">32.37</mark></td><td><mark class="b">32.79</mark></td></tr>
+          <tr><td rowspan="2">RX</td><td>(c)</td><td>(c1)</td><td>(c4)</td><td>(c4)</td></tr>
+          <tr><td>AFAR</td><td><mark class="b">45.66</mark></td><td><mark class="b">02.96</mark></td><td><mark class="b">04.83</mark></td></tr>
+        </table>
+        <div style="text-align:center;font-size:12.5px">TABLE III — Detection masks and AFAR corresponding to GDR = 90%（原表含二元遮罩影像，此處僅保留數值）</div></div>
+      <div class="zh">對每種演算法與每件零件，我們從 20 張檢測遮罩（5 個立方體 × 4 種目標）中選出一張呈現；RX 為非監督演算法，只有對應 5 個立方體的 5 張遮罩。(c, t) 表示所用的立方體 c 與目標 t。AFAR（%）為在 GDR 固定為 90% 時，這 20 張（RX 為 5 張）檢測圖的平均誤報率。表 III 列出六種演算法在三件零件上、最接近平均表現 AFAR 的檢測遮罩；ci 代表立方體（i），tj 代表 target_j。</div>
+    </div>
+    <details class="note-wrap"><summary>展開批註</summary><aside class="note f-evid">
+      <div class="fn"><span class="lbl">段落功能</span><span class="tag">提供證據</span></div>
+      <dl><dt>邏輯角色</dt><dd>表 III 是全文最核心的實證證據，後續所有討論都以此表為基礎。</dd>
+      <dt>論證觀察</dt><dd>AFAR 對 20 個組合取平均，混合了監督與非監督目標、表現好與差的立方體；表中顯示的遮罩只是「最接近平均」的一張，且沒有報告標準差，平均值掩蓋了組合之間的變異。儘管如此，SAM 三個 AFAR 皆低於 1.5%，與其他方法相差一個數量級以上，這個差距足夠大，結論方向應屬可信。</dd></dl>
+    </aside></details>
+  </div>
+
+  <div class="row">
+    <div class="para">
+      <div class="en">The results show that:
+        <ul><li><mark class="b">AMF and ACE have the worse detection results</mark>, because of the spectral variability of the target (defect) and background classes. The defect is represented by multiple spectra, which makes the choice of a single representative spectrum difficult. By choosing only one spectrum as target to be detected, AMF and ACE can detect only the pixels that have the same spectral signature as the chosen target. <mark class="g">On the other hand, some of the key assumptions used for these detectors [5] may not be verified, such as:</mark>
+          <ul><li><mark class="g">The background should be homogeneous and could be modeled by a multivariate normal distribution.</mark></li>
+          <li><mark class="g">The background spectrum interfering with the test pixel spectrum should have the same covariance matrix with the background training pixels.</mark></li>
+          <li><mark class="g">The test and training pixels should be independent.</mark></li></ul>
+          In our case, <mark class="p">under the assumption of low-probability targets we have estimated the mean vector and covariance matrix of the background from the entire data cube.</mark> <mark class="g">Although, AMF and ACE can provide reduced FAR by choosing the pair (c1, t1/t2) and fixing GDR to 90%.</mark></li></ul></div>
+      <div class="zh">結果顯示：
+        <ul><li>AMF 與 ACE 的檢測結果最差。原因在於目標（缺陷）與背景類別都存在光譜變異：同一缺陷由多條光譜構成，難以選出單一代表光譜；若只以一條光譜作為目標，AMF 與 ACE 只能偵測到與該光譜特徵相同的像素。此外，這些檢測器的部分關鍵假設 [5] 可能並不成立，包括：背景應為均質且可用多變量常態分佈建模；干擾待測像素的背景光譜應與背景訓練像素具有相同的共變異數矩陣；待測像素與訓練像素應相互獨立。本研究在「目標出現機率低」的假設下，以整個資料立方體估計背景的均值向量與共變異數矩陣。不過，若選擇 (c1, t1/t2) 的組合並將 GDR 固定為 90%，AMF 與 ACE 的 FAR 仍可降低。</li></ul></div>
+    </div>
+    <details class="note-wrap"><summary>展開批註</summary><aside class="note f-concede">
+      <div class="fn"><span class="lbl">段落功能</span><span class="tag">解釋負面結果</span></div>
+      <dl><dt>邏輯角色</dt><dd>本段說明監督式方法為何失敗，為「轉向非監督方法」提供理由，是由證據走向主論點的關鍵橋梁。</dd>
+      <dt>論證觀察</dt><dd>作者提出兩種解釋（目標光譜變異大、統計假設不成立），但兩者都是事後解釋，並未以實驗驗證，例如檢查背景是否近似常態，或改用多條目標光譜重新測試。此外，以含缺陷的整個立方體估計共變異數，本身就可能違反假設，因此這更像是估計方式可以改進，而非演算法本身不適用。最後一句「Although…」文法不完整，且所稱的降低幅度沒有提供數值。</dd></dl>
+    </aside></details>
+  </div>
+
+  <div class="row">
+    <div class="para">
+      <div class="en"><ul><li><mark class="b">The estimated values of TAU belong to [0.114, 1], [0.329, 1] and [0.576, 1] respectively for Defect I, Defect II and Defect III</mark> which means that the pixels are not discordant. <mark class="b">TAU and SID have almost similar results and can give good results by choosing t3 or t4 as target to be detected.</mark> <mark class="b">TAU hardly detects when using cube (1)</mark>, unpolarized WL modality with only 3 components which is not enough.</li></ul></div>
+      <div class="zh"><ul><li>TAU 的估計值在缺陷 I、II、III 上分別落在 [0.114, 1]、[0.329, 1] 與 [0.576, 1]，表示像素之間沒有不一致的情形。TAU 與 SID 的結果大致相近，以 t3 或 t4 為目標時可得到良好結果。使用立方體（1），也就是只有 3 個分量的非偏振白光模態時，TAU 幾乎無法偵測，因為分量數不足。</li></ul></div>
+    </div>
+    <details class="note-wrap"><summary>展開批註</summary><aside class="note f-evid">
+      <div class="fn"><span class="lbl">段落功能</span><span class="tag">提供證據</span></div>
+      <dl><dt>邏輯角色</dt><dd>本段報告兩種距離量測的結果，並首次將「分量數不足」作為解釋。</dd>
+      <dt>論證觀察</dt><dd>τ 的值全部為正，代表所有像素與目標皆呈正相關，缺陷與背景在排序上的區分度有限，可以解釋 TAU 誤報率偏高。「3 個分量不夠」的說法有數學根據：當 L = 3 時只有 3 組成對比較，τ 最多只有 7 種可能取值，分數幾乎沒有解析度。另外，「TAU 與 SID 結果相近」與表 III 的數字（例如缺陷 I 為 54.77 與 48.65）大致相符，但表 III 中 TAU 與 SID 的最佳組合多數使用 t2 而非 t3、t4，與「選 t3 或 t4 結果好」的敘述並不完全一致。</dd></dl>
+    </aside></details>
+  </div>
+
+  <div class="row">
+    <div class="para">
+      <div class="en"><ul><li>RX is an unsupervised algorithm based on a local or global background model reference. <mark class="p">Here we compute the covariance matrix of the data cube, and define the anomalies to be the points that are farthest from the mean spectrum, in the Mahalanobis distance sense.</mark> The results vary a lot from one modality to another and from one defect to another, although <mark class="b">the AFAR value is rather good for Defects II and III</mark>. <mark class="g">When the background is not uniform or when the defects are spread in a large surface, RX do not present satisfactory results.</mark></li></ul></div>
+      <div class="zh"><ul><li>RX 是以局部或全域背景模型為參考的非監督演算法。本研究以整個資料立方體計算共變異數矩陣，並將在馬氏距離意義下離平均光譜最遠的點定義為異常。RX 的結果隨模態與缺陷類型差異很大，但在缺陷 II 與 III 上的 AFAR 相當理想。當背景不均勻，或缺陷分佈於大面積區域時，RX 的表現則不令人滿意。</li></ul></div>
+    </div>
+    <details class="note-wrap"><summary>展開批註</summary><aside class="note f-concede">
+      <div class="fn"><span class="lbl">段落功能</span><span class="tag">證據與限制</span></div>
+      <dl><dt>邏輯角色</dt><dd>本段呈現第二個非監督方法的結果，使 SAM 的優勢有一個公平的對照。</dd>
+      <dt>論證觀察</dt><dd>RX 在小而局部的缺陷 II、III 上表現好，在較大的缺陷 I 上表現差，這符合「異常必須是少數」的前提：大面積缺陷會拉動均值與共變異數的估計。作者正確描述了這一現象，但「結果差異很大」沒有量化，讀者無法判斷變異程度。</dd></dl>
+    </aside></details>
+  </div>
+
+  <div class="row">
+    <div class="para">
+      <div class="en"><ul><li><mark class="y">SAM, simple spectral cosine angle, is the algorithm that gives the best results, which are more constant and stable comparing to the other algorithms.</mark> For an unsupervised approach (by choosing t3 or t4 as target), and GDR=90%, <mark class="b">SAM can have a very low FAR which can reach 0% for the three defects and for all modalities.</mark></li></ul></div>
+      <div class="zh"><ul><li>SAM 這種簡單的光譜餘弦夾角，是表現最好的演算法，其結果比其他演算法更一致、更穩定。在非監督設定下（以 t3 或 t4 為目標）且 GDR 為 90% 時，SAM 的 FAR 極低，對三種缺陷及所有模態都可以達到 0%。</li></ul></div>
+    </div>
+    <details class="note-wrap"><summary>展開批註</summary><aside class="note f-claim">
+      <div class="fn"><span class="lbl">段落功能</span><span class="tag">核心論點</span></div>
+      <dl><dt>邏輯角色</dt><dd>這是全文最主要的實證結論，直接支撐摘要與結論中的主張。</dd>
+      <dt>論證觀察</dt><dd>「可達 0%，且適用於所有模態」的措辭，比表 III 的平均值（0.50%、0.01%、1.32%）更強；而圖 3 顯示立方體 1、2 的 SAM 曲線明顯較差，因此「all modalities」與圖 3 存在張力，屬於輕微的過度宣稱。作者也沒有解釋 SAM 為何勝出；前文提到的「對亮度縮放不敏感」是一個可能的機制。</dd></dl>
+    </aside></details>
+  </div>
+
+  <div class="row">
+    <div class="para">
+      <div class="en"><mark class="y">The FAR is reduced significantly when using ML modalities compared to WL modalities for TAU, SAM and SID.</mark> These distance measures have the same behavior with respect to different modalities but they have different results, such as: <mark class="b">modalities (3), (4) and (5) are very close to each other and are better than modality (2) which is also better than modality (1).</mark></div>
+      <div class="zh">對 TAU、SAM 與 SID 而言，使用單色光模態時的 FAR 明顯低於白光模態。這三種距離量測對不同模態呈現相同的趨勢，只是數值不同：模態（3）、（4）、（5）彼此非常接近，且優於模態（2），而模態（2）又優於模態（1）。</div>
+    </div>
+    <details class="note-wrap"><summary>展開批註</summary><aside class="note f-evid">
+      <div class="fn"><span class="lbl">段落功能</span><span class="tag">證據推向模態結論</span></div>
+      <dl><dt>邏輯角色</dt><dd>本段從演算法層級轉向模態層級，回應研究目標中的「評估照明模態」。</dd>
+      <dt>論證觀察</dt><dd>「significantly」並未經過統計檢定，應理解為「明顯」而非統計上顯著。模態排序（3、4、5 優於 2，2 優於 1）與分量數排序（12、36、60 大於 9，9 大於 3）幾乎完全一致，因此無法排除「只是維度較多」的替代解釋。若要區分兩者，應比較分量數相同但模態不同的立方體，例如從單色光中只取 9 個分量與模態（2）比較。</dd></dl>
+    </aside></details>
+  </div>
+
+  <div class="row" id="fig3">
+    <div class="para">
+      <div class="en"><mark class="p">In order to compare the different modalities, we plot the ROC curves (Fig. 3) using the <mark class="r">semi-log</mark> function on the P<sub>FA</sub> axis for the detection maps of SAM</mark> (a distance measure applied on a non-supervised approach, which does not require the estimation of the covariance matrix of the background) and RX (unsupervised detection algorithm, which has CFRA property).
+        <div class="figbox"><img src="figs/benmoussat12-fig3-real.png" alt="Fig. 3 ROC curves of SAM and RX"><b>Fig. 3.</b> ROC curves of SAM with target_4 and RX.</div></div>
+      <div class="zh">為了比較不同模態，我們以對數尺度的 P<sub>FA</sub> 軸，繪出 SAM 與 RX 檢測圖的 ROC 曲線（圖 3）。SAM 是應用於非監督設定的距離量測，不需要估計背景的共變異數矩陣；RX 則是具有 CFAR 性質的非監督檢測演算法。</div>
+    </div>
+    <details class="note-wrap"><summary>展開批註</summary><aside class="note f-evid">
+      <div class="fn"><span class="lbl">段落功能</span><span class="tag">提供證據（圖）</span></div>
+      <dl><dt>邏輯角色</dt><dd>圖 3 以完整的 ROC 曲線補充表 III 的單點摘要，並以五條曲線直接比較五個立方體。</dd>
+      <dt>論證觀察</dt><dd>將 P<sub>FA</sub> 軸取對數可以放大低誤報區域的差異，是正確的呈現選擇。只選 SAM 與 RX 作圖，是因為兩者都不需要缺陷的目標光譜，與本文的非監督主張一致。文中「CFRA」應為「CFAR」的筆誤。</dd></dl>
+    </aside></details>
+  </div>
+
+  <div class="row">
+    <div class="para">
+      <div class="en">As a conclusion:
+        <ul><li><mark class="b">Modalities (1) and (2), with white light illumination and small number of components (resp. 3 and 9), are not performant.</mark> The performances are improved with ML modalities, which involve a higher number of components (resp. 12 and 36).</li>
+        <li><mark class="g">Polarization can improve the detection in certain cases, depending on the geometry of the defect and the used algorithm.</mark></li>
+        <li>Modalities (3) and (4) are very close to each other and the choice of the best modality between them is very difficult because it depends on the defect. <mark class="y">However, the combination of all modalities (modality 5) can give a good compromise between them and for some cases even the best results.</mark></li></ul></div>
+      <div class="zh">綜合而言：
+        <ul><li>模態（1）與（2）使用白光照明，分量數少（分別為 3 與 9），表現不佳；改用分量數較多的單色光模態（分別為 12 與 36）後，表現隨之提升。</li>
+        <li>偏振在某些情況下可以改善檢測，效果取決於缺陷的幾何形狀與所用的演算法。</li>
+        <li>模態（3）與（4）的表現非常接近，由於最佳選擇會隨缺陷而變，很難在兩者之間擇一。然而，結合所有模態的模態（5）能在兩者之間取得良好折衷，在部分情況下甚至得到最佳結果。</li></ul></div>
+    </div>
+    <details class="note-wrap"><summary>展開批註</summary><aside class="note f-sum">
+      <div class="fn"><span class="lbl">段落功能</span><span class="tag">小結</span></div>
+      <dl><dt>邏輯角色</dt><dd>本段將證據收束為三條模態層級的結論，對應研究目標中的「評估」與「組合」。</dd>
+      <dt>論證觀察</dt><dd>第一點作者自己把表現提升與「分量數較多」並列，等於間接承認了分量數混淆，卻沒有進一步處理。第二點對偏振的結論相當保守，實際上削弱了第 II 節「偏振可提供三維資訊」的理論期待，但作者沒有把這個落差回饋到理論討論。第三點「折衷」是務實的建議，但模態（5）的資料量與計算成本最高，這項權衡沒有被量化。</dd></dl>
+    </aside></details>
+  </div>
+
+  <div class="row">
+    <div class="para">
+      <div class="en">On the other hand, the computational burden of these algorithms depends directly from the size (N × M × L) of the input cube, where N and M are the spatial dimensions and L the spectral dimension, <mark class="p">which is expressed in terms of big O notation for all the algorithms used in this paper as: <mark class="b">O(NML)</mark>, except for TAU which is <mark class="b">O(NM(L)<sup>2</sup>)</mark>.</mark> <mark class="y">This means that these algorithms scale to increasing amounts of data.</mark></div>
+      <div class="zh">另一方面，這些演算法的計算負擔直接取決於輸入立方體的大小 N × M × L，其中 N 與 M 為空間維度，L 為光譜維度。以大 O 符號表示，本文所有演算法的複雜度皆為 O(NML)，唯獨 TAU 為 O(NML²)。這表示這些演算法能隨資料量增加而擴展。</div>
+    </div>
+    <details class="note-wrap"><summary>展開批註</summary><aside class="note f-concede">
+      <div class="fn"><span class="lbl">段落功能</span><span class="tag">回應潛在異議</span></div>
+      <dl><dt>邏輯角色</dt><dd>本段回應引言中「HSI 運算太慢」的問題，嘗試讓論證首尾呼應。</dd>
+      <dt>論證觀察</dt><dd>此處的複雜度分析並不正確。AMF、ACE、RX 對每個像素都要計算 <i>x</i><sup>T</sup>Γ̂<sup>−1</sup><i>x</i> 這類二次式，每像素代價為 O(L²)；加上估計共變異數需 O(NML²)、求反矩陣需 O(L³)，整體應為 O(NML²) 的量級。只有 SAM 與 SID 才是 O(NML)。此外，「可擴展」不等於「滿足即時需求」，作者沒有提供任何實際執行時間。這是全文較明顯的論證漏洞，但它反而對 SAM 有利，作者錯失了強化論點的機會。</dd></dl>
+    </aside></details>
+  </div>
+
+  <!-- ================= VI. CONCLUSION ================= -->
+  <div class="sec-head" id="s6" data-nav="VI 結論"><h2>VI. Conclusion</h2><div class="sub">結論</div></div>
+
+  <div class="row">
+    <div class="para">
+      <div class="en">In this paper, a comparison study is presented between different lighting modalities used to illuminate metal parts containing 3D artificial surface defects. <mark class="p">These modalities are combined in order to obtain data cubes, which are compared and tested by means of supervised and unsupervised detection algorithms dedicated to hyperspectral imaging applications.</mark></div>
+      <div class="zh">本文針對照射含三維人工表面缺陷之金屬零件的不同照明模態，進行了比較研究。這些模態經組合後形成資料立方體，再以高光譜影像領域的監督式與非監督式檢測演算法進行比較與測試。</div>
+    </div>
+    <details class="note-wrap"><summary>展開批註</summary><aside class="note f-sum">
+      <div class="fn"><span class="lbl">段落功能</span><span class="tag">小結</span></div>
+      <dl><dt>邏輯角色</dt><dd>本段重述研究範圍，為結論開場。</dd>
+      <dt>論證觀察</dt><dd>作者在此將全文定位為「比較研究」，比摘要中「提出方法」的措辭更謙遜，也更貼近實際貢獻。</dd></dl>
+    </aside></details>
+  </div>
+
+  <div class="row">
+    <div class="para">
+      <div class="en">Usually, it is difficult to determine a single representative spectral signature for a real defect (target) because there can be a wide variation for the same defect. <mark class="g">Moreover, it may be worthless or even impossible to investigate all the possible defects signatures.</mark> <mark class="y">This is why we also investigated unsupervised methods.</mark></div>
+      <div class="zh">實務上，由於同一缺陷的光譜可能變異很大，通常難以為真實缺陷（目標）決定單一的代表光譜；而且要窮盡所有可能的缺陷光譜，不僅不划算，甚至可能做不到。這正是本研究同時探討非監督方法的原因。</div>
+    </div>
+    <details class="note-wrap"><summary>展開批註</summary><aside class="note f-concede">
+      <div class="fn"><span class="lbl">段落功能</span><span class="tag">論證回溯</span></div>
+      <dl><dt>邏輯角色</dt><dd>本段將第 V 節的負面結果提升為研究動機，替非監督方法的選擇提供正當性。</dd>
+      <dt>論證觀察</dt><dd>結論在此重新包裝了研究動機：第 I 節並沒有把「監督式方法難以取得目標光譜」當作動機，這一點是在 AMF、ACE 結果不佳後才被凸顯。這種事後敘事讓研究看起來比實際過程更具前瞻性，讀者應能辨識此寫作手法。</dd></dl>
+    </aside></details>
+  </div>
+
+  <div class="row">
+    <div class="para">
+      <div class="en"><mark class="y">The spectral angle mapper (SAM) algorithm, which is widely used for material identification, shows interesting results in an unsupervised approach, where the target to be detected has been chosen as a background pixel or as the mean of the data cube.</mark> Moreover, this simple approach allows fast detection, which is an important parameter in the context of industrial applications.</div>
+      <div class="zh">廣泛用於材料辨識的光譜角映射（SAM）演算法，在以背景像素或資料立方體平均光譜作為目標的非監督設定下，展現出值得注意的結果。此外，這種簡單的方法能夠快速完成檢測，而速度正是工業應用中的重要考量。</div>
+    </div>
+    <details class="note-wrap"><summary>展開批註</summary><aside class="note f-claim">
+      <div class="fn"><span class="lbl">段落功能</span><span class="tag">重申核心論點</span></div>
+      <dl><dt>邏輯角色</dt><dd>本段重申演算法層級的主要結論，並回扣引言中對速度的關切。</dd>
+      <dt>論證觀察</dt><dd>「interesting results」比第 V 節「best results」的措辭保守，顯示作者在結論中有意降低宣稱強度。「快速檢測」沒有運行時間數據佐證，只能由 O(NML) 推得；如前所述，這個推論只對 SAM 與 SID 成立。</dd></dl>
+    </aside></details>
+  </div>
+
+  <div class="row">
+    <div class="para">
+      <div class="en"><mark class="y">In conclusion, the use of multiple source lights to illuminate the same area of interest by changing the wavelength domains, which provides multiple representations with different information for the same defect, improves the detection performances.</mark></div>
+      <div class="zh">總而言之，以多種光源照射同一感興趣區域、藉由改變波長範圍為同一缺陷提供多重且資訊互異的表徵，能夠提升檢測效能。</div>
+    </div>
+    <details class="note-wrap"><summary>展開批註</summary><aside class="note f-claim">
+      <div class="fn"><span class="lbl">段落功能</span><span class="tag">最終結論</span></div>
+      <dl><dt>邏輯角色</dt><dd>本段是全文的最終論點，回答引言中的研究問題。</dd>
+      <dt>論證觀察</dt><dd>結論把效能提升歸因於「改變波長所帶來的多重表徵」，完全沒有提及偏振，這與第 V 節「偏振只在某些情況有效」一致。主要風險仍是分量數的混淆與樣本數過少，因此這個結論較適合被理解為「初步可行性證據」，而不是可普遍推廣的規律。</dd></dl>
+    </aside></details>
+  </div>
+
+  <!-- ================= 區塊 D：論證結構總覽 ================= -->
+  <section id="overview" data-nav="論證總覽">
+    <h2>論證結構總覽</h2>
+
+    <div class="ov-item"><h3>研究問題</h3>
+      <p>在金屬零件表面三維缺陷檢測中，若將不同照明模態（白光或單色光、偏振或非偏振）下拍攝的影像堆疊成「偽光譜立方體」，能否借用高光譜影像演算法提升檢測效能？哪一種模態與演算法的組合效果最好？</p></div>
+
+    <div class="ov-item"><h3>核心論點（一句話版本）</h3>
+      <p class="thesis">結合多種波長照明所建構的偽光譜立方體，搭配以背景為參考的非監督式光譜角映射（SAM），能以極低的誤報率穩定偵測金屬表面的三維缺陷。</p></div>
+
+    <div class="ov-item"><h3>證據鏈</h3>
+      <ol>
+        <li>前提：照明決定影像對比度，而波段與偏振是提升對比的兩種手段（第 I 節）。</li>
+        <li>方法：以 2 種光源乘以 2 種偏振條件，再加上全部合併，共建構 5 個分量數為 3 至 60 的偽光譜立方體（第 II、IV 節，表 I）。</li>
+        <li>比較：以 6 種演算法、4 種目標，在 GDR = 90% 下比較平均誤報率 AFAR（第 V 節，表 III）。</li>
+        <li>演算法層級證據：SAM 的 AFAR 為 0.01% 至 1.32%，其他方法多在 27% 至 76% 之間，RX 僅在小缺陷上表現良好（表 III）。</li>
+        <li>模態層級證據：單色光立方體（3、4、5）優於偏振白光（2），偏振白光又優於非偏振白光（1）（圖 3）。</li>
+        <li>推論：多波長提供互補資訊，因此提升檢測效能；SAM 不需目標光譜且計算簡單，適合工業應用（第 VI 節）。</li>
+      </ol></div>
+
+    <div class="ov-item"><h3>讓步與反駁的處理方式</h3>
+      <ul>
+        <li>作者先承認 HSI 資料量大、運算慢的缺點，再以「簡單的偽光譜立方體」及複雜度分析作為回應。</li>
+        <li>對 AMF、ACE 的不佳表現，作者以「目標光譜變異大」與「統計假設不成立」兩點加以解釋，並把這個負面結果轉化為採用非監督方法的理由。</li>
+        <li>對偏振與模態選擇，作者採取保守措辭（「某些情況下」、「難以擇一」），並以「全部合併的模態（5）作為折衷」來迴避無法明確擇優的問題。</li>
+      </ul></div>
+
+    <div class="ov-item"><h3>結論</h3>
+      <p>多波長照明能為同一缺陷提供資訊互異的多重表徵，從而提升檢測效能；在各演算法中，以背景為參考的 SAM 表現最佳且最穩定，具備工業應用潛力。</p></div>
+
+    <div class="ov-item"><h3>論證最強處與最弱處</h3>
+      <div class="sw">
+        <div class="s"><h4>最強處：SAM 的優勢幅度大且跨樣本一致</h4>
+          在表 III 中，SAM 在三種性質不同的缺陷上，AFAR 都低於 1.5%，與次佳方法相差一個數量級以上；圖 3 的完整 ROC 曲線也呈現相同趨勢。即使考慮平均方式粗糙、樣本數少等問題，如此大的差距也很難單純由隨機變異造成，因此「SAM 優於其他演算法」是全文最可靠的結論。</div>
+        <div class="w"><h4>最弱處：模態效果與分量數互相混淆</h4>
+          五個立方體的分量數（3、9、12、36、60）與表現排序幾乎完全一致，因此「多波長提供互補資訊」與「單純增加維度」這兩種解釋無法區分，而最終結論恰好依賴前者。實驗設計缺少分量數相同、模態不同的對照組；再加上每類缺陷只有一件人工樣本，且沒有任何統計檢定，模態層級的結論應視為初步觀察，而非已確立的因果關係。</div>
+      </div></div>
+  </section>
+
+  <footer>本頁為學術閱讀輔助材料。英文原文出自 Benmoussat, Spinnler &amp; Guillaume（IEEE, 2012），中文譯文與批註為閱讀輔助用途。</footer>
+</main>
+
+<script>
+(function(){
+  // TABLE II：論文 PDF 內嵌的 15 個非偏振分量 × 3 件零件原始照片
+  var t2 = document.getElementById('t2grid');
+  ['WL-R','WL-G','WL-B','470-G','470-B','505-G','505-B','590-R','590-G','630-R','780-R','810-R','850-R','880-R','940-R'].forEach(function(k){
+    var tr = document.createElement('tr'), th = document.createElement('th');
+    th.textContent = k.replace(/^(\d+)-/, '$1 nm ').replace('WL-', 'WL ');
+    tr.appendChild(th);
+    ['d1','d2','d3'].forEach(function(d){
+      var td = document.createElement('td'), img = document.createElement('img');
+      img.src = 'figs/benmoussat12-tab2-' + d + '-' + k + '-real.png'; img.alt = d + ' ' + k; img.loading = 'lazy';
+      td.appendChild(img); tr.appendChild(td);
+    });
+    t2.appendChild(tr);
+  });
+
+  // 區塊 B：自動偵測章節標題，生成錨點按鈕
+  var nav = document.getElementById('secnav');
+  var heads = Array.prototype.slice.call(document.querySelectorAll('[data-nav]'));
+  var links = heads.map(function(h){
+    var a = document.createElement('a');
+    a.href = '#' + h.id;
+    a.textContent = h.getAttribute('data-nav');
+    nav.appendChild(a);
+    return a;
+  });
+
+  // 當前章節高亮
+  var current = -1;
+  function update(){
+    var idx = 0;
+    for (var i = 0; i < heads.length; i++){
+      if (heads[i].getBoundingClientRect().top <= 140) idx = i;
+    }
+    if ((window.innerHeight + window.scrollY) >= document.body.scrollHeight - 4) idx = heads.length - 1;
+    if (idx !== current){
+      current = idx;
+      links.forEach(function(a, i){ a.classList.toggle('active', i === idx); });
+      var a = links[idx];
+      nav.scrollTo({left: a.offsetLeft - nav.clientWidth / 2 + a.offsetWidth / 2, behavior: 'smooth'});
+    }
+  }
+  window.addEventListener('scroll', update, {passive: true});
+  window.addEventListener('resize', update);
+  update();
+
+  // 響應式：桌面端批註常駐展開，行動端預設折疊
+  var mq = window.matchMedia('(min-width: 1024px)');
+  function syncNotes(){
+    document.querySelectorAll('details.note-wrap').forEach(function(d){ d.open = mq.matches; });
+  }
+  if (mq.addEventListener) mq.addEventListener('change', syncNotes); else mq.addListener(syncNotes);
+  syncNotes();
+  // 桌面端防止誤觸收合
+  document.querySelectorAll('details.note-wrap').forEach(function(d){
+    d.addEventListener('toggle', function(){ if (mq.matches && !d.open) d.open = true; });
+  });
+})();
+</script>
+</body>
+</html>
